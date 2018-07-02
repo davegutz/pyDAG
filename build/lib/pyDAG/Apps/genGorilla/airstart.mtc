@@ -1,0 +1,11 @@
+# NAME UPDATE INPUT_TYPE min max RISE_TYPE min max FALL_TYPE min max HOLD_TYPE min max absoluteMin absoluteMax
+  plaslider 1   uniform  -10 10   uniform   2 420   uniform -240 -2   uniform  3  4   15  132
+# NAME UPDATE switch HOLD_TYPE min max initialValue
+# NAME normalconstant min max absmin absmax
+# dtamb normalconstant -20 20 -119 44
+ xm    normalconstant -0.1 0.1 0.1 0.4
+ alt   normalconstant -10000 10000 -2000 20000
+#NAME uniformconstant min max absmin absmax
+# NAME UPDATE oneswitch HOLD_TYPE min max offTime
+ MASTER_SWx 1 oneswitch uniform   1   5    10
+ trial 1 uniform 0 1 uniform 0.1 0.1 uniform -0.01 -0.01 uniform 20 20 0 1

@@ -1,0 +1,281 @@
+#!/usr/bin/env perl
+# ins2adj.pl
+# Author: Robert Boguski
+# Description: Converts a file containing NPSS adjustments to an .adj file
+# 		Also applies more formating to the output that in previous
+#		versions: 
+#			1. Wraps lines around if they will exceed 72 characters,
+#			2. Vertically aligns X's and Z's, 
+#			3. Adds leading and trailing zeros where they are missing.
+#	
+# Revision History
+# 20090128 Baseline
+# 20090212 Added iDescription handling, more robust comment handling 
+#
+# 20090413 Made filename handling more generic.
+# 20100625 Added more documentation to the help page.
+# 20111116 Added notification if improper NPSS input format - DGR
+# To-Do: sar number format check
+#        remove carriage return (<cr>)  
+
+use Getopt::Long;
+#use strict;
+my (%opt, %npssTbls, %bcnTbls,%asAdjHash);
+my $version = "3.5";
+my $asAdj = "as.adj";
+&GetOptions(\%opt, 
+	'v' => sub {print "Version: $version\n";exit;},
+	'd|h|help|?' => sub {print STDERR <<'EOF'; exit;},
+
+Description: ins2adj converts NPSS adjustments to BEACON adj format. 
+The input files are named with a SAR-style number in the form YY_AS_XXX. 
+Also, they have a BEACON-style header at the top (as a // comment). The input 
+file may contain multiple adjustments.
+
+Input: as.adj _ins.inp files (NPSS variables (adjustments))
+Output: .adj files
+
+Usage: ins2adj [options] as.adj _ins.inp files
+	Options:	
+	<none>		Run program normally-must supply input file names
+	-h	 	Help/Program Description
+	-v		Print Current Version; 	
+	
+Example Command: ins2adj.pl as.adj 09_AS_001_ins.inp 09_AS_901_ins.inp
+
+Example Input File:
+//!01-Jan-09|N Gineer|09-AS-001|Some comments describing the change
+Ctrl.XEN_FP_ASYNC_COMP = 10;
+Ctrl.XEN_FP_ASYNC_COMP.iDescription = "Some info about the adjustment change\n";
+Ctrl.XENG_TX_HEAL.value=0;
+
+A45_INV =-100.0; 
+A45_INV.iDescription = "Some info about the adjustment change\n"
+
+Corresponding Output File:
+!01-Jan-09|N Gineer|09-AS-001|Some comments describing the change
+XEN_FP_ASYNC_COMP 10
+XENG_TX_HEAL false
+A45_INV -100.0
+
+
+EOF
+);
+#--------------------------------MAIN-ROUTINE---------------------------------#
+main();
+
+sub main()
+{
+    die "Not enough arguments. Use $0 -h for usage information.\n" if($#ARGV < 1);
+    my $asAdj = shift @ARGV;
+    die "Can't find $asAdj. Check path.\n" unless -e $asAdj;
+	
+	
+	#Populate hash with as.adj 
+	asAdj2Hash(&fileToArray($asAdj));	
+
+	foreach my $file(@ARGV)
+	{	
+		
+		warn "filename not the correct format: yy-ww-nnn\n" 
+			unless $file =~ m/\d\d[_-]\w\w[_-]\d\d\d/ ;
+		
+		$file =~ m/(\d\d[_-]\w\w[_-]\d\d\d)/;
+		my $fileSarNumber = $1;
+		my @newAdjs;
+		my $header;
+	    #if(-e $file)
+	    #{ #print "$file:\n"; #For testing
+		
+		unless(-e $file)
+		{
+			warn "Warning: $file - $!\n";
+			next;
+		}
+		
+			my @file = &fileToArray($file);
+			foreach $line(@file)
+			{	
+				if($line =~ m/^\s*\/\/!/) #Pick up Header
+				{
+					die "Error: Can't have multiple headers\n" if $header;
+					
+					$header = $line;
+					$header =~ s/\/\///;
+							
+					warn "Warning: Incorrect header format - $header. Use $0 for more information.\n" 
+						unless $header =~ /^!\d\d[_-]\w\w\w[_-]\d\d(\|.*){3}/;
+					
+					my @tmp = split '\|', $header;
+								
+					#unless($tmp[2] =~ /$fileSarNumber/) #Does not account for _ vs -
+					#{
+					#	print "Warning: SAR number in header does not match SAR number in filename\n";
+					#}
+					next;
+				}
+				elsif($line =~ m/\/\//) #Skip Comments //
+				{
+					next;
+				}
+				#Skip multiline comments: /*   */
+				elsif($line =~ m/\/\*/)#Found beginning of comment: /*
+				{
+					# Test for end of comment: */
+					m/\*\// ? $inComment = 0 : $inComment = 1; 
+					next;			
+				}
+				elsif($inComment)
+				{
+					# In comment, Test for end of comment: */
+					m/\*\// ? $inComment = 0 : 1; 
+					next;
+				}				
+				elsif($line =~ m/[Ctrl\.]*(\b\w+)\.*(\w*)\s*=\s*(-*\d+\.*\d*);/)
+				{ 	#Capture the adjustment name and nominal value
+					#$line =~ m/Ctrl\.(\w*)\.*(\w*)\s*=\s*(-*\d+);/;
+					my $name = $1;
+					my $value = $3;
+				
+					if(exists $asAdjHash{$name})
+					{
+						#If the adjustment is a boolean in as.adj, convert
+						# the NPSS value to a boolean.	
+						if($asAdjHash{$name}{"nom"} =~ m/true|false/i)
+						{		
+							$value = ($value > 0) ? "true" : "false";										
+						}
+						else #otherwise check that the value is in range
+						{ 
+							warn "Value of $name, $value, is out of range (" . 
+							     $asAdjHash{$name}{"min"} . "-" .
+							     $asAdjHash{$name}{"max"} . ")\n"  
+								if($value < $asAdjHash{$name}{"min"} || 
+							      $value > $asAdjHash{$name}{"max"});
+						}
+						push @newAdjs, "$name $value\n"; 	
+					}
+					else
+					{
+						warn "Warning: $name does not exist in as.adj\n";	
+					}
+				}
+				elsif($line =~ m/iDescription/)
+				{
+					#Pick up iDescriptions
+					push @iDesc, $line;
+				}
+                elsif($line =~ m/[Ctrl\.]*(\b\w+)\.*(\w*)\s*(-*\d+\.*\d*)/) {
+                    if (!($line =~m/;$/)) {
+                        die "error: improper NPSS format, missing semicolon\n";
+                    }
+                    elsif (!($line =~m/.*=.*/)) {
+                        die "error: improper NPSS format, missing \"=\"\n";
+                    }
+                    else {
+                        die "error: improper NPSS format\n";
+                    }
+                }
+				else
+				{
+				
+				}			
+			#}
+		
+			
+			
+
+		}
+		unshift @newAdjs, "$header\n";
+		$newFile = $file;
+		$newFile =~ s/-/_/g;
+		$newFile =~ /(\d{2}_\w\w_\d{3}).*/;
+		#$file =~ s/_ins\.inp/.adj/;
+		my $newFile = "$1.adj";
+		#print "!$newFile,\n";
+		&arrayToFile(@newAdjs, $newFile);
+	}		
+
+	#Dump the iDescriptions into a file for later use with BEACON to NPSS process
+	unshift @iDesc, "\/\/iDescriptions:\n";
+	#&arrayToFile(@iDesc, "iDescriptions_adj.inp");
+}
+
+#-----------------------------SUBROUTINE-DEFINITIONS----------------------------#
+sub asAdj2Hash()
+{		
+	foreach(@_)
+	{	
+		next if /^[#|!]/;				
+		chomp;			
+		my ($name, $min, $nom, $max, $units, $desc, $loc) = split '\t';									
+		$asAdjHash{$name}{"min"} = $min;
+		$asAdjHash{$name}{"nom"} = $nom;
+		$asAdjHash{$name}{"max"} = $max;			
+	}		
+}
+
+
+#------------------------------------------------------------------------------------
+# Subroutine: fileToArray
+# Description: Loads the specified file into an array
+# Inputs: fileName
+# Outputs: Array of lines from the file provided
+#------------------------------------------------------------------------------------
+sub fileToArray()
+{
+	my $fileName = $_[0]; 
+	open(FILE, $fileName) or die "Can't open $fileName\n";
+	my @fileArray = <FILE>;
+	close(FILE);	
+	return @fileArray;
+}
+
+#------------------------------------------------------------------------------------
+# Subroutine: arrayToFile
+# Description: Writes the specified array to the 
+#		specified file
+# Inputs: array, file name
+# Outputs: Returns nothing
+#------------------------------------------------------------------------------------
+sub arrayToFile()
+{
+	#The last element in @_ is the name of the file to be written to
+	my $fileName = pop(@_);		
+	open(FILE, ">$fileName") or die "Can't open $fileName\n";
+	print FILE @_;
+	close(FILE);
+}
+# matchCase();
+# Description: Matches the case of the 2nd argument (format) to that the 1st (subject),
+# by character. If the subject is longer than the format, then the last character 
+# of the format is used to determine the case of the rest of the characters in the
+#  subject.
+sub matchCase()
+{
+	my @format = split "", $_[0];
+	my @subject = split "", $_[1];	
+	my $result;
+	
+	if(@format && @subject)	
+	{
+		while(@subject)
+		{
+			my $tmp = shift @subject;
+			if((ord($format[0]) >= 65 && ord($format[0]) <= 90))
+			{			
+				$result .= uc($tmp);					
+			}
+			else
+			{
+				$result .= lc($tmp);
+			}
+			shift @format unless($#format == 0); 
+		}
+		return $result;
+	}
+	else
+	{
+		return 0;
+	}
+}

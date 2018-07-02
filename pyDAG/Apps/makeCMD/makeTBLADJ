@@ -1,0 +1,128 @@
+#!bash
+# makeTBLADJ
+# Wrapper script on Rob Boguski's perl map2tbl and ins2adj
+# 11-Aug-2009	DA Gutz	Created
+
+# Defaults
+PGM="ge38"
+VER=v1.22
+
+# Initialize
+help=0
+debug=0
+verbose=0
+force=0
+quitting=0
+args=""
+DATE=`date +%Y%m%d`
+
+# getopt  from /usr/lib/getopt/parse.bash
+TEMP=`getopt -o dfhp:v: --long debug,force,help,program:,version: \
+	 -n 'makeCMD' -- "$@"`
+if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
+eval set -- "$TEMP"
+while true ; do
+    case "$1" in
+	-d|--debug)		debug=1; set -x;	shift ;;
+	-f|--force)     force=1; 			shift ;;
+	-h|--help)      help=1;           	shift ;;
+	-p|--program)	shift; PGM="$1";	shift ;;
+	-v|--version)   shift; VER="$1";    shift ;;
+	--)             shift; break ;;
+	*) echo "bad option"; quitting=1; exit 1 ;;
+    esac
+done
+if ( test $help -eq "1" || test $quitting -eq "1" )
+    then
+    echo "Makes .adj and .tbl files from  files like:"
+    echo "09_ET_01_map.inp and 09_ET_01_ins.inp"
+    echo "usage"
+    echo "  $0 [options]"
+    echo "  options:"
+    echo "  -d,  --debug	echo all commands"
+    echo "  -f,  --force     force program to remake all"
+    echo "  -h,  --help	this screen"
+    echo "  -p,  --program   program id [$PGM]"
+    echo "  -v,  --version	software version [$VER]"
+    echo " "
+    exit 0
+fi
+
+# Traps
+trap 'rm -f map2tbl ins2adj .temp;' 0 1 2 9 15
+
+# Dirty hack:  make perl scripts local to avoid stupid path games
+MAPFIL=`which map2tbl`
+if test $? -eq 0
+    then
+    cp $MAPFIL .
+else
+    echo "ERROR $0:  map2tbl not found.  Have you run 'make install' in base level of this package?"
+    exit 1
+fi
+INSFIL=`which ins2adj`
+if test $? -eq 0
+    then
+    cp $INSFIL .
+else
+    echo "ERROR $0:  ins2adj not found.  Have you run 'make install' in base level of this package?"
+    exit 1
+fi
+
+
+if test $debug -eq "1"
+    then
+	verbose=4
+fi
+
+
+# tbls
+haveFiles=0
+if `ls *_map.inp >/dev/null 2>&1`
+   then
+   echo "Making tbl files from:"
+   ls *_map.inp
+   haveFiles=1
+fi
+if test $haveFiles -eq "1"
+    then
+    perl ./map2tbl as.tbl *_map.inp &
+    wait $!
+    if test "$? " == "0 "
+       then
+       echo "success with _map.inp"
+    else
+       echo "ERROR($0):  map2tbl failed"
+       exit 1
+    fi
+else
+    echo "No _map.inp files... continuing"
+fi
+
+# adjs
+haveFiles=0
+if `ls *_ins.inp >/dev/null 2>&1`
+   then
+   echo "Making adj files from:"
+   ls *_ins.inp
+   haveFiles=1
+fi
+if test $haveFiles -eq "1"
+    then
+    perl ./ins2adj as.adj *_ins.inp &
+    wait $!
+    if test "$? " == "0 "
+       then
+       echo "success with _ins.inp"
+    else
+       echo "ERROR($0):  ins2adj failed"
+       exit 1
+    fi
+else
+    echo "No _ins.inp files"
+fi
+
+
+# Cleanup and quit
+rm -f map2tbl ins2adj
+echo "$0:  done."

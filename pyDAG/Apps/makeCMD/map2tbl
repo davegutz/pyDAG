@@ -1,0 +1,842 @@
+#!/usr/local/bin/perl
+# map2tbl.pl
+# Author: Robert Boguski
+# Description: Converts a file containing NPSS tables to a .tbl file
+# 		Also applies more formating to the output that in previous
+#		versions: 
+#			1. Wraps lines around if they will exceed 72 characters,
+#			2. Vertically aligns X's and Z's, 
+#			3. Adds leading and trailing zeros where they are missing.
+#	
+# Revision History
+# 20090128 -Baseline
+# 20090212 -Added table exists check, no multiple headers check, more robust 
+#			comment handling, iDescription handling
+# 20090327 -Added more comments
+my $version = "1.0";
+# 20090619 -Added code that lines all numbers up by commas. Formats for X and Z
+#		   not uniform. 
+$version = "1.2"; 
+# 20090715	-Added code that wraps the lines in a way that the format of the X's
+#			 and Z's formats' match.
+$version = "1.3";
+# 20090922 - Modified npss table parsing algorithm to use a LIFO to track the
+#            curly braces in order to determine when the end of table has been reached.
+$version = "1.4";
+# 20100625 - Added more documentation.
+$version = "1.4.1";
+#20110419 - Added substitute command to catch missing space between _SCH and (
+$version - "1.4.2";
+
+use Getopt::Long;
+#use strict;
+my (%opt, %npssTbls, %bcnTbls);
+my $asTbl;
+&GetOptions(\%opt, 
+	'v' => sub {print "Version: $version\n";exit;},
+	'd|h|help|?' => sub {print STDERR <<'EOF'; exit;},
+
+Description: map2tbl converts NPSS tables to BEACON table format. 
+The input files are named with a SAR-style number in the form YY_AS_XXX. 
+Also, they have a BEACON-style header at the top (as a // comment). The input 
+file may contain multiple tables. 
+
+Input: .map files (NPSS tables)
+Output: .tbl files
+Usage: map2tbl [options] as.tbl YY_AS_XXX_map.inp files
+
+Notes: 1. YY_AS_XXX is the SAR format where YY is the year, 
+          XXX is the SAR number
+       2. as.tbl is required
+
+	Options:	
+	<none>		Run program normally-must supply input file names
+	-h	 	Help/Program Description
+	-v		Print Current Version; 	
+	
+Example Command: map2tbl as.tbl 10_AS_024_map.inp
+
+Input File Example:
+
+//!01-Jan-09|N Gineer|09-AS-000|Short SAR Description
+  Table TB_NPSS_SCH (real X) {
+    X = {  1.0,  2.0,  3.0,  4.0,  5.0,  6.0,  7.0,  8.0,
+           9.0, }
+    z = { 10.0, 11.0, 12.0,  13.0, 14.0, 15.0, 16.0, 17.0,
+          18.0,  }
+  }
+
+Corresponding Output File:
+!01-Jan-09|N Gineer|09-AS-000|Short SAR Description
+#ADJUSTABLE
+ $INPUT T='NPSS_SCH',
+   X =   1.0,  2.0,  3.0,  4.0,  5.0,  6.0,  7.0,  8.0,
+         9.0, 
+   z =  10.0, 11.0, 12.0,  13.0, 14.0, 15.0, 16.0, 17.0,
+        18.0,  
+ $
+
+EOF
+);
+#----------------------------------MAIN-ROUTINE---------------------------------#
+&main();
+
+sub main()
+{
+	my @iDesc;
+	die "Not enough arguments. Use $0 -h for usage information.\n" if($#ARGV < 1);
+	#die "Not enough arguments. Use $0 -h for usage information.\n" if($#ARGV < 0);
+
+    my $asTbl = shift @ARGV;
+    die "Can't find $asTbl. Check path.\n" if  (!-e $asTbl);
+	
+	#Load as.tbl into a hash - used to notify user if npss table doesn't
+	#exist in as.tbl
+	&asTblToHash(&fileToArray($asTbl));
+	
+	foreach my $file(@ARGV)
+	{	
+		my @file = &fileToArray($file);
+		#Load npss tables into a hash. The subroutine returns a sar header.
+		my $header = &npssTablesToHash(@file);
+		#Convert the tables in the hash to a .tbl format and put into an array
+		my @out = &hashToSar(sort keys %npssTbls);
+		#Put the header at the top of the output array
+		unshift @out, $header;	
+		#Extract the sar number from the filename
+		#$file =~ /(\d{2}[-_]AS[-_]\d{3}).*/;
+		$file =~ /(\d{2}[-_]\w\w[-_]\d{3}).*/;
+		my $sarNumber = $1;
+		#Make sure only underscores are used
+		$sarNumber =~ s/-/_/g;
+		my $outFile = "$sarNumber.tbl";
+		&arrayToFile(@out, $outFile);
+		undef %npssTbls; #Clear out the hash between files
+
+	}		
+}
+
+#-----------------------------SUBROUTINE-DEFINITIONS----------------------------#
+sub npssTablesToHash()
+{
+	my $tableFound = 0;
+	my $tableName;
+	my $haveY = 0;
+	my $foundX = 0;
+	my $foundZ = 0;	
+	my $inComment;
+	my $header;
+	my @braces;
+	
+	foreach(@_)
+	{	
+		if(m/^\s*\/\/!/) #Header
+		{
+			die "Can't have multiple headers\n" if $header;
+			$header = $_;
+			$header =~ s/\/\///;
+			next;
+		}
+		elsif(m/\/\//) #Regular Comment
+		{
+			next;
+		}
+		#Skip Comments: /*   */
+		elsif(m/\/\*/)#Found beginning of comment: /*
+		{
+			m/\*\// ? $inComment = 0 : $inComment = 1; # Test for end of comment: */
+			next;			
+		}
+		elsif($inComment)
+		{
+			m/\*\// ? $inComment = 0 : 1; # In comment, Test for end of comment: */
+			next;
+		}
+			
+		#Remove Comments: //
+		/(.*)\/\/.*$/ ? $_ = "$1\n" : 1;
+		
+		#Skip iDescription Statements
+		#next if m/iDescription\s*=\s*/;
+		
+		
+		#-------------------START LIFO--------------------------------
+		# The following code implements a stack (LIFO) to keep track of curly braces.
+		# For each left curly brace encountered in a line, a "{" is pushed 
+		# onto the array and for each right curly brace the array is popped.
+		# This is used in the table parsing algorithm to signify the end of a table.
+		my $lbCount = 0;
+		my $rbCount = 0;
+		#Collect braces
+		if($lbCount = () = $_ =~ /(\{)/g)
+		{
+			for(1 .. $lbCount){
+				push @braces, "{";
+				#print "+";
+			}
+			#print "[@braces]\n";
+		}
+		
+		if($rbCount = () = $_ =~ /\}/g)
+		{
+			for(1 .. $rbCount){
+				pop @braces;
+				#print "-";
+			}
+			#print "[@braces]\n";
+		}
+		
+		if($tblFound && $#braces < 0)
+		{
+			#print "Table Done: $line\n";
+			$tableFound = 0;
+			#$totalTbls++;
+		}
+		#----------------------END LIFO------------------------------
+		
+		#---------------Process iDescription-------------------------
+		if($tableFound && m/(iDescription\s*=\s*)/)
+		{			
+			s/^\s*//;
+			#Pick up iDescriptions
+			push @iDesc, "$tableName.$_";
+			#print "$tableName.$_\n";
+			next;
+		}
+		elsif(!$tableFound && m/(iDescription\s*=\s*)/)
+		{
+			print $_;
+			s/^\s*//;
+			s/TB_//;
+			#Pick up iDescriptions
+			push @iDesc, "$_";
+			#print "$_\n";
+			next;
+		}
+		
+		#Skip Extrapolation Statements
+		next if m/\w+\.extrap\s*=.*/;
+		
+		#If there isn't a space between an identifier and an =, put one in.
+		#Example: ABC= --> ABC =
+		s/(\w+)\b=/$1 =/;
+				
+		#Process Tables	
+		if(m/Table\s+(\w*).*{/) #Table found
+		{	
+			s/SCH\(/SCH \(/;
+			my @definition = split ' '; #Split into "Table", table name and arg list
+			shift @definition; #Get rid of "Table"
+			$tableName = shift @definition;	#Capture table name
+			$tableName =~ s/TB_//;
+			
+			#Check that table already exists in as.tbl. If not, warn and skip	
+			if (! exists $bcnTbls{$tableName})	
+			{
+				warn "Table $tableName does not exist in as.tbl\n";
+			#	next;
+			}
+			
+			#The table has already been defined--skip duplicate tables
+			next if exists $npssTbls{$tableName}; 
+								
+			my $inputStr = "@definition"; 
+			$inputStr =~ s/\(|\)|\{//g;
+			my @inputs = split ',', $inputStr;				
+						
+			if($#inputs == 1) #If there are two inputs=>3D table, capture Y first
+			{	
+				($npssTbls{$tableName}{"ytype"}, 
+					$npssTbls{$tableName}{"y"}) = split ' ',shift @inputs;
+				
+				unless($npssTbls{$tableName}{"ytype"} =~ /real|int/i)
+				{
+					print STDERR "Type Error: $_\n ";
+				}				
+				$haveY = 1;
+			}
+			else{$haveY = 0;}
+			
+			($npssTbls{$tableName}{"xtype"}, 
+				$npssTbls{$tableName}{"x"}) = split ' ', shift @inputs;
+			
+			$npssTbls{$tableName}{"ztype"} = $npssTbls{$tableName}{"xtype"};
+			$tableFound = 1;	
+		}
+		elsif($tableFound && !(m/^\s\s}\n/)) #In the middle of the table
+		{	
+			my $y = $npssTbls{$tableName}{"y"};		
+			my $x = $npssTbls{$tableName}{"x"};
+
+			if($haveY && m/$y\s*=\s*(.*)\s*{/)#Pick up y's
+			{ 	
+				&processLine($tableName,$1,"y");
+			}
+			elsif(m/$x\s*=\s*{(.*)/ && @{$npssTbls{$tableName}{"xvalues"}} <=0)
+			{	                 #^^^^^^^Pick up x's only once^^^^^^^^^^^^^^^
+				my $tmp = $1;
+				$foundX = (s/}//) ? 0 : 1; 				
+				&processLine($tableName,$tmp,"x");
+			}
+			elsif($foundX)
+			{	
+				$foundX = (s/}//) ? 0 : 1;
+				&processLine($tableName,$_,"x");
+			}
+			elsif(m/z\s*=\s*{(.*)\n/i)#Pick up z's
+			{	
+				my $tmp  = $1;
+				$foundZ = (s/}//) ? 0 : 1; 
+				&processLine($tableName,$tmp,"z");
+			}
+			elsif($foundZ)
+			{	
+				$foundZ = (s/}//) ? 0 : 1;
+				&processLine($tableName, $_,"z");			
+			}
+			else
+			{
+				$foundZ = 0;
+				$foundX = 0;
+			}
+		}		
+		#elsif($tableFound && m/^\s\s}\s*\n/) #Found the end of the table
+		elsif($tableFound && $#braces < 0) #FIFO Empty -> Found the end of the table 
+		{
+			$tableFound = 0;
+			$haveY = 0;		
+		}
+		else{} #Do nothing	
+		#foreach $a(@{$npssTbls{$tableName}{"xvalues"}})	
+		#{
+		#	print "$a\n";
+		#}	
+	}
+	
+	#Dump the iDescriptions into a file for later use with BEACON to NPSS process
+	unshift @iDesc, "\/\/iDescriptions:\n";
+	#&arrayToFile(@iDesc, "iDescriptions_tbl.inp");
+	return $header;	
+}
+
+
+
+
+
+
+###################################################################
+sub hashToSar()
+{
+	my @arrayOut;
+	foreach(@_)
+	{	
+		#if($diffs{$_} =~ m/\<delete\>/){push @arrayOut, "\n$_ delete\n\n";next;}
+		my $tableName = $_;
+		my $newTbl = "";
+		my $xCount = $#{$npssTbls{$_}{"xvalues"}}+1;
+		my $count = 0;
+		my @X = @{$npssTbls{$_}{"xvalues"}};
+		my @Z = @{$npssTbls{$_}{"zvalues"}};
+		#my @X = \@{$npssTbls{$_}{"xvalues"}};#New
+		#my @Z = \@{$npssTbls{$_}{"zvalues"}};#New
+		
+		my $padding = 0;
+		my $ySize = @{$npssTbls{$_}{"yvalues"}} ? $#{$npssTbls{$_}{"yvalues"}}+1 : 1; 
+		my $xIndex = 0;		
+		my $zCount = 0; 
+		my $y = 1;
+		my $ref = 0;
+		my %hash;
+		my $lineCount = 0;
+
+
+		#Find longest length among all the numbers
+		my @Y = @{$npssTbls{$_}{"yvalues"}};
+		my $maxLength = 0;
+		foreach(@X,@Y,@Z)
+		{
+			$maxLength = (length $_ > $maxLength) ? length $_ : $maxLength;
+		}
+	
+		#Pad all of the number with enough spaces to match the number
+		#of characters in the longest number
+		#foreach(@X,@Y,@Z)
+		foreach(@{$npssTbls{$_}{"xvalues"}},
+		        @{$npssTbls{$_}{"yvalues"}},
+				@{$npssTbls{$_}{"zvalues"}})
+		{
+			$_ = " " x ($maxLength - length $_) . "$_";
+		}
+
+		#Count the number of characters in each line and put into a hash for sorting
+		foreach(@Z)
+		{	
+			push @{$hash{$y}}, $_; 
+			$zCount++;
+			if($zCount%($#X+1)==0){$y++;}		
+		}
+
+		#Find the longest line in the hash 
+		foreach(sort keys %hash)
+		{
+			$ref = \@{$hash{$_}} if(length "@{$hash{$_}}" > length $ref);
+		}
+ 
+		#Adjust the x's by comparing with the reference to make the new reference 
+ 		for(my $i = 0; $i <= $#{$npssTbls{$_}{"xvalues"}}; $i++)
+		{		
+			if(length ${$npssTbls{$_}{"xvalues"}}[$i] > length ${$ref}[$i])
+			{
+				#Pad ref
+				$padding = (length ${$npssTbls{$_}{"xvalues"}}[$i]) - 
+					(length ${$ref}[$i]);
+					
+				${$ref}[$i] .= ",";
+				${$ref}[$i] .= " " x $padding;
+				${$npssTbls{$_}{"xvalues"}}[$i] .= ", ";
+			}
+			elsif(length ${$npssTbls{$_}{"xvalues"}}[$i] < length ${$ref}[$i])
+			{
+				#Pad X
+				$padding = (length ${$ref}[$i]) - 
+					(length ${$npssTbls{$_}{"xvalues"}}[$i]);
+					
+				${$npssTbls{$_}{"xvalues"}}[$i] .= ",";
+				${$npssTbls{$_}{"xvalues"}}[$i] .= " " x $padding;
+			}		
+		}
+		
+		#Adjust the z's using the x's as a reference
+		for(my $i = 0; $i <= $#X*$ySize + $ySize-1; $i++)
+		{
+			$xIndex =0 if($xIndex == $#X+1);
+
+			if(length ${$npssTbls{$_}{"xvalues"}}[$xIndex] > 
+			   length ${$npssTbls{$_}{"zvalues"}}[$i])
+			{
+				$padding = (length ${$npssTbls{$_}{"xvalues"}}[$xIndex]) - 
+				  		(length ${$npssTbls{$_}{"zvalues"}}[$i]);
+								
+				$padding -= 1 if(${$npssTbls{$_}{"xvalues"}}[$xIndex] =~ m/,/);
+				
+				${$npssTbls{$_}{"zvalues"}}[$i] .= ",";
+				${$npssTbls{$_}{"zvalues"}}[$i] .= " " x $padding;				
+			}
+			elsif(length ${$npssTbls{$_}{"xvalues"}}[$xIndex] == 
+			      length ${$npssTbls{$_}{"zvalues"}}[$i])
+			{
+				${$npssTbls{$_}{"xvalues"}}[$xIndex] .= ", " 
+					unless ${$npssTbls{$_}{"xvalues"}}[$xIndex] =~ /,/;
+				${$npssTbls{$_}{"zvalues"}}[$i] .= ", ";
+				
+			}
+			$xIndex++;
+		}
+	
+	
+		#Form the tables that wrap around after 8 numbers or after
+		#67 characters	
+		push @arrayOut, "#ADJUSTABLE\n";
+		push @arrayOut, " \$INPUT T='$_',\n";
+		$newTbl = "   X= ";
+		foreach my $element(@{$npssTbls{$_}{"xvalues"}})
+		{	
+			$count++;		
+			#Remove the front-end space padding for the potential- 
+			#lineCount
+			my $tmpElement = $element; 
+			$tmpElement =~ s/^\s//g;  
+			$lineCount += length "$tmpElement, ";
+			#$lineCount += length "$element, ";
+			
+			#if($count%8==0 || $lineCount <= 68)
+			if($count%8==0 or $lineCount <= 69)
+			{	
+				$newTbl .= "$element";#$newTbl .= "$element ";
+			}
+			else
+			{
+				$newTbl .= "\n      $element";#$newTbl .= "\n      $element ";
+				$lineCount = 0;
+			}
+		}
+		$newTbl .= "\n";
+		push @arrayOut, "$newTbl";
+		$lineCount = 0;
+		if(@{$npssTbls{$_}{"yvalues"}})
+		{
+			$newTbl = "   Y= ";
+			$count = 0;
+			foreach my $element(@{$npssTbls{$_}{"yvalues"}})
+			{	
+				$count++;
+				#$lineCount += length "$element, ";
+				my $tmpElement = $element; 
+				$tmpElement =~ s/^\s//g;
+				$lineCount += length "$tmpElement, ";		
+				if($count%8==0 or $lineCount >= 68)
+				{
+					$newTbl .= "$element,\n";
+					push @arrayOut, $newTbl;
+					$newTbl = " " x 6;
+					$lineCount = 0;	
+				}
+				else
+				{
+					$newTbl .= "$element, "; 
+				}
+			}
+			$newTbl .= "\n";
+			push @arrayOut, $newTbl;
+		}
+		
+		#The number of Z's on each line should match the number of X's
+		$newTbl = "   Z= "; 
+		$count = 0;
+		$lineCount = 0;
+		foreach my $element(@{$npssTbls{$_}{"zvalues"}})
+		{	
+			$count++;
+			#$lineCount += length "$element, ";	
+			my $tmpElement = $element; 
+			$tmpElement =~ s/^\s//g;
+			$lineCount += length "$tmpElement, ";	
+			if($count%$xCount==0 or $lineCount >= 68)
+			{
+				$newTbl .= "$element\n";
+				push @arrayOut, $newTbl;
+				$newTbl = " " x 6;
+				$lineCount = 0;	
+			}
+			else
+			{
+				
+				$element .= ($element !~ /,/) ? ",":"";
+				$newTbl .= "$element"; #$newTbl .= "$element "; 
+			}
+		}
+		$newTbl =~ s/\s{6,}$//;
+		push @arrayOut, $newTbl;
+		push @arrayOut, " \$\n";
+	}
+	return @arrayOut;
+}
+############################################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+sub hashToSar2()
+{
+	my @arrayOut;
+	foreach(@_)
+	{	
+		#if($diffs{$_} =~ m/\<delete\>/){push @arrayOut, "\n$_ delete\n\n";next;}
+		my $tableName = $_;
+		my $newTbl = "";
+		my $xCount = $#{$npssTbls{$_}{"xvalues"}}+1;
+		my $count = 0;
+		my @X = @{$npssTbls{$_}{"xvalues"}};
+		my @Z = @{$npssTbls{$_}{"zvalues"}};
+		my $padding = 0;
+		my $ySize = @{$npssTbls{$_}{"yvalues"}} ? $#{$npssTbls{$_}{"yvalues"}}+1 : 1; 
+		my $xIndex = 0;		
+		my $zCount = 0; 
+		my $y = 1;
+		my $ref = 0;
+		my %hash;
+		my $lineCount = 0;
+
+		#Count the number of characters in each line and put into a hash for sorting
+		foreach(@Z)
+		{	
+			push @{$hash{$y}}, $_; 
+			$zCount++;
+			if($zCount%($#X+1)==0){$y++;}		
+		}
+
+		#Find the longest line in the hash 
+		foreach(sort keys %hash)
+		{
+			$ref = \@{$hash{$_}} if(length "@{$hash{$_}}" > length $ref);
+		}
+ 
+		#Adjust the x's by comparing with the reference to make the new reference 
+ 		for(my $i = 0; $i <= $#{$npssTbls{$_}{"xvalues"}}; $i++)
+		{		
+			if(length ${$npssTbls{$_}{"xvalues"}}[$i] > length ${$ref}[$i])
+			{
+				#Pad ref
+				$padding = (length ${$npssTbls{$_}{"xvalues"}}[$i]) - 
+					(length ${$ref}[$i]);
+					
+				${$ref}[$i] .= ",";
+				${$ref}[$i] .= " " x $padding;
+				${$npssTbls{$_}{"xvalues"}}[$i] .= ", ";
+			}
+			elsif(length ${$npssTbls{$_}{"xvalues"}}[$i] < length ${$ref}[$i])
+			{
+				#Pad X
+				$padding = (length ${$ref}[$i]) - 
+					(length ${$npssTbls{$_}{"xvalues"}}[$i]);
+					
+				${$npssTbls{$_}{"xvalues"}}[$i] .= ",";
+				${$npssTbls{$_}{"xvalues"}}[$i] .= " " x $padding;
+			}		
+		}
+		
+		#Adjust the z's using the x's as a reference
+		for(my $i = 0; $i <= $#X*$ySize + $ySize-1; $i++)
+		{
+			$xIndex =0 if($xIndex == $#X+1);
+
+			if(length ${$npssTbls{$_}{"xvalues"}}[$xIndex] > 
+			   length ${$npssTbls{$_}{"zvalues"}}[$i])
+			{
+				$padding = (length ${$npssTbls{$_}{"xvalues"}}[$xIndex]) - 
+				  		(length ${$npssTbls{$_}{"zvalues"}}[$i]);
+								
+				$padding -= 1 if(${$npssTbls{$_}{"xvalues"}}[$xIndex] =~ m/,/);
+				
+				${$npssTbls{$_}{"zvalues"}}[$i] .= ",";
+				${$npssTbls{$_}{"zvalues"}}[$i] .= " " x $padding;				
+			}
+			elsif(length ${$npssTbls{$_}{"xvalues"}}[$xIndex] == 
+			      length ${$npssTbls{$_}{"zvalues"}}[$i])
+			{
+				${$npssTbls{$_}{"xvalues"}}[$xIndex] .= ", " 
+					unless ${$npssTbls{$_}{"xvalues"}}[$xIndex] =~ /,/;
+				${$npssTbls{$_}{"zvalues"}}[$i] .= ", ";
+				
+			}
+			$xIndex++;
+		}
+	
+		push @arrayOut, "#ADJUSTABLE\n";
+		push @arrayOut, " \$INPUT T='$_',\n";
+		$newTbl = "   X= ";
+		foreach my $element(@{$npssTbls{$_}{"xvalues"}})
+		{	
+			$count++;		
+			$lineCount += length "$element, ";
+			
+			if($count%8==0 || $lineCount <= 68)
+			{
+				$newTbl .= " $element";#$newTbl .= "$element ";
+			}
+			else
+			{
+				$newTbl .= "\n       $element";#$newTbl .= "\n      $element ";
+				$lineCount = 0;
+			}
+		}
+		$newTbl .= "\n";
+		push @arrayOut, "$newTbl";
+		$lineCount = 0;
+		if(@{$npssTbls{$_}{"yvalues"}})
+		{
+			$newTbl = "   Y=  ";
+			$count = 0;
+			foreach my $element(@{$npssTbls{$_}{"yvalues"}})
+			{	
+				$count++;
+				$lineCount += length "$element, ";		
+				if($count%8==0 || $lineCount >= 68)
+				{
+					$newTbl .= "$element,\n";
+					push @arrayOut, $newTbl;
+					$newTbl = " " x 7;#$newTbl = " " x 6;
+					$lineCount = 0;	
+				}
+				else
+				{
+					$newTbl .= "$element, "; 
+				}
+			}
+			$newTbl .= "\n";
+			push @arrayOut, $newTbl;
+		}
+		
+		#The number of Z's on each line should match the number of X's
+		$newTbl = "   Z= "; 
+		$count = 0;
+		$lineCount = 0;
+		foreach my $element(@{$npssTbls{$_}{"zvalues"}})
+		{	
+			$count++;
+			$lineCount += length "$element, ";		
+			if($count%$xCount==0 || $lineCount >= 68)
+			{
+				$newTbl .= "$element\n";
+				push @arrayOut, $newTbl;
+				$newTbl = " " x 6;
+				$lineCount = 0;	
+			}
+			else
+			{
+				
+				$element .= ($element !~ /,/) ? ",":"";
+				$newTbl .= " $element"; #$newTbl .= "$element "; 
+			}
+		}
+		$newTbl =~ s/\s{6,}$//;
+		push @arrayOut, $newTbl;
+		push @arrayOut, " \$\n";
+	}
+	return @arrayOut;
+}
+#------------------------------------------------------------------------------------
+# Subroutine: fileToArray
+# Description: Loads the specified file into an array
+# Inputs: fileName
+# Outputs: Array of lines from the file provided
+#------------------------------------------------------------------------------------
+sub fileToArray()
+{
+	my $fileName = $_[0]; 
+	open(FILE, $fileName) or die "Can't open $fileName\n";
+	my @fileArray = <FILE>;
+	close(FILE);	
+	return @fileArray;
+}
+
+#------------------------------------------------------------------------------------
+# Subroutine: arrayToFile
+# Description: Writes the specified array to the 
+#		specified file
+# Inputs: array, file name
+# Outputs: Returns nothing
+#------------------------------------------------------------------------------------
+sub arrayToFile()
+{
+	#The last element in @_ is the name of the file to be written to
+	my $fileName = pop(@_);		
+	open(FILE, ">$fileName") or die "Can't open $fileName\n";
+	print FILE @_;
+	close(FILE);
+}
+sub processLine()
+{	
+	my $lineIn = $_[1];
+	chomp $lineIn;
+	$lineIn =~ s/\s|}//g;
+	my @array = split ',', $lineIn;
+	foreach(@array)
+	{	
+		#Convert scientific notation to decimal format
+		if(m/E[-|+]/i)
+		{
+			my ($num, $exp) = split /E/i;
+			$_ = $num*(10**$exp);
+			$_ = "$_"; #Make sure $_ is a string.
+		}
+
+		#Make sure all real data has a decimal point and a leading/trailing zero
+		$_ .= ".0" if ($npssTbls{$_[0]}{$_[2]."type"} eq "real" && !m/\./);
+		$_ = $_ . "0" if ($npssTbls{$_[0]}{$_[2]."type"} eq "real" && m/\d\.$/);
+		$_ = "0" . $_ if ($npssTbls{$_[0]}{$_[2]."type"} eq "real" && m/^\.\d+$/);
+	}
+	push @{$npssTbls{$_[0]}{$_[2]."values"}}, @array;
+}
+sub asTblToHash()
+{
+	my $tableFound = 0;
+	my $tableName;
+	my $foundX = 0;
+	my $foundY = 0;
+	my $foundZ = 0;
+	my(@x, @y, @z);
+	
+	foreach(@_)
+	{	
+		next if m/#\s+|!|#ADJUSTABLE/;
+		chomp;
+		if(m/\$INPUT\s+T\s*=\s*\'(.*)\'\s*,/) #Table found
+		{	
+			$tableFound = 1;
+			$tableName = $1;
+		}
+		elsif((s/\s*X\s*=\s*//))
+		{
+			s/\s//g;
+			push @x, $_;
+			$foundX = 1;		
+		}
+		elsif($foundX && !($foundY || $foundZ))
+		{	
+			if(s/\s*Y\s*=\s*//)
+			{
+				s/\s//g;
+				push @y, $_;
+				$foundY = 1;
+				$foundX = 0;
+			}
+			elsif(s/\s*Z\s*=\s*//)
+			{
+				s/\s//g;
+				push @z, $_;
+				$foundZ = 1;
+				$foundX = 0;
+			}
+			else{s/\s//g;push @x, $_;}
+		}
+		elsif($foundY)
+		{
+			if(s/\s*Z\s*=\s*//)
+			{	
+				s/\s//g;
+				push @z, $_;
+				$foundZ = 1;
+				$foundY = 0;
+			}
+			else{s/\s//g; push @y, $_;}
+		}
+		elsif($foundZ)
+		{
+			if(!m/\$/)
+			{
+				s/\s//g;
+				push @z, $_ ;#unless $_ == "";
+			}
+			elsif(m/\$/)
+			{
+				$foundZ = 0;
+				$tableFound = 0;
+				push @{$bcnTbls{$tableName}{"xvalues"}}, split ',', "@x";
+				push @{$bcnTbls{$tableName}{"yvalues"}}, split ',', "@y";
+				push @{$bcnTbls{$tableName}{"zvalues"}}, split ',', "@z";
+				@x=();
+				@y=();
+				@z=();		
+			}
+		}else{} #Do nothing
+	}
+}

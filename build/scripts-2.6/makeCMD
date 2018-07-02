@@ -1,0 +1,536 @@
+#!/usr/bin/env bash
+# makeCMD
+# Wrapper script on Rob Boguski's perl sar2trim
+# 16-Jun-2009	DA Gutz	Created
+# 18-Jun-2009   DA Gutz removed true/false myReplace
+# 19-Jun-2009 	DA Gutz	deal with make install
+# 19-Jun-2009   DA Gutz debug XX
+# 22-Jun-2009 	DA Gutz combine adj/tbl for XX
+# 23-Jun-2009   DA Gutz no flash nvm for XX
+# 13-Jul-2009   DA Gutz generalized
+# 20-Jul-2009 	DA Gutz make fmlist72 default
+# 05-Aug-2009 	DA Gutz add python option
+# 07-Aug-2009   DA Gutz made python nominal
+# 08-Jul-2010 	DA Gutz	add PGM and VER arguments to makeCMD.py call.
+# 11-Nov-2010   DA Gutz add check for too many arguments
+
+# Defaults
+PGM=PGM
+VER=none
+ENG=engine
+RIG=dryRig
+PYTHON=1
+#FML00=fmlist72_governors.cmd
+
+# Default _XX_ correspondence between file names and usage
+engSARs="AS ET"
+dryRigSARs="AS ET DR"
+testSARs="XX"
+
+# Initialize
+help=0
+debug=0
+verbose=0
+force=0
+quitting=0
+args=""
+DATE=`date +%Y%m%d`
+usingFML00=1
+
+# getopt  from /usr/lib/getopt/parse.bash
+TEMP=`getopt -o bde:fhp:r:v: --long backward,debug,engine:,force,help,program:,rig:,version: \
+	 -n 'makeCMD' -- "$@"`
+if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
+eval set -- "$TEMP"
+while true ; do
+    case "$1" in
+	-b|--backward) 	PYTHON=0; 			shift ;;
+	-d|--debug)		debug=1; set -x;	shift ;;
+	-e|--engine)	shift; ENG="$1";	shift ;;
+	-f|--force)     force=1; 			shift ;;
+	-h|--help)      help=1;           	shift ;;
+	-p|--program)	shift; PGM="$1";	shift ;;
+	-r|--rig)	    shift; RIG="$1";	shift ;;
+	-v|--version)   shift; VER="$1";    shift ;;
+	--)             shift; break ;;
+	*) echo "bad option"; quitting=1; exit 1 ;;
+    esac
+done
+if ( test "$1 " != " ")
+then
+    echo "too many arguments:" $1 " ...quitting"
+    exit 1
+fi
+if ( test $help -eq "1" || test $quitting -eq "1" )
+then
+    echo "Makes .cmd PMAT trim files from ingredients in folder such as"
+    echo "09_ET_01.adj and 09_ET_01.tbl."
+    echo "  - makes engine test trim file from $engSARs files."
+    echo "  - makes dry rig test trim file from $dryRigSARs files."
+    echo "  - makes multiple individual trim files from $testSARs files."
+    echo "Normally all the files in a folder are converted depending on"
+    echo "file name.    Therefore the user must organize source .adj and .tbl"
+    echo "files in folders that match the usage.   Alternatively you can list the"
+    echo "desired files in a .shm file to create a 'shop mod' trim.   Files in the .shm"
+    echo "may have any name.  The program still runs as though the files are"
+    echo "organized in the same folder so it will throw errors if files are not"
+    echo "named per convention."
+    echo " "
+    echo "The naming convention for source .adj and .tbl goes"
+    echo "YY-AS-000.adj/.tbl:    application software change planned.  Included"
+    echo "                       into all rig and engine trims."
+    echo "YY-ET-000.adj/.tbl:    engine test only.  Included only in engine trims."
+    echo "YY-DR-000.adj/.tbl:    dry rig only.   Included only in rig trims."
+    echo "YY-XX-000.adj/.tbl:    test only.  Included only in XX test trims."
+    echo " "
+    echo "Any one of these appearing in a .shm file gets put into the shop"
+    echo "mod trim regardless of name."
+    echo "usage"
+    echo "  $0 [options]"
+    echo "  options:"
+    echo "  -b,  --backward do not use python scripting"
+    echo "  -d,  --debug	echo all commands"
+    echo "  -e,  --engine   engine id [$ENG]"
+    echo "  -f,  --force     force program to remake all"
+    echo "  -h,  --help	this screen"
+    echo "  -p,  --program   program id [$PGM]"
+    echo "  -r,  --rig   rig id [$RIG]"
+    echo "  -v,  --version	software version [$VER]"
+    echo " "
+    exit 0
+fi
+
+# Traps
+trap 'rm -f sar2trim makeCMD.py .temp;' 0 1 2 9 15
+
+# Calculate
+VERN=`echo $VER | sed "s/\.//g" | sed "s/v//g"`
+perlOut="$PGM"v"$VERN"scr"$DATE".cmd
+
+# Dirty hack:  make sar2trim local to avoid stupid path games
+SARFIL=`which sar2trim`
+if test $? -eq 0
+    then
+    cp $SARFIL .
+else
+    echo "ERROR $0:  sar2trim not found.  Have you run 'make install' in base level of this package?"
+    exit 1
+fi
+
+# Dirty hack:  make makeCMD.py local to avoid stupid path games
+PYFIL=`which makeCMD.py`
+if test $? -eq 0
+    then
+    cp $PYFIL .
+else
+    echo "ERROR $0:  makeCMD.py not found.  Have you run 'make install' in base level of this package?"
+    exit 1
+fi
+
+if test $debug -eq "1"
+    then
+	verbose=4
+fi
+
+if test $PYTHON -eq "1"
+	then
+	if test "$VER " == "none "
+	then
+		if test "$PGM " == "none "
+		then
+			echo "Calling Python script makeCMD.py"
+			python makeCMD.py -d $verbose
+		else
+			echo "Calling Python script makeCMD.py -p $PGM"
+			python makeCMD.py -d $verbose -p $PGM
+		fi
+	else
+		if test "$PGM " == "none "
+		then
+			echo "Calling Python script makeCMD.py -v $VER"
+			python makeCMD.py -d $verbose -v $VER
+		else
+			echo "Calling Python script makeCMD.py -p $PGM -v $VER"
+			python makeCMD.py -d $verbose -p $PGM -v $VER
+		fi
+	fi
+    exit 0
+fi
+
+# Shell script method
+echo "Making PDAP script cmd files for program=$PGM, version=$VER..."
+# Misc Test XX SARs
+sleep 2   # Dirty hack to fix race condition
+listTestSARs=""
+listOneTest=""
+haveFiles=0
+echoed00=0
+rm -f .temp
+for i in $testSARs
+do
+  if `ls *$i*.adj >/dev/null 2>&1`
+      then
+      ls -1 *$i*.adj | sort | uniq >>.temp
+      haveFiles=1
+  fi
+  if `ls *$i*.tbl >/dev/null 2>&1`
+      then
+      ls -1 *$i*.tbl | sort | uniq >>.temp
+      haveFiles=1
+  fi
+done
+if test $haveFiles -eq "1"
+    then
+    trimListTestSARs=`cat .temp`
+    rm -f .temp
+    for i in $trimListTestSARs
+      do
+
+      # Test for new file, continue if nothing new
+      ROOT=`echo $i|sed "s/.adj//g"|sed "s/.tbl//g"`
+      TYPE=`echo $i|sed 's/.*\(...\)/\1/'`
+      if test "$TYPE" == "adj"
+	  	then
+	  	OTYPE=tbl
+      else
+	  	OTYPE=adj
+      fi
+      if test "$TYPE" == "adj" && `ls "$ROOT"."$OTYPE" >/dev/null 2>&1`
+	  	then
+	  	haveOther=1
+	  	other="$ROOT"."$OTYPE"
+      elif test "$TYPE" == "tbl" && `ls "$ROOT"."$OTYPE" >/dev/null 2>&1`
+	  	then
+	  	continue
+      else
+	  	haveOther=0
+	  	other=""
+      fi
+      if test "$haveOther " -eq "1 "
+	  	then
+	 	rOutFile="$PGM"v"$VERN"_"$ROOT"_adjtbl_"$DATE".cmd
+	  	if `ls "$PGM"v"$VERN"_"$ROOT"_adjtbl_????????.cmd >/dev/null 2>&1`
+	      then
+	      pOutFile=`ls -1rt "$PGM"v"$VERN"_"$ROOT"_adjtbl_????????.cmd |\
+              tail -1`
+	  	else
+	      pOutFile=$rOutFile
+	  	fi
+      else
+	  	rOutFile="$PGM"v"$VERN"_"$ROOT"_"$TYPE"_"$DATE".cmd
+	  	if `ls "$PGM"v"$VERN"_"$ROOT"_"$TYPE"_????????.cmd >/dev/null 2>&1`
+	    	then
+	      	pOutFile=`ls -1rt "$PGM"v"$VERN"_"$ROOT"_"$TYPE"_????????.cmd |\
+              tail -1`
+	  	else
+	      	pOutFile=$rOutFile
+	  	fi
+      fi
+      if test "$haveOther " == "1 "
+	  	then
+	  	if test $other -nt $pOutFile
+	      then
+	      makingNewOther=1
+	      echo "$other changed..."
+	  	else
+	      makingNewOther=0
+	  	fi
+      else
+      	makingNewOther=0
+      fi
+      if test $i -nt $pOutFile
+	  	then
+	  	makingNew=1
+	  	echo "$i changed..."
+      else
+	  	makingNew=0
+      fi
+      if test "$force " == "1 "
+	  	then
+	  	makingNewOther=1
+	  	makingNew=1
+	  	if test "$echoed00 " == "0 "
+	  		then
+	      	echo "Forcing rebuild of all..."
+	  	fi
+	  	echoed00=1
+      fi
+      if test "$makingNew " == "0 " && test "$makingNewOther " == "0 "
+	  	then
+	  	echo "$pOutFile up to date..."
+	  	continue
+      else
+	  	iFile=""
+	  	oFile=""
+	  	perl sar2trim -p $PGM -v $VERN $i &
+	  	wait $!
+	  	if test "$? " == "0 "
+	      then
+	      iFile=`echo $perlOut |
+                 sed "s/"$VERN"/"$VERN"_"$ROOT"/1" |
+                 sed "s/scr/_"$TYPE"_/1"`
+	      if `cat -s "$perlOut" > "$iFile"`
+		  	then
+		  	rm -f $perlOut
+		  	if test "$usingFML00 " == "1 "
+		  		then
+		  		myReplace "SET VA AS_ADJ_STORE_REQ" \
+		      		"!SET VA AS_ADJ_STORE_REQ" $iFile
+		      	fi
+	      else
+		  	rm -f $oLatestFile
+		  	echo "ERROR($0):  sar2trim failed for $other"
+		  	exit 1
+	      fi
+	  	else
+	      echo "ERROR($0):  sar2trim failed for $i"
+	      exit 1
+	  	fi
+	  	sleep 2  # dirty hack to fix race condition
+	  	if test "$haveOther " == "1 "
+	      then
+	      perl sar2trim -p $PGM -v $VERN $other &
+	      wait $!
+	      if test "$? " == "0 "
+		  then
+		  oLatestFile=`ls -1rt | tail -1`
+		  oFile=`echo $oLatestFile |
+                  sed "s/"$VERN"/"$VERN"_"$ROOT"/1" |
+                  sed "s/scr/_"$OTYPE"_/1"`
+		  if `cat -s $oLatestFile > $oFile`
+		  then
+		      rm -f $oLatestFile
+	              if test "$usingFML00 " == "1 "
+	                  then
+		          myReplace "SET VA AS_ADJ_STORE_REQ" \
+			      "!SET VA AS_ADJ_STORE_REQ" $oFile
+                      fi
+        	  else
+		      rm -f $oLatestFile
+		      echo "ERROR($0):  sar2trim failed for $other"
+		      exit 1
+	          fi
+	      else
+		  	echo "ERROR($0):  sar2trim failed for $other"
+		  	exit 1
+	      fi
+	  	fi
+	  	sleep 1  # dirty hack to fix race condition
+      	# Cat two results
+	  	if test "$haveOther " == "0 "
+	      then
+	      if test -s $rOutFile
+		  	then
+		  	echo "Made $rOutFile"
+	      else
+		  	echo "ERROR($0):  make of $rOutFile failed"
+		  	exit 1
+	      fi
+	  	else
+	      if `cat -s $iFile $oFile > $rOutFile`
+		  	then
+		  	rm -f $iFile $oFile
+		  	if test -s $rOutFile
+		      then
+		      echo "Made $rOutFile"
+		  	else
+		      echo "ERROR($0):  copy to $rOutFile failed"
+		      exit 1
+		  	fi
+	      else
+		  	rm -f $iFile $oFile
+		  	echo "ERROR($0):  copy to $rOutFile failed"
+		  	exit 1
+	      fi
+	  	fi
+   	fi
+	done
+else
+    echo "No test SARSs... continuing"
+fi
+
+
+
+# Engine SARs
+sleep 2   # Dirty hack to fix race condition
+rOutFile="$PGM""$ENG"v"$VERN"_"$DATE".cmd
+if `ls -1rt "$PGM""$ENG"v"$VERN"_????????.cmd >/dev/null 2>&1`
+	then
+    pOutFile=`ls -1rt "$PGM""$ENG"v"$VERN"_????????.cmd | tail -1`
+else
+    pOutFile=$rOutFile
+fi
+listEngSARs=""
+for i in $engSARs
+do
+  if `ls *$i*.adj >/dev/null 2>&1`
+      then
+      new=`ls *$i*.adj`
+      listEngSARs="$listEngSARs $new"
+  fi
+  if `ls *$i*.tbl >/dev/null 2>&1`
+      then
+      new=`ls *$i*.tbl`
+      listEngSARs="$listEngSARs $new"
+  fi
+done
+makingNew=0
+for j in $listEngSARs
+  do
+  if test "$j" -nt $pOutFile
+      then
+      echo "$j changed..."
+      makingNew=1
+  fi
+done
+if test -s $FML00
+then
+   if test $FML00 -nt $pOutFile
+      then
+      echo "$FML00 changed..."
+      makingNew=1
+   fi
+else
+    #echo "$FML00 does not exist....quitting"
+    #exit 1
+    usingFML00=0
+    echo "$0: $FML00 does not exist....continuing assuming not needed"
+fi
+if test "$force " -eq "1 "
+    then
+    makingNew=1
+    if test "$echoed00 " == "0 "
+	then
+	echo "Forcing remake of all..."
+    fi
+    echoed00=1
+fi
+if test "$makingNew" -eq "1 "
+    then
+    perl sar2trim -p $PGM -v $VERN $listEngSARs &
+    wait $!
+    if test "$? " == "0 "
+	then
+	latestFile=`ls -1rt | tail -1`
+	outFile=`echo $latestFile | sed "s/"$PGM"/"$PGM"eng001/1" |
+           sed 's/scr/_/g'`
+	if `mv $latestFile $outFile`
+	    then
+     	    if test "$usingFML00 " == "1 "
+	    then
+            myReplace "SET VA AS_ADJ_STORE_REQ" \
+		  "!SET VA AS_ADJ_STORE_REQ" $outFile
+	    fi
+	    if test -s $FML00
+		then
+		cat -s $outFile $FML00 > .temp
+      	        mv .temp $outFile
+	    else
+		echo "WARNING($O):   no $FML00 file...continuing..."
+	    fi
+	    if test -s $outFile
+		then
+		echo "Made $outFile"
+	    else
+		echo "ERROR($0):  make of $outFile failed"
+		exit 1
+	    fi
+	fi
+    else
+	echo "ERROR($0):  sar2trim failed for $i"
+	exit 1
+    fi
+else
+    echo "$pOutFile up to date..."
+fi
+
+
+
+# DryRig SARS
+sleep 2   # Dirty hack to fix race condition
+    rOutFile="$PGM""$RIG"v"$VERN"_"$DATE".cmd
+if `ls -1rt  "$PGM""$RIG"v"$VERN"_????????.cmd >/dev/null 2>&1`
+	then
+    pOutFile=`ls -1rt "$PGM""$RIG"v"$VERN"_????????.cmd | tail -1`
+else
+    pOutFile=$rOutFile
+fi
+listDryRigSARs=""
+for i in $dryRigSARs
+  do
+  if `ls *$i*.adj >/dev/null 2>&1`
+      then
+      new=`ls *$i*.adj`
+      listDryRigSARs="$listDryRigSARs $new"
+  fi
+  if `ls *$i*.tbl >/dev/null 2>&1`
+      then
+      new=`ls *$i*.tbl`
+      listDryRigSARs="$listDryRigSARs $new"
+  fi
+done
+makingNew=0
+for j in $listDryRigSARs
+  do
+  if test $j -nt $pOutFile
+      then
+      echo "$j changed..."
+      makingNew=1
+  fi
+done
+if test $FML00 -nt $pOutFile
+    then
+    echo "$FML00 changed..."
+    makingNew=1
+fi
+if test "$force " -eq "1 "
+    then
+    makingNew=1
+    if test "$echoed00 " == "0 "
+	then
+	echo "Forcing remake of all..."
+    fi
+    echoed00=1
+fi
+if test "$makingNew " -eq "1 "
+    then
+    perl sar2trim -p $PGM -v $VERN $listDryRigSARs &
+    wait $!
+    if test "$? " == "0 "
+		then
+		latestFile=`ls -1rt | tail -1`
+		outFile=`echo $latestFile | sed "s/"$PGM"/"$PGM"dryRig/1" |
+            sed 's/scr/_/g'`
+	if `mv $latestFile $outFile`
+	    then
+	    if test "$usingFML00 " == "1 "
+            then
+        	myReplace "SET VA AS_ADJ_STORE_REQ" \
+		      "!SET VA AS_ADJ_STORE_REQ" $outFile
+            fi
+	    if test -s $FML00
+			then
+			cat -s $outFile $FML00 > .temp
+	        mv .temp $outFile
+	    else
+			echo "WARNING($O):   no $FML00 file...continuing..."
+	    fi
+	fi
+	if test -s $outFile
+	    then
+	    echo "Made $outFile"
+	else
+	    echo "ERROR($0):  make of $outFile failed"
+	    exit 1
+	fi
+    else
+	echo "ERROR($0):  sar2trim failed for $i"
+	exit 1
+    fi
+else
+    echo "$pOutFile up to date..."
+fi
+
+# Cleanup and quit
+rm -f sar2trim makeCMD.py .temp
+echo "$0:  done."

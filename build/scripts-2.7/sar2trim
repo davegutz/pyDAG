@@ -1,0 +1,515 @@
+#!/usr/bin/env perl
+# Created by:  nh58f6t (Robert Boguski)
+# Date Created:  Mon Apr 13 17:41:54 EDT 2009
+# Perl Version:  5.006001
+#
+# Revisions
+# 20090413  RB	-Baseline
+# 20090513  RB	-Added command line options for version and help
+#				-Change code to support the input of multiple adj and
+#				 tbl files
+my $version = "1.0";
+# 20090519 RB   -Added information to help page.
+# 				-Added code to compare table sizes in SAR files
+#				 with those in as.adj/as.tbl
+#				-Added code for default case -- all .adj/.tbl files
+#				 are inputs 
+#				-Added -a command line option for including as.adj
+#				 and as.tbl in argument list.
+$version = "1.5";
+# 20090526	RB	-Added code to pick the headers out of the sar files 
+#				 and put them in the trimfile
+# 				-Made command line argument handling more robust
+# 20090611	RB	-Changed yearMonthDay to ensure the day has 2 digits 
+$version = "1.5.1";
+# 20090618	RB	-Fixed bug that prevented boolean values from being converted
+#				 to integers. $line[1] was $line[2]. Also added more robust
+#				 pattern from splitting up adjustment lines (\t -> \s+)
+$version = "1.5.2";
+# 20090624	RB	-Added duplicate adjustment/schedule check. If duplicates
+#				 are detected, a trim file will not be generated. Also
+#				 added a duplicate check/report disabled flag, d, for the
+#				 command line
+$version = "1.6";
+# 20110408  DGR -Duplicate check disable flag did not work properly, corrected
+#				Map v2.02 schedules that exceeded name length to new name per .dat1
+$version = "1.7";
+# 20110408  DGR -Added statement to count number of obsolete adjustments or tables
+#				Map v2.02 schedules that exceeded name length to new name per .dat1
+$version = "2.0";
+# 20110928  DGR -Added SAR number to warning output, needed for makeCMD wrapper script
+#
+# To Do:
+#	-Add code to put fm list number in trim file
+#	-Check adjustments against their ranges in as.adj and issue warnings 
+#    if the values are out of range.
+
+use Getopt::Long;
+use Switch;
+my @allAdjs;
+my @allTbls;
+my %asTbl;
+my %duplicates; #Stores adjustment and schedule names to track duplicates
+my @out;
+my @inFiles;
+my $swversion = "xxx";
+my $program = "program";
+my $dateYmd = yearMonthDay();
+my $fileName = "$program$swversion". "scr" ."$dateYmd.cmd";
+my $footer = "!
+! Write to NVM
+SET VA AS_ADJ_STORE_REQ 1 both\n";
+my %opt;
+#>>>>>>>>>>>>>>>>>>>HANDLE COMMANDLINE ARGUMENTS<<<<<<<<<<<<<<<<<<<<<<<
+&GetOptions(\%opt, 
+	'v=s' => \$swversion, #Requires string argument
+	'p=s' => \$program,   #Requires string argument
+	'd',				  #Duplicate Disabled Flag
+	'f=s' => \$fmNum,     #Reason for this?
+	'info' => sub {print $version,"\n";exit;},
+	'a',
+	'h|help|?' => sub {print STDERR <<'EOF'; exit;},
+	sar2trim - converts adjustments and tables in .adj and .tbl files to
+	a trim (.cmd) file.
+	
+	Usage: sar2trim[-a][-h][-d][-p program_name][-v version][-f files]
+
+	Options:
+	<none>	Convert all .adj and .tbl files in the current directory
+		to a trim (.cmd) file. 
+	-p		Specify Program
+	-v		Specify Software Version
+	-d		Allow duplicates
+	-h		Help (This Page)
+	-info	Print version
+	-a		Don't skip as.adj and as.tbl (by default as.adj and as.tbl are skipped)	
+	
+	Notes: 
+	1. If as.tbl is in the current directory, this script will compare the sizes   
+	   of the tables in the SAR files with those in as.tbl and issue warnings if
+	   there is a mismatch in sizes.
+	2. The .adj SAR files supplied to this script can only be in the nominal value change
+	   format: adjustment value 
+	
+	Examples: 
+	(1 - Typical Usage)
+	>> sar2trim -p ge38 -v 121 09_AS_001.adj 09_AS_001.tbl
+	>> sar2trim -p ge38 -v 121 *.adj *.tbl
+			 
+		 If it is May 13, 2009, then the output file resulting from 
+		 the command above will be called ge38v121scr20090513.cmd
+	
+	(2 - Default trim file name)	 
+	>> sar2trim
+	
+		If it is May 13, 2009 and no program name or software version 
+		number is supplied, then the output file will be called
+		programvxxxscr20090513.cmd.
+	
+	(3 - Including as.adj/as.tbl)
+	>> sar2trim -a   
+	>> sar2trim -a -p ge38 -v 122 *.
+	
+		Both will include as.tbl and/or as.adj in the resulting trim file 
+		if they are in the current working directory.		 		  
+EOF
+);
+main();
+sub main()
+{	
+
+	$swversion =~ s/\.|v//g;	
+	$fileName = "$program". "v$swversion". "scr" ."$dateYmd.cmd";
+	$header = "!Filename: $fileName
+!Created by:  
+!for use on $swversion AS w/vxxx OS
+!Date: $dateYmd
+!Description: 
+!
+!This trim file contain adjustments and schedules 
+!from the following files:\n";
+	
+	@inFiles = ($#ARGV < 0) ? glob("*.adj *.tbl") : @ARGV;
+
+	#If any of the files are .tbl files, load as.tbl into a hash
+	# in order to compare table sizes
+	foreach my $inFile(@inFiles)
+	{
+		if($inFile =~ /.*\.tbl/)
+		{
+			if(-e "as.tbl")
+			{	
+				%asTbl = asTblToHash("as.tbl",fileToArray("as.tbl"));
+			}
+			else
+			{
+				warn "Warning: as.tbl is not in the current directory. ",
+				     "as.tbl is needed to check table sizes.\n",
+					 "If you like to enable this check, make sure as.tbl ",
+					 "is in the current directory.\n";					 		 	
+			}	
+			last;
+		}
+	}
+	
+	foreach my $inFile(@inFiles)
+	{
+		next unless -e $inFile;
+		if($inFile eq "as.adj" || $inFile eq "as.tbl")
+		{
+			next unless exists $opt{a};
+		}
+
+		if(-z $inFile)
+		{
+			warn "Warning: $inFile has zero size.\n";
+			next;
+		}
+	
+		chomp $inFile;
+		
+		if($inFile =~ /\.tbl/)
+		{
+			push @allTbls, processTbl($inFile);
+			push @fileList, "!$inFile\n";
+		}
+		elsif($inFile =~ /\.adj/)
+		{
+			push @allAdjs, processAdj($inFile);
+			push @fileList, "!$inFile\n";			
+		}
+		else
+		{
+			warn "Warning: $inFile is not a valid file. Only files with extension .adj or .tbl are valid\n"; 
+			next;
+		}	
+	}
+		
+	#A -d flag disables the duplicate check and report feature
+		if((grep {$_ > 1} values %duplicates) && (!(exists $opt{d})))
+		{
+			print "Duplicates Found - Trim File not generated.\n"
+		}
+		else
+		{		
+			push @out, 	$header, 
+						@fileList,
+						"!\n!\n",
+						@allAdjs, 
+						"!\n!\n", 				
+						@allTbls, 
+						$footer;
+			arrayToFile(@out, $fileName);
+		}
+	
+}
+
+sub processAdj()
+{
+	@SARpath=split("/",$_[0]);
+	$SARname=@SARpath[-1];
+	#print "I am working on $SARname\n";
+	my @file = fileToArray($_[0]);
+	my @allAdjs = ();
+	my $header ="";
+	my $numDuplicates = 0;
+	my $numObsolete = 0;
+	foreach my $line(@file)
+	{
+		if (($line =~ /^\s*!/) && !($header) )
+		{
+			$header = $line;
+			next;
+		}
+        next if $line =~ /^\s*$/;
+
+		if ($line =~ /^(#|!)/) {
+			if ($line =~ /!obsolete/) {
+				$numObsolete++;
+			}
+			push @allAdjs, $line;
+			next;
+		} #skip comments and blank lines
+
+		chomp $line;
+		my @line = split '\s+', $line;
+		
+		unless(exists $opt{d})
+		{
+			$duplicates{$line[0]}++;
+		if ($duplicates{$line[0]} > 1) {
+			$numDuplicates++;
+			warn "Duplicate adjustment $line[0] in file $_[0]\n";
+			}
+		}
+	
+		if($line =~ /true|false/i && $line[1] =~ /true/i)
+		{
+			$line[1] = 1;
+		}
+		elsif($line =~ /true|false/i && $line[1] =~ /false/i)
+		{
+			$line[1] = 0;
+		}
+		else{}
+		push @allAdjs, "set adjust $line[0] $line[1] both\n";		
+	}
+    if ($numObsolete > 0) {
+		unshift @allAdjs, "!SAR updated by makeCMD on $dateYmd|Removed $numObsolete adjustments modified in subsequent SAR\n";
+	}
+	unshift @allAdjs, $header;
+	unshift @allAdjs,  "!\n!", $_[0],"\n";
+	return @allAdjs;	
+}
+
+sub processTbl()
+{
+	@SARpath=split("/",$_[0]);
+	$SARname=@SARpath[-1];
+	#print "I am working on $SARname\n";
+	my @file = fileToArray($_[0]);	
+	my %theBcnTbls = asTblToHash($_[0],@file);
+	my @tblOut = ();
+	my $header;
+	
+	#Pick up the header to put in the trimfile
+	foreach $line(@file)
+	{
+		if($line =~ /^\s*!/)
+		{
+			$header = $line;
+			last;
+		}
+	}
+	my $tblName;
+	foreach my $tbl(sort keys %theBcnTbls)
+	{
+
+		my @trimTbl = @{$theBcnTbls{$tbl}{'xvalues'}};		
+		my @y = @{$theBcnTbls{$tbl}{'yvalues'}};
+		my @z = @{$theBcnTbls{$tbl}{'zvalues'}};
+
+		#Compare table sizes and warn if there is a mismatch
+		unless($#trimTbl == $#{$asTbl{$tbl}{'xvalues'}})
+		{
+			warn "$SARname: Warning: $tbl - mismatch in the number of x values (SAR: ",
+			$#trimTbl+1, ", as.tbl: ", $#{$asTbl{$tbl}{'xvalues'}}+1, ")\n";
+		}
+		
+		unless($#y == $#{$asTbl{$tbl}{'yvalues'}})
+		{
+			warn "$SARname: Warning: $tbl - mismatch in the number of y values (SAR: ",
+			$#y+1, ", as.tbl: ", $#{$asTbl{$tbl}{'yvalues'}}+1, ")\n";
+		}
+		
+		unless($#z == $#{$asTbl{$tbl}{'zvalues'}})
+		{
+			warn "$SARname: Warning: $tbl - mismatch in the number of z values (SAR: ",
+			$#z+1, ", as.tbl: ", $#{$asTbl{$tbl}{'zvalues'}}+1, ")\n";
+		}
+
+		if($#{$theBcnTbls{$tbl}{'yvalues'}} == -1)#1-D Table
+		{			
+			#Merge alternating x's and z's into one array:	
+			my $i = 1;
+			until($#z < 0)
+			{
+				splice @trimTbl, $i, 0, shift @z;	
+				$i += 2;				
+			}
+			
+			#Generate the proper trim file format for 1D tables	
+			@trimTbl = trimFormat($tbl, @trimTbl);
+			push @tblOut, @trimTbl, "!\n!\n";						
+		}
+		else #2D table
+		{
+		if ($swversion == 202)
+			{ switch ($tbl) {
+				case "NGDOT_ALT_AC_SCH"	{  
+				print "$SARname: Changing NGDOT_ALT_AC_SCH to NGDOT_AT_AC_SCH in trim to match v2.02 dat1 file\n";
+				$tblName = "NGDOT_AT_AC_SCH";}
+				case "NP_DGOV_KICK_SCH" {
+				print "$SARname: Changing NP_DGOV_KICK_SCH to NP_DGOV_KCK_SCH in trim to match v2.02 dat1 file\n";
+				$tblName = "NP_DGOV_KCK_SCH";
+				}
+				case "NP_GGN_SC_REF_SCH" {
+				print "$SARname: Changing NP_GGN_SC_REF_SCH to NP_G_SC_REF_SCH in trim to match v2.02 dat1 file\n";
+				$tblName = "NP_G_SC_REF_SCH";
+				}
+				case "ND_GGN_SC_REF_SCH" {
+				print "$SARname: Changing ND_GGN_SC_REF_SCH to ND_G_SC_REF_SCH in trim to match v2.02 dat1 file\n";
+				$tblName = "ND_G_SC_REF_SCH";
+				}
+				else {$tblName = $tbl;}
+			}
+		}
+		else {$tblName = $tbl;}		  
+		  
+			@trimTbl = trimFormat($tblName . "_X", @{$theBcnTbls{$tbl}{'xvalues'}});
+			push @trimTbl, 	trimFormat($tblName . "_Y", @{$theBcnTbls{$tbl}{'yvalues'}});	
+			push @trimTbl, 	trimFormat($tblName . "_Z", @{$theBcnTbls{$tbl}{'zvalues'}});
+			push @tblOut, @trimTbl, "!\n!\n";									
+		}
+	}
+	unshift @tblOut, $header;
+	unshift @tblOut,  "!", $_[0],"\n" unless $#tblOut < 0;	
+	return  @tblOut;
+}
+
+sub trimFormat()
+{
+	#In: table name, array
+	#Out: array of formatted lines, @trimTbl
+	my $counter = 0;
+	my $tblName = shift @_;
+	my @trimTbl = @_;
+	foreach my $var(@trimTbl)
+	{
+		chomp $var;
+		if($counter == 0)
+		{
+			$var = "set adjust $tblName $var both\n";
+		}
+		elsif($counter < 10)
+		{
+			$var = "set adjust $tblName+0$counter $var both\n";
+		}
+		else
+		{
+			$var = "set adjust $tblName+$counter $var both\n";
+		}
+		$counter++;			
+	}
+	return @trimTbl;
+}
+
+#Modified asTblToHash to facilitate duplicate check and reporting
+sub asTblToHash()
+{
+	my %bcnTbls;
+	my $tableFound = 0;
+	my $tableName;
+	my $foundX = 0;
+	my $foundY = 0;
+	my $foundZ = 0;
+	my(@x, @y, @z);
+	my $fileName = shift;#Used only for duplicate reporting
+	
+	foreach(@_)
+	{	
+		next if m/#\s+|!|#ADJUSTABLE/;
+		chomp;
+		if(m/\s*\$INPUT\s+T\s*=\s*\'(.*)\'\s*,/) #Table found
+		{	
+			$tableFound = 1;
+			$tableName = $1;
+			
+			#The duplicate check doesn't apply to as.tbl
+			unless(exists $opt{d} or $fileName =~ /as.tbl/)
+			{	
+				warn "Duplicate schedule $1 in file $fileName\n"
+					if ++$duplicates{$1} > 1;
+			}
+		}
+		elsif((s/\s*X\s*=\s*//))
+		{
+			s/\s//g;
+			push @x, $_;
+			$foundX = 1;		
+		}
+		elsif($foundX && !($foundY || $foundZ))
+		{	
+			if(s/\s*Y\s*=\s*//)
+			{
+				s/\s//g;
+				push @y, $_;
+				$foundY = 1;
+				$foundX = 0;
+			}
+			elsif(s/\s*Z\s*=\s*//)
+			{
+				s/\s//g;
+				push @z, $_;
+				$foundZ = 1;
+				$foundX = 0;
+			}
+			else{s/\s//g;push @x, $_;}
+		}
+		elsif($foundY)
+		{
+			if(s/\s*Z\s*=\s*//)
+			{	
+				s/\s//g;
+				push @z, $_;
+				$foundZ = 1;
+				$foundY = 0;
+			}
+			else{s/\s//g; push @y, $_;}
+		}
+		elsif($foundZ)
+		{
+			if(!m/\$/)
+			{
+				s/\s//g;
+				push @z, $_ ;#unless $_ == "";
+			}
+			elsif(m/\s*\$/)
+			{
+				$foundZ = 0;
+				$tableFound = 0;
+				push @{$bcnTbls{$tableName}{"xvalues"}}, split ',', "@x";
+				push @{$bcnTbls{$tableName}{"yvalues"}}, split ',', "@y";
+				push @{$bcnTbls{$tableName}{"zvalues"}}, split ',', "@z";
+				@x=();
+				@y=();
+				@z=();		
+			}
+		}else{} #Do nothing
+	}
+	return %bcnTbls;
+}
+
+#------------------------------------------------------------------------------------
+# Subroutine: fileToArray
+# Description: Loads the specified file into an array
+# Inputs: fileName
+# Outputs: Array of lines from the file provided
+#------------------------------------------------------------------------------------
+sub fileToArray()
+{
+	my $fileName = $_[0]; 
+	open(FILE, $fileName) or warn "Read Error: Can't open $fileName\n";
+	my @fileArray = <FILE>;
+	close(FILE);
+	return @fileArray;
+}
+
+#------------------------------------------------------------------------------------
+# Subroutine: arrayToFile
+# Description: Writes the specified array to the 
+#		specified file
+# Inputs: array, file name
+# Outputs: Returns nothing
+#------------------------------------------------------------------------------------
+sub arrayToFile()
+{
+	#The last element in @_ is the name of the file to be written to
+	my $fileName = pop(@_);	
+	open(FILE, ">$fileName") or warn "Write Error: Can't open $fileName\n";
+	print FILE @_;
+	close(FILE);
+}
+
+sub yearMonthDay()
+{
+	my %months = ('Jan','01','Feb','02','Mar','03','Apr','04','May','05','Jun','06',
+	'Jul','07','Aug','08','Sep','09','Oct','10','Nov','11','Dec','12');
+
+	my @time = split ' ',scalar localtime();
+	my $day = $time[2];
+	$day =~ s/\b(\d)\b/0$1/; #Make sure the day uses 2 digits
+	$timeFormat = "$time[4]". $months{$time[1]} . "$day";
+	return $timeFormat
+}
+
