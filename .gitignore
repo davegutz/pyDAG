@@ -79,3 +79,4 @@ build/scripts-2.7/watermark.py
 *.pyc
 *.xml
 .idea/workspace.xml
+.idea/workspace.xml
