@@ -75,3 +75,7 @@ build/scripts-2.7/pyReplace
 build/scripts-2.7/rotorModel.py
 build/scripts-2.7/sar2trim
 build/scripts-2.7/watermark.py
+*.py___jb_old___
+*.pyc
+*.xml
+.idea/workspace.xml

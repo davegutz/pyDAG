@@ -36,7 +36,8 @@ is the local Monte Carlo definitions file with contents:
     alt  uniformconstant -10000 10000   -2000   60000
 
 Tests:
->>>python genGorilla.py -c11 g1000.def airstart.mtc
+python genGorilla.py -c11 g1000.def airstart.mtc
+>>>  main(['-c11', 'g1000.def','airstart.mtc'])
 loaded g1000.def root= g1000 numLines= 121  extension= def
 loaded g1000.int root= g1000 numLines= 13  extension= int
 loaded airstart.mtc root= airstart numLines= 11  extension= mtc
