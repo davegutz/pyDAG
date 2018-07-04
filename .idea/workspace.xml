@@ -5,8 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d9723ae8-6fbc-408f-a905-c24f4389de69" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/pyDAG.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/pyDAG.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pyDAG/Apps/genGorilla/genGorilla.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyDAG/Apps/genGorilla/genGorilla.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/pyReplace" beforeDir="false" afterPath="$PROJECT_DIR$/pyDAG/Apps/pyReplace" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -20,17 +23,43 @@
       <file leaf-file-name="README.txt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/README.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="100">
+            <state relative-caret-position="85">
               <caret line="5" selection-start-line="5" selection-end-line="5" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="genGorilla.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="genGorilla.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pyDAG/Apps/genGorilla/genGorilla.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="83" lean-forward="true" selection-start-line="83" selection-end-line="83" />
+            <state relative-caret-position="680">
+              <caret line="40" selection-start-line="40" selection-end-line="40" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="copire" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pyDAG/Apps/copire/copire">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="204">
+              <caret line="12" lean-forward="true" selection-start-line="12" selection-end-line="12" />
+              <folding>
+                <element signature="e#290#313#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="copire.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pyDAG/Apps/copire/copire.py">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file leaf-file-name="pyReplace" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/pyDAG/Apps/pyReplace">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2046">
+              <caret line="97" column="8" lean-forward="true" selection-start-line="97" selection-start-column="8" selection-end-line="97" selection-end-column="8" />
             </state>
           </provider>
         </entry>
@@ -46,6 +75,7 @@
         <option value="$PROJECT_DIR$/pyDAG/pyDAG/Apps/makeBsrc/MakeBsrc.py" />
         <option value="$PROJECT_DIR$/setup.py" />
         <option value="$PROJECT_DIR$/pyDAG/Apps/genGorilla/genGorilla.py" />
+        <option value="$PROJECT_DIR$/pyDAG/Apps/pyReplace" />
       </list>
     </option>
   </component>
@@ -79,13 +109,6 @@
               <item name="pyDAG" type="462c0819:PsiDirectoryNode" />
               <item name="Apps" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="pyDAG" type="b2602c69:ProjectViewProjectNode" />
-              <item name="pyDAG" type="462c0819:PsiDirectoryNode" />
-              <item name="pyDAG" type="462c0819:PsiDirectoryNode" />
-              <item name="Apps" type="462c0819:PsiDirectoryNode" />
-              <item name="genGorilla" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -96,7 +119,7 @@
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="preferences.editor" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -189,15 +212,6 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="Doctests_in_genGorilla - 2018.07.03 at 14h 24m 58s.xml">
-      <configuration name="Doctests in genGorilla" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Doctests_in_genGorilla - 2018.07.03 at 14h 26m 04s.xml">
-      <configuration name="Doctests in genGorilla" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Doctests_in_genGorilla - 2018.07.03 at 14h 27m 23s.xml">
-      <configuration name="Doctests in genGorilla" configurationId="tests" />
-    </history-entry>
     <history-entry file="Doctests_in_genGorilla - 2018.07.03 at 14h 32m 27s.xml">
       <configuration name="Doctests in genGorilla" configurationId="tests" />
     </history-entry>
@@ -219,14 +233,24 @@
     <history-entry file="Doctests_in_genGorilla - 2018.07.03 at 14h 41m 46s.xml">
       <configuration name="Doctests in genGorilla" configurationId="tests" />
     </history-entry>
+    <history-entry file="Doctests_in_genGorilla - 2018.07.04 at 09h 53m 06s.xml">
+      <configuration name="Doctests in genGorilla" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Doctests_in_genGorilla - 2018.07.04 at 09h 54m 07s.xml">
+      <configuration name="Doctests in genGorilla" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Doctests_in_genGorilla - 2018.07.04 at 09h 54m 40s.xml">
+      <configuration name="Doctests in genGorilla" configurationId="tests" />
+    </history-entry>
   </component>
   <component name="ToolWindowManager">
     <frame x="132" y="20" width="1400" height="824" extended-state="0" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.2034632" />
+      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.2034632" />
       <window_info anchor="bottom" id="TODO" order="10" />
       <window_info anchor="bottom" id="Event Log" order="2" side_tool="true" />
+      <window_info active="true" anchor="bottom" id="Inspection Results" visible="true" weight="0.32911393" />
+      <window_info anchor="bottom" id="Find" order="5" />
       <window_info anchor="bottom" id="Version Control" order="3" weight="0.32911393" />
       <window_info anchor="bottom" id="Python Console" order="0" weight="0.32911393" />
       <window_info anchor="bottom" id="Run" order="6" weight="0.48241913" />
@@ -235,12 +259,11 @@
       <window_info id="Favorites" order="0" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="7" weight="0.3994374" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="9" weight="0.4" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="bottom" id="Message" order="4" />
-      <window_info anchor="bottom" id="Inspection" order="9" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="8" weight="0.25" />
-      <window_info anchor="bottom" id="Find" order="5" />
+      <window_info anchor="bottom" id="Message" order="4" />
     </layout>
     <layout-to-restore>
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -271,6 +294,34 @@
     </ignored-roots>
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/README.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" selection-start-line="5" selection-end-line="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pyDAG/Apps/genGorilla/genGorilla.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1411">
+          <caret line="83" selection-start-line="83" selection-end-line="83" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" selection-start-line="5" selection-end-line="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pyDAG/Apps/genGorilla/genGorilla.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1411">
+          <caret line="83" lean-forward="true" selection-start-line="83" selection-end-line="83" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/README.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="100">
@@ -364,34 +415,40 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$APPLICATION_CONFIG_DIR$/idea.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" selection-start-line="2" selection-end-line="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Anaconda2/Lib/doctest.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="63" column="22" selection-start-line="63" selection-start-column="22" selection-end-line="63" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pyDAG/Apps/genGorilla/genGorilla.py___jb_old___">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/idea.properties" />
+    <entry file="file://$USER_HOME$/Anaconda2/Lib/doctest.py" />
+    <entry file="file://$PROJECT_DIR$/pyDAG/Apps/genGorilla/genGorilla.py___jb_old___" />
     <entry file="file://$PROJECT_DIR$/README.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="100">
+        <state relative-caret-position="85">
           <caret line="5" selection-start-line="5" selection-end-line="5" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/pyDAG/Apps/genGorilla/genGorilla.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="83" lean-forward="true" selection-start-line="83" selection-end-line="83" />
+        <state relative-caret-position="680">
+          <caret line="40" selection-start-line="40" selection-end-line="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pyDAG/Apps/copire/copire">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" lean-forward="true" selection-start-line="12" selection-end-line="12" />
+          <folding>
+            <element signature="e#290#313#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pyDAG/Apps/copire/copire.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pyDAG/Apps/pyReplace">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2046">
+          <caret line="97" column="8" lean-forward="true" selection-start-line="97" selection-start-column="8" selection-end-line="97" selection-end-column="8" />
         </state>
       </provider>
     </entry>

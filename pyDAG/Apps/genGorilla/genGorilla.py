@@ -37,10 +37,7 @@ is the local Monte Carlo definitions file with contents:
 
 Tests:
 python genGorilla.py -c11 g1000.def airstart.mtc
->>>  main(['-c11', 'g1000.def','airstart.mtc'])
-loaded g1000.def root= g1000 numLines= 121  extension= def
-loaded g1000.int root= g1000 numLines= 13  extension= int
-loaded airstart.mtc root= airstart numLines= 11  extension= mtc
+>>> main(['-c11', 'g1000.def','airstart.mtc'])
 MESSAGE(genGorilla.py):  g110.def generated from g1000.def and airstart.mtc
 MESSAGE(genGorilla.py):  g110.int generated from g1000.def and airstart.mtc
 MESSAGE(genGorilla.py):  g110.int generated from g1000.def and airstart.mtc
