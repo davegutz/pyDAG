@@ -85,5 +85,6 @@ setup(name='pyDAG',
                'pyDAG/System/myReplace.py',
                'pyDAG/Apps/copire/copire',
                'pyDAG/Apps/copire/copire.py'],
-      packages=['pyDAG', 'pyDAG.TextProcessing', 'pyDAG.Dynamics', 'pyDAG.Tables', 'pyDAG.System', 'pyDAG.Tkinter']
-)
+      packages=['pyDAG', 'pyDAG.TextProcessing', 'pyDAG.Dynamics', 'pyDAG.Tables', 'pyDAG.System', 'pyDAG.Tkinter'],
+      requires=['Pillow']
+      )

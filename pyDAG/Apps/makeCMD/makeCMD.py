@@ -1,4 +1,16 @@
 #!/usr/bin/env python
+# import cProfile
+import getopt
+import datetime
+import sys
+import os
+import shutil
+import glob
+import time
+import subprocess
+from pyDAG import InFile
+import fnmatch
+
 """Makes .cmd PMAT trim files from ingredients in folder such as
 09_ET_01.adj and 09_ET_01.tbl.
    - makes engine test trim file from $engSARs files.
@@ -50,35 +62,23 @@ Rev        Author        Date    Description
 1.6        DG Rindner    11/9/11    Update shopmod creation, added update_as_(adj,tbl) option (currently disabled)
 1.7        DG Rindner   9/6/12      Fixed path errors that prevented it from running in windows cygwin installation
 """
-MYVERSION=1.7
-#import cProfile
-import getopt
-import datetime
-import sys
-import os
-import shutil
-import glob
-import time
-import pdb
-import subprocess
-from pyDAG import InFile
-from fnmatch import filter
+MY_VERSION = 1.7
 
 # Initialize static variables.
-enableUpdateASfiles=0
+enable_update_AS_files = 0
 verbose = 0
 PGM = "ge38"
 ENG = "engine"
 RIG = "dryrig"
-#FML00 = "fmlist72_governors.cmd"
-FML00="fmlist38_esn003_v2_02.cmd"
-USINGFML00 = True
+# FML00 = "fmlist72_governors.cmd"
+FML00 = "fmlist38_esn003_v2_02.cmd"
+USING_FML00 = True
 FORCE = False
 today = datetime.date.today()
 DATE = "%(Y)4i%(M)02i%(D)02i" \
-    % {'Y': today.year, 'M': today.month, 'D': today.day}
-SWVER = "0.0"
-PERLOUT = "000.cmd"
+       % {'Y': today.year, 'M': today.month, 'D': today.day}
+SW_VER = "0.0"
+PERL_OUT = "000.cmd"
 VERN = "00"
 
 
@@ -86,20 +86,25 @@ VERN = "00"
 class Error(Exception):
     """Base class for exceptions in this module."""
     pass
+
+
 class InputError(Error):
     """Exception raised for errors in the input.
     Attributes:
         message -- explanation of the error
     """
+
     def __init__(self, message, use=0):
         Error.__init__()
         self.message = message
         self.usage = use
+
     def __str__(self):
         if self.usage:
-            return repr(self.message) + '\n\n%(doc)s' % {'doc':  __doc__}
+            return repr(self.message) + '\n\n%(doc)s' % {'doc': __doc__}
         else:
             return repr(self.message)
+
 
 def usage(code, msg=''):
     """Usage description"""
@@ -107,6 +112,7 @@ def usage(code, msg=''):
     if msg:
         print >> sys.stderr, msg
     sys.exit(code)
+
 
 def find_executable(executable, path=None):
     """Try to find 'executable' in the directories listed in 'path' (a
@@ -117,7 +123,7 @@ def find_executable(executable, path=None):
     if path is None:
         path = os.environ['PATH']
     paths = path.split(os.pathsep)
-    extlist = ['']
+    external_list = ['']
 
     if os.name == 'os2':
         (base, ext) = os.path.splitext(executable)
@@ -126,610 +132,602 @@ def find_executable(executable, path=None):
         if not ext:
             executable = executable + ".exe"
     elif sys.platform == 'win32':
-        pathext = os.environ['PATHEXT'].lower().split(os.pathsep)
+        path_external = os.environ['PATHEXT'].lower().split(os.pathsep)
         (base, ext) = os.path.splitext(executable)
-        if ext.lower() not in pathext:
-            extlist = pathext
-        print 'pathext=', pathext, ', base=', base, ', ext=', ext, \
-            'extlist=', extlist
-    for ext in extlist:
-        execname = executable + ext
-        if os.path.isfile(execname):
-            return execname
+        if ext.lower() not in path_external:
+            external_list = path_external
+        print 'path_external=', path_external, ', base=', base, ', ext=', ext, \
+            'external_list=', external_list
+    for ext in external_list:
+        executable_name = executable + ext
+        if os.path.isfile(executable_name):
+            return executable_name
         else:
             for p in paths:
-                f = os.path.join(p, execname)
+                f = os.path.join(p, executable_name)
                 if os.path.isfile(f):
                     return f
     else:
         return None
 
-def lslrt(path):
+
+def list_time(path):
     """Directory listing sorted by time, latest last"""
-    flist = []
+    file_list = []
     for x in os.listdir(path):
         if not os.path.isdir(x) and os.path.isfile(x):
-            flist.append((os.stat(x).st_mtime, x))
-    flist.sort()
-    dList = [x[1] for x in flist]
-    return dList
+            file_list.append((os.stat(x).st_mtime, x))
+    file_list.sort()
+    calculated_list = [x[1] for x in file_list]
+    return calculated_list
 
-def lsl(path):
+
+def list_alpha(path):
     """Directory listing sorted alphabetically"""
-    flist = []
+    file_list = []
     for x in os.listdir(path):
         if not os.path.isdir(x) and os.path.isfile(x):
-            flist.append((os.stat(x).st_mtime, x))
-    dListAlpha = [x[1] for x in flist]
-    return dListAlpha
+            file_list.append((os.stat(x).st_mtime, x))
+    directory_list_alpha = [x[1] for x in file_list]
+    return directory_list_alpha
 
-def fReplace(stext, rtext, iFile):
+
+def replace_str_in_file(s_text, r_text, index_file):
     """Replace string in file"""
-    inf = open(iFile)
-    outf = open('.temp', 'w')
+    inf = open(index_file)
+    out_file = open('.temp', 'w')
     count = 0
     for s in inf.xreadlines():
-        count += s.count(stext)
-        outf.write(s.replace(stext, rtext))
+        count += s.count(s_text)
+        out_file.write(s.replace(s_text, r_text))
     inf.close()
-    outf.close()
-    shutil.move('.temp', iFile)
+    out_file.close()
+    shutil.move('.temp', index_file)
     return count
 
-def cat(file1, file2, oFile):
-    """Cat two files to dest, return success as 0"""
+
+def cat(file1, file2, out_file):
+    """Cat two files to destination, return success as 0"""
     input1 = open(file1)
     input2 = open(file2)
-    outf = open(oFile, 'w')
+    out_file = open(out_file, 'w')
     for s in input1.xreadlines():
-        outf.write(s)
+        out_file.write(s)
     for s in input2.xreadlines():
-        outf.write(s)
+        out_file.write(s)
     input1.close()
     input2.close()
-    outf.close()
+    out_file.close()
 
-def copy(file1, oFile):
-    """Copy file to dest, return success as 0"""
+
+def copy(file1, out_file):
+    """Copy file to , return success as 0"""
     input1 = open(file1)
-    outf = open(oFile, 'w')
+    out_file = open(out_file, 'w')
     for s in input1.xreadlines():
-        outf.write(s)
+        out_file.write(s)
     input1.close()
-    outf.close()
+    out_file.close()
 
-def adjtblList(locSARs):
+
+def adjust_table_list(location_sars):
     """Make .adj .tbl listing"""
-    aList = []
-    tList = []
+    adj_list = []
+    tbl_list = []
     # Alphabetical directory listing, a-z
-    dListAlpha = lsl('.')
-    for ifile in dListAlpha:
-        if ifile.count('.adj'):
-            for tsType in locSARs:
-                if ifile.count('_%(TS)s_' % {'TS': tsType}):
-                    aList.append(ifile)
-        elif ifile.count('.tbl'):
-            for tsType in locSARs:
-                if ifile.count('_%(TS)s_' % {'TS': tsType}):
-                    tList.append(ifile)
-    return (aList, tList)
+    directory_list_alpha = list_alpha('.')
+    for check_file in directory_list_alpha:
+        if check_file.count('.adj'):
+            for tsType in location_sars:
+                if check_file.count('_%(TS)s_' % {'TS': tsType}):
+                    adj_list.append(check_file)
+        elif check_file.count('.tbl'):
+            for tsType in location_sars:
+                if check_file.count('_%(TS)s_' % {'TS': tsType}):
+                    tbl_list.append(check_file)
+    return adj_list, tbl_list
 
 
-def makeTest(testSARs):
+def make_test(test_sars):
     """Make test SAR trims, one at a time"""
     echoed00 = False
-    dList = lslrt('.')
-    (aList, tList) = adjtblList(testSARs)
-    if aList.__len__() | tList.__len__():
-        trimListTestSARs = aList + tList
-        for i in trimListTestSARs:
-            haveOther = False
+    calculated_list = list_time('.')
+    (adj_list, tbl_list) = adjust_table_list(test_sars)
+    if adj_list.__len__() | tbl_list.__len__():
+        trim_list_test_sars = adj_list + tbl_list
+        for i in trim_list_test_sars:
+            have_other = False
             other = ""
-            ROOT = i.replace('.adj', '').replace('.tbl', '')
+            root = i.replace('.adj', '').replace('.tbl', '')
             if i.count('.adj'):
-                TYPE = "adj"
-                OTYPE = "tbl"
-                if trimListTestSARs.count(ROOT+'.'+OTYPE):
-                    haveOther = 1
-                    other = ROOT+'.'+OTYPE
+                parameter_type = "adj"
+                other_type = "tbl"
+                if trim_list_test_sars.count(root + '.' + other_type):
+                    have_other = 1
+                    other = root + '.' + other_type
             else:
-                TYPE = "tbl"
-                OTYPE = "adj"
-                if trimListTestSARs.count(ROOT+'.'+OTYPE):
+                parameter_type = "tbl"
+                other_type = "adj"
+                if trim_list_test_sars.count(root + '.' + other_type):
                     continue
-            if haveOther:
-                rOutFile = PGM+'v'+VERN+'_'+ROOT+'_adjtbl_'+DATE+'.cmd'
-                pOutRoot = PGM+'v'+VERN+'_'+ROOT+'_adjtbl_'
-                # Last occurence of root will be the latest
-                pOutFile = rOutFile
-                for ifile in dList:
-                    if ifile.count(pOutRoot):
-                        pOutFile = ifile
+            if have_other:
+                r_out_file = PGM + 'v' + VERN + '_' + root + '_adjtbl_' + DATE + '.cmd'
+                # p_out_file = PGM+'v' + VERN + '_' + root + '_adjtbl_'
+                # Last occurrence of root will be the latest
+                p_out_file = r_out_file
+                for check_file in calculated_list:
+                    if check_file.count(p_out_file):
+                        p_out_file = check_file
                     if verbose > 3:
-                        print 'file=', i, 'rOutFile=', rOutFile, \
-                            'pOutFile=', pOutFile
+                        print 'file=', i, 'r_out_file=', r_out_file, \
+                            'p_out_file=', p_out_file
             else:
-                rOutFile = PGM+'v'+VERN+'_'+ROOT+'_'+TYPE+'_'+DATE+'.cmd'
-                pOutRoot = PGM+'v'+VERN+'_'+ROOT+'_'+TYPE+'_'
-                # Last occurence of root will be the latest
-                pOutFile = rOutFile
-                for ifile in dList:
-                    if ifile.count(pOutRoot):
-                        pOutFile = ifile
+                r_out_file = PGM + 'v' + VERN + '_' + root + '_' + parameter_type + '_' + DATE + '.cmd'
+                # p_out_file = PGM + 'v' + VERN + '_' + root + '_' + parameter_type + '_'
+                # Last occurrence of root will be the latest
+                p_out_file = r_out_file
+                for check_file in calculated_list:
+                    if check_file.count(p_out_file):
+                        p_out_file = check_file
                 if verbose > 3:
-                    print 'file=', i, 'rOutFile=', rOutFile, \
-                        'pOutFile=', pOutFile
+                    print 'file=', i, 'r_out_file=', r_out_file, \
+                        'p_out_file=', p_out_file
 
-            makingNewOther = False
-            if haveOther:
-                if dList.count(pOutFile) > 0:
-                    if os.stat(other).st_mtime > os.stat(pOutFile).st_mtime:
-                        makingNewOther = True
+            making_new_other = False
+            if have_other:
+                if calculated_list.count(p_out_file) > 0:
+                    if os.stat(other).st_mtime > os.stat(p_out_file).st_mtime:
+                        making_new_other = True
                         print other, " changed..."
                 else:
-                    makingNewOther = True
+                    making_new_other = True
 
-            makingNew = False
-            if dList.count(pOutFile) > 0:
+            making_new = False
+            if calculated_list.count(p_out_file) > 0:
                 if verbose > 3:
-                    print 'pOutFile=', pOutFile, 'pstat=', \
-                        os.stat(pOutFile).st_mtime, \
-                        'i=', i, 'istat=', os.stat(i).st_mtime
-                if os.stat(i).st_mtime > os.stat(pOutFile).st_mtime:
-                    makingNew = True
+                    print 'p_out_file=', p_out_file, 'p_stat=', \
+                        os.stat(p_out_file).st_mtime, \
+                        'i=', i, 'i_stat=', os.stat(i).st_mtime
+                if os.stat(i).st_mtime > os.stat(p_out_file).st_mtime:
+                    making_new = True
                     print i, " changed"
             else:
-                makingNew = True
+                making_new = True
                 print i, " changed"
 
             if FORCE:
-                makingNewOther = True
-                makingNew = True
-                if (not echoed00):
+                making_new_other = True
+                making_new = True
+                if not echoed00:
                     print "Forcing rebuild of all..."
                     echoed00 = True
 
             # Create the new file
-            if (not makingNew) & (not makingNewOther):
-                print pOutFile, " up to date..."
+            if (not making_new) & (not making_new_other):
+                print p_out_file, " up to date..."
                 continue
             else:
-                iFile = ""
-                oFile = ""
-           #     plStat = os.system("sar2trim -d -p %(PG)s -v %(VE)s %(FL)s" \
-           #                   % {'PG': PGM, 'VE': VERN, 'FL': i})
-                sar2trimPath=findPath('sar2trim')
-              #  print sar2trimPath
-                plStat=subprocess.Popen(['perl',sar2trimPath, '-d', '-p',PGM,'-v',VERN,i],stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-                plStat.communicate()[0]
-                plerr=plStat.stderr.read()
-                if not plerr:
-#                    print "No errors"
-                    targ = "v%(VE)s" % {'VE': VERN}
-                    repl = "v%(VE)s_%(RT)s" % {'VE': VERN, 'RT': ROOT}
-                    iFile = PERLOUT.replace(targ, repl).replace('scr', \
-                                             "_%(TY)s_" % {'TY': TYPE})
-                    fReplace(PERLOUT, iFile, PERLOUT)
-                    shutil.move(PERLOUT, iFile)
-                    if USINGFML00:
-                        fReplace("SET VA AS_ADJ_STORE_REQ", \
-                                     "!SET VA AS_ADJ_STORE_REQ", iFile)
-                    if (not haveOther):
-                        print 'made ', iFile
+                index_file = ""
+                # out_file = ""
+                sar_2_trim_path = find_path('sar2trim')
+                perl_status = subprocess.Popen(['perl', sar_2_trim_path, '-d', '-p', PGM, '-v', VERN, i],
+                                               stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                # perl_status.communicate()[0] = perl_status.stderr.read()
+                perl_error = perl_status.stderr.read()
+                if not perl_error:
+                    target_str = "v%(VE)s" % {'VE': VERN}
+                    replace_str = "v%(VE)s_%(RT)s" % {'VE': VERN, 'RT': root}
+                    index_file = PERL_OUT.replace(target_str, replace_str).replace('scr',
+                                                                                   "_%(TY)s_" % {'TY': parameter_type})
+                    replace_str_in_file(PERL_OUT, index_file, PERL_OUT)
+                    shutil.move(PERL_OUT, index_file)
+                    if USING_FML00:
+                        replace_str_in_file("SET VA AS_ADJ_STORE_REQ",
+                                            "!SET VA AS_ADJ_STORE_REQ", index_file)
+                    if not have_other:
+                        print 'made ', index_file
                         time.sleep(1)
 
-            if haveOther:  # this must be a .tbl file given sorting done earlier
-                plCmd = "sar2trim -d -p %(PG)s -v %(VE)s %(FI)s" \
-                    % {'PG': PGM, 'VE': VERN, 'FI': other}
+            if have_other:  # this must be a .tbl file given sorting done earlier
+                perl_command = "sar2trim -d -p %(PG)s -v %(VE)s %(FI)s" \
+                        % {'PG': PGM, 'VE': VERN, 'FI': other}
                 if verbose > 3:
-                    print plCmd
-                sar2trimPath=findPath('sar2trim')
-                print sar2trimPath
-                plStat=subprocess.Popen(['perl',sar2trimPath, '-d', '-p',PGM,'-v',VERN,i],stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-                plStat.communicate()[0]
-                plerr=plStat.stderr.read()
-                if not plerr:
-                    targ = "v%(VE)s" % {'VE': VERN}
-                    repl = "v%(VE)s_%(RT)s" % {'VE': VERN, 'RT': ROOT}
-                    oFile = PERLOUT.replace(targ, repl).replace('scr', \
-                                             "_%(OTY)s_" % {'OTY': OTYPE})
-                    fReplace(PERLOUT, oFile, PERLOUT)
-                    shutil.move(PERLOUT, oFile)
-                    if USINGFML00:
-                        fReplace("SET VA AS_ADJ_STORE_REQ", \
-                                     "!SET VA AS_ADJ_STORE_REQ", \
-                                     oFile)
-                    cat(iFile, oFile, rOutFile)
-                    os.remove(iFile)
-                    os.remove(oFile)
-                    print 'made ', rOutFile
+                    print perl_command
+                sar_2_trim_path = find_path('sar2trim')
+                print sar_2_trim_path
+                perl_status = subprocess.Popen(['perl', sar_2_trim_path, '-d', '-p', PGM, '-v', VERN, i],
+                                               stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                perl_status.communicate()[0] = perl_status.stderr.read()
+                if not perl_error:
+                    target_str = "v%(VE)s" % {'VE': VERN}
+                    replace_str = "v%(VE)s_%(RT)s" % {'VE': VERN, 'RT': root}
+                    out_file = PERL_OUT.replace(target_str, replace_str).replace('scr',
+                                                                                 "_%(OTY)s_" % {'OTY': other_type})
+                    replace_str_in_file(PERL_OUT, out_file, PERL_OUT)
+                    shutil.move(PERL_OUT, out_file)
+                    if USING_FML00:
+                        replace_str_in_file("SET VA AS_ADJ_STORE_REQ",
+                                            "!SET VA AS_ADJ_STORE_REQ",
+                                            out_file)
+                    cat(index_file, out_file, r_out_file)
+                    os.remove(index_file)
+                    os.remove(out_file)
+                    print 'made ', r_out_file
                     time.sleep(1)
         else:
             print "No more test SARs... continuing\n"
 
-def listShm(shmFile):
-    """Recursively list shm file and extract lists"""
-    shmF = InFile(shmFile)
-    shmF.load()
-    shmF.gsub('#include', 'INCLUDE')
-    shmF.stripComments('#')
-    shmF.stripComments('%')
-    shmF.stripComments('!')
-    shmF.stripBlankLines()
-    shmF.tokenize('. \r\n')
-    rawlist = []
-    fullList= []
-    shmList = []
-    for i in range(shmF.numLines):
-       # if len(shmF.vS[i]) != 4:
-       #     print shmF.vS[i]
-       #     print "\nERROR(makeCMD.py/loadShm):  bad input in", shmFile, \
-       #         "at", shmF.Line(i)
-       #     exit(1)
-       #Added ability to recursively #INCLUDE additional shopmods (.shm) lists
- #       print "Line is "+shmF.Line(i)
-        if shmF.token(i,1).startswith('INCLUDE') :
-            includeShmName= shmF.token(i, 2) + '.shm'
-            shmList.append(includeShmName)
-            includeShmFile=os.path.join(os.getcwd(), includeShmName)
-            if os.path.isfile(includeShmFile):
-                #Recursive call to listShm
-                [recList,recFullList,recShmList] = listShm(includeShmFile)
-                fullList=fullList+recFullList
-                shmList=shmList+recShmList
-#            pdb.set_trace
-        else:
-            filename = os.path.join(os.getcwd(), \
-                            shmF.token(i, 1) + '.' + shmF.token(i, 2))
-            if os.path.isfile(filename):
-                rawlist.append(filename)
-                fullList.append(filename)
-            else:
-                print("Could not find "+os.path.basename(filename))
-    # cull repeats
-    cleanlist = []
-    for i in range(len(rawlist)):
-        if not cleanlist.__contains__(rawlist[i]):
-            cleanlist.append(rawlist[i])
-    return cleanlist, fullList, shmList
 
-def makeShmFolder(pOutFolder, loclist):
+def list_shm(shm_file):
+    """Recursively list shm file and extract lists"""
+    shm_in_file = InFile(shm_file)
+    shm_in_file.load()
+    shm_in_file.gsub('#include', 'INCLUDE')
+    shm_in_file.stripComments('#')
+    shm_in_file.stripComments('%')
+    shm_in_file.stripComments('!')
+    shm_in_file.stripBlankLines()
+    shm_in_file.tokenize('. \r\n')
+    raw_list = []
+    full_list = []
+    shm_list = []
+    for i in range(shm_in_file.numLines):
+        # Added ability to recursively #INCLUDE additional shopmods (.shm) lists
+        if shm_in_file.token(i, 1).startswith('INCLUDE'):
+            include_shm_name = shm_in_file.token(i, 2) + '.shm'
+            shm_list.append(include_shm_name)
+            include_shm_file = os.path.join(os.getcwd(), include_shm_name)
+            if os.path.isfile(include_shm_file):
+                # Recursive call to list_shm
+                [recursive_list, recursive_full_list, recursive_shm_list] = list_shm(include_shm_file)
+                full_list = full_list + recursive_full_list
+                shm_list = shm_list + recursive_shm_list
+        #            pdb.set_trace
+        else:
+            filename = os.path.join(os.getcwd(),
+                                    shm_in_file.token(i, 1) + '.' + shm_in_file.token(i, 2))
+            if os.path.isfile(filename):
+                raw_list.append(filename)
+                full_list.append(filename)
+            else:
+                print("Could not find " + os.path.basename(filename))
+    # cull repeats
+    clean_list = []
+    for i in range(len(raw_list)):
+        if not clean_list.__contains__(raw_list[i]):
+            clean_list.append(raw_list[i])
+    return clean_list, full_list, shm_list
+
+
+def make_shm_folder(print_out_folder, location_list):
     """Copy files to working folder"""
-    print 'processing', os.path.basename(pOutFolder)
+    print 'processing', os.path.basename(print_out_folder)
     if os.path.isfile('as.adj'):
-        shutil.copy('as.adj', os.path.join(pOutFolder, 'as.adj'))
+        shutil.copy('as.adj', os.path.join(print_out_folder, 'as.adj'))
     if os.path.isfile('as.tbl'):
-        shutil.copy('as.tbl', os.path.join(pOutFolder, 'as.tbl'))
-    #if os.path.isfile('sar2trim'):
-   #     shutil.copy('sar2trim', os.path.join(pOutFolder, 'sar2trim'))    
-   # pdb.set_trace()
-#    if os.path.isfile(FML00):
-#       print 'I found the fml00'
-#       shutil.copy(FML00, os.path.join(pOutFolder, FML00))
-    adjList = []
-    adjSarDict = {}
-    tblList = []
-    tblSarDict = {}
-    for ifile in reversed(loclist):
-        if ifile.count('.adj'):
-            outfname = os.path.join(pOutFolder, os.path.basename(ifile))
-            outf = open(outfname, 'w')
-            adjF = InFile(ifile)
-            adjF.load()
-            adjF.tokenize(' \n\t')
-            for i in range(adjF.numLines):
-                if adjF.Line(i).startswith('!') or adjF.Line(i).startswith('#') or adjF.Line(i).startswith('\n'):
-                    outf.write(adjF.Line(i))
-                else: #if len(adjF.LineS(i)) == 4:
-                    name = adjF.token(i, 1)
-                    if adjList.count(name) == 0:
-                        adjList.append(name)
-                        adjSarDict[name]=os.path.basename(ifile)
-                        outf.write(adjF.Line(i))
+        shutil.copy('as.tbl', os.path.join(print_out_folder, 'as.tbl'))
+    adj_list = []
+    adj_sar_dict = {}
+    tbl_list = []
+    tbl_sar_dict = {}
+    for check_file in reversed(location_list):
+        if check_file.count('.adj'):
+            out_file_name = os.path.join(print_out_folder, os.path.basename(check_file))
+            out_file = open(out_file_name, 'w')
+            adj_in_file = InFile(check_file)
+            adj_in_file.load()
+            adj_in_file.tokenize(' \n\t')
+            for i in range(adj_in_file.numLines):
+                if adj_in_file.Line(i).startswith('!') or adj_in_file.Line(i).startswith('#')\
+                        or adj_in_file.Line(i).startswith('\n'):
+                    out_file.write(adj_in_file.Line(i))
+                else:  # if len(adj_in_file.LineS(i)) == 4:
+                    name = adj_in_file.token(i, 1)
+                    if adj_list.count(name) == 0:
+                        adj_list.append(name)
+                        adj_sar_dict[name] = os.path.basename(check_file)
+                        out_file.write(adj_in_file.Line(i))
                     else:
-                        outf.write(' '.join(['!obsolete: overwritten by',adjSarDict[name], adjF.Line(i)]))
-            outf.close()
-        elif ifile.count('.tbl'):
-            outfname = os.path.join(pOutFolder, os.path.basename(ifile))
-            outf = open(outfname, 'w')
-            tblF = InFile(ifile)
-            tblF.load()
-            tblF.tokenize(' \n\t\',')
+                        out_file.write(' '.join(['!obsolete: overwritten by', adj_sar_dict[name], adj_in_file.Line(i)]))
+            out_file.close()
+        elif check_file.count('.tbl'):
+            out_file_name = os.path.join(print_out_folder, os.path.basename(check_file))
+            out_file = open(out_file_name, 'w')
+            tbl_in_file = InFile(check_file)
+            tbl_in_file.load()
+            tbl_in_file.tokenize(' \n\t\',')
             commenting = False
-            for i in range(tblF.numLines):
-                if tblF.Line(i).startswith('!'):
-                    outf.write(tblF.Line(i))
+            for i in range(tbl_in_file.numLines):
+                if tbl_in_file.Line(i).startswith('!'):
+                    out_file.write(tbl_in_file.Line(i))
                 else:
-                    if tblF.Line(i).count('#ADJUSTABLE'):
+                    if tbl_in_file.Line(i).count('#ADJUSTABLE'):
                         continue
-                    if tblF.Line(i).count('$INPUT'):
-                        name = tblF.token(i, 3)
-                        if tblList.count(name) == 0:
-                            tblList.append(name)
-                            tblSarDict[name]=os.path.basename(ifile)
+                    if tbl_in_file.Line(i).count('$INPUT'):
+                        name = tbl_in_file.token(i, 3)
+                        if tbl_list.count(name) == 0:
+                            tbl_list.append(name)
+                            tbl_sar_dict[name] = os.path.basename(check_file)
                             commenting = False
-                            outf.write(tblF.Line(i-1))
-                            outf.write(tblF.Line(i))
+                            out_file.write(tbl_in_file.Line(i - 1))
+                            out_file.write(tbl_in_file.Line(i))
                         else:
                             commenting = True
-                            outf.write(' '.join(['!obsolete:', tblF.Line(i-1)]))
-                            outf.write(' '.join(['!obsolete: overwritten by', tblSarDict[name],tblF.Line(i)]))
+                            out_file.write(' '.join(['!obsolete:', tbl_in_file.Line(i - 1)]))
+                            out_file.write(' '.join(['!obsolete: overwritten by', tbl_sar_dict[name],
+                                                     tbl_in_file.Line(i)]))
                     elif commenting:
-                       outf.write(''.join(['!obsolete:', tblF.Line(i)]))
+                        out_file.write(''.join(['!obsolete:', tbl_in_file.Line(i)]))
                     else:
-                        outf.write(tblF.Line(i))
-            outf.close()
-        elif ifile.count('.fml'):
-            shutil.copy(ifile, os.path.join(pOutFolder, os.path.basename(ifile)))
+                        out_file.write(tbl_in_file.Line(i))
+            out_file.close()
+        elif check_file.count('.fml'):
+            shutil.copy(check_file, os.path.join(print_out_folder, os.path.basename(check_file)))
         else:
-            print os.path.basename(ifile)," not found"
+            print os.path.basename(check_file), " not found"
 
-def makeShm(shmFile):
+
+def make_shm(shm_file):
     """Make shop mod from list in file"""
-    pOutRoot = os.path.basename(shmFile).rpartition('.')[0]
-    rOutFile = pOutRoot+'.cmd'
+    p_out_file = os.path.basename(shm_file).rpartition('.')[0]
+    r_out_file = p_out_file + '.cmd'
     home = os.getcwd()
-    pOutFolder = os.path.join(home, pOutRoot)
+    print_out_folder = os.path.join(home, p_out_file)
     # load shm file and extract lists
-    [loclist,fullList,shmList] = listShm(shmFile)
-    
+    [location_list, full_list, shm_list] = list_shm(shm_file)
 
     # make folder to work the files
-    recreateShm = 0
-    if os.path.isfile(pOutRoot):
-        print 'ERROR(makeCMD.py/makeShm): ', home, 'is already a file...quitting'
+    recreate_shm = 0
+    if os.path.isfile(p_out_file):
+        print 'ERROR(makeCMD.py/make_shm): ', home, 'is already a file...quitting'
         exit(1)
-    if not os.path.isdir(pOutRoot):
-        os.mkdir(pOutRoot)
-        recreateShm = 1
+    if not os.path.isdir(p_out_file):
+        os.mkdir(p_out_file)
+        recreate_shm = 1
     else:
-        if os.stat(shmFile).st_mtime > os.stat(pOutRoot).st_mtime:
-            print "".join([pOutRoot,".shm is more recent than ",pOutRoot," folder"])
-            recreateShm = 1
+        if os.stat(shm_file).st_mtime > os.stat(p_out_file).st_mtime:
+            print "".join([p_out_file, ".shm is more recent than ", p_out_file, " folder"])
+            recreate_shm = 1
         else:
-            for i in loclist:
-    #note: only compares time stamps of  SARs explicitly included in this .shm file,
-    #      does not check files recursively to determine whether to rebuild
-                if os.stat(os.path.basename(i)).st_mtime > os.stat(pOutRoot).st_mtime:
-                    print os.path.basename(i)," is more recent than ",pOutRoot," folder"
-                    recreateShm = 1
+            for i in location_list:
+                # note: only compares time stamps of  SARs explicitly included in this .shm file,
+                #      does not check files recursively to determine whether to rebuild
+                if os.stat(os.path.basename(i)).st_mtime > os.stat(p_out_file).st_mtime:
+                    print os.path.basename(i), " is more recent than ", p_out_file, " folder"
+                    recreate_shm = 1
 
-    if recreateShm or FORCE:
-        print "\ncleaning out", os.path.basename(pOutFolder)
-        for ifile in glob.iglob(os.path.join(pOutFolder, '*')):
-            if not os.path.basename(ifile) == 'CVS':
+    if recreate_shm or FORCE:
+        print "\ncleaning out", os.path.basename(print_out_folder)
+        for check_file in glob.iglob(os.path.join(print_out_folder, '*')):
+            if not os.path.basename(check_file) == 'CVS':
                 try:
-                    os.remove(ifile)
+                    os.remove(check_file)
                 except OSError:
-                    shutil.rmtree(ifile,ignore_errors=True)
-        
-        locDlist = []
-        locNameList =[]
-        for i in loclist:
-            locDlist.append(os.path.join(pOutFolder, os.path.basename(i)))
-            locNameList.append(os.path.basename(i))
-        # copy all files, including recursive, to working folder and go there
-        makeShmFolder(pOutFolder, fullList)
-       # print os.getcwd()
-        os.chdir(pOutFolder)
-      #  print os.getcwd()
-       # pdb.set_trace()
-        # Time sorted directory listing, newest last
-        dList = lslrt('.')
+                    shutil.rmtree(check_file, ignore_errors=True)
 
-        # Last occurence of root will be the latest
-        pOutFile = rOutFile
-        for ifile in dList:
-            if ifile.count(pOutRoot) and ifile.count('.cmd'):
-                pOutFile = ifile
+        local_directory_list = []
+        local_name_list = []
+        for i in location_list:
+            local_directory_list.append(os.path.join(print_out_folder, os.path.basename(i)))
+            local_name_list.append(os.path.basename(i))
+        # copy all files, including recursive, to working folder and go there
+        make_shm_folder(print_out_folder, full_list)
+        os.chdir(print_out_folder)
+        # Time sorted directory listing, newest last
+        calculated_list = list_time('.')
+
+        # Last occurrence of root will be the latest
+        p_out_file = r_out_file
+        for check_file in calculated_list:
+            if check_file.count(p_out_file) and check_file.count('.cmd'):
+                p_out_file = check_file
         if verbose > 3:
-            print "\n\n", "rOutFile=", rOutFile, "pOutFile=", pOutFile
+            print "\n\n", "r_out_file=", r_out_file, "p_out_file=", p_out_file
 
         # Output file
-        outFile = PERLOUT.replace(PGM, pOutRoot).replace('v'+VERN, '')
-        outFile = outFile.replace('scr', '_')
+        out_file = PERL_OUT.replace(PGM, p_out_file).replace('v' + VERN, '')
+        out_file = out_file.replace('scr', '_')
 
         # Generate the file
-        newFile, success = makeLocFiles(locDlist, dList, outFile, pOutFile)
-        
-        fullDlist = []
-        fullNameList = []
-        if not fullList==loclist:
-            print 'Recursively included '+', '.join(shmList)
-            for i in fullList:
-                fullDlist.append(os.path.join(pOutFolder, os.path.basename(i)))
-                fullNameList.append(os.path.basename(i))
-            fullOutFile=outFile.replace('.cmd','_full.cmd')
-            newFullFile, successFull = makeLocFiles(fullDlist,dList,fullOutFile, pOutFile)
-            if successFull:
-                print 'Created full trim file to go from baseline software v'+VERN
-            if enableUpdateASfiles:
-                updateASfiles(fullNameList,pOutRoot)
-            deltaList=list(set(fullNameList).difference(set(locNameList)))
-            #pdb.set_trace()
-            os.mkdir(os.path.join(pOutFolder,'backup'))
-            for i in deltaList:
-                shutil.move(os.path.join(pOutFolder,i),os.path.join(pOutFolder,'backup',i))
+        new_file, success = make_location_files(local_directory_list, calculated_list, out_file, p_out_file)
+
+        full_directory_list = []
+        full_name_list = []
+        if not full_list == location_list:
+            print 'Recursively included ' + ', '.join(shm_list)
+            for i in full_list:
+                full_directory_list.append(os.path.join(print_out_folder, os.path.basename(i)))
+                full_name_list.append(os.path.basename(i))
+            full_out_file = out_file.replace('.cmd', '_full.cmd')
+            new_full_file, success_full = make_location_files(full_directory_list, calculated_list, full_out_file,
+                                                              p_out_file)
+            if success_full:
+                print 'Created full trim file to go from baseline software v' + VERN
+            if enable_update_AS_files:
+                # update_as_files(full_name_list, p_out_file)
+                update_as_files(p_out_file)
+            delta_list = list(set(full_name_list).difference(set(local_name_list)))
+            os.mkdir(os.path.join(print_out_folder, 'backup'))
+            for i in delta_list:
+                shutil.move(os.path.join(print_out_folder, i), os.path.join(print_out_folder, 'backup', i))
         else:
-            if enableUpdateASfiles:
-                updateASfiles(locNameList,pOutRoot)
-        
-        
-        newFileBase = os.path.basename(newFile)
-        topFile = os.path.join(home, newFileBase)
+            if enable_update_AS_files:
+                # update_as_files(local_name_list, p_out_file)
+                update_as_files(p_out_file)
+
+        new_file_base = os.path.basename(new_file)
+        top_file = os.path.join(home, new_file_base)
         if success:
-            shutil.copy(newFile, topFile)
+            shutil.copy(new_file, top_file)
         os.chdir(home)
     else:
-        print pOutRoot," up to date"
+        print p_out_file, " up to date"
 
-def makeLoc(locSARs, loc):
+
+def make_location(location_sars, loc):
     """Make SARs for defined location"""
-    rOutFile = PGM+loc+'v'+VERN+'_'+DATE+'.cmd'
-    pOutRoot = PGM+loc+'v'+VERN+'_'
+    r_out_file = PGM + loc + 'v' + VERN + '_' + DATE + '.cmd'
+    # p_out_file = PGM + loc + 'v' + VERN + '_'
 
     # Time sorted directory listing, newest last
-    dList = lslrt('.')
+    calculated_list = list_time('.')
 
-    # Last occurence of root will be the latest
-    pOutFile = rOutFile
-    for ifile in dList:
-        if ifile.count(pOutRoot):
-            pOutFile = ifile
+    # Last occurrence of root will be the latest
+    p_out_file = r_out_file
+    for check_file in calculated_list:
+        if check_file.count(p_out_file):
+            p_out_file = check_file
     if verbose > 3:
-        print '\n\n', loc, 'rOutFile=', rOutFile, 'pOutFile=', pOutFile
+        print '\n\n', loc, 'r_out_file=', r_out_file, 'p_out_file=', p_out_file
 
     # .adj and .tbl listings
-    (aList, tList) = adjtblList(locSARs)
-    loclist = aList
-    [loclist.append(i) for i in tList]
+    (adj_list, tbl_list) = adjust_table_list(location_sars)
+    location_list = adj_list
+    [location_list.append(i) for i in tbl_list]
 
     # Output file
-    outFile = PERLOUT.replace(PGM, PGM+loc).replace('scr', '_')
+    out_file = PERL_OUT.replace(PGM, PGM + loc).replace('scr', '_')
 
     # Generate the file
-    makeLocFiles(loclist, dList, outFile, pOutFile)
+    make_location_files(location_list, calculated_list, out_file, p_out_file)
 
-def makeLocFiles(loclist, dList, outFile, pOutFile):
-    """Make SAR out of loclist"""
-    global USINGFML00
+
+def make_location_files(location_list, calculated_list, out_file, p_out_file):
+    """Make SAR out of location_list"""
+    global USING_FML00
     echoed00 = False
-    makingNew = False
+    making_new = False
     success = False
-    for i in loclist:
-        if dList.count(pOutFile) > 0:
+    for i in location_list:
+        if calculated_list.count(p_out_file) > 0:
             if verbose > 3:
-                print 'pOutFile=', pOutFile, 'pstat=', \
-                    os.stat(pOutFile).st_mtime, \
-                    'i=', i, 'istat=', os.stat(i).st_mtime
-            if os.stat(i).st_mtime > os.stat(pOutFile).st_mtime:
-                makingNew = True
+                print 'p_out_file=', p_out_file, 'p_stat=', \
+                    os.stat(p_out_file).st_mtime, \
+                    'i=', i, 'i_stat=', os.stat(i).st_mtime
+            if os.stat(i).st_mtime > os.stat(p_out_file).st_mtime:
+                making_new = True
                 print i, "changed"
         else:
-            makingNew = True
-    if dList.count(FML00) > 0:
-        USINGFML00 = True
-        if dList.count(pOutFile) > 0:
-            if os.stat(FML00).st_mtime > os.stat(pOutFile).st_mtime:
-                makingNew = True
+            making_new = True
+    if calculated_list.count(FML00) > 0:
+        USING_FML00 = True
+        if calculated_list.count(p_out_file) > 0:
+            if os.stat(FML00).st_mtime > os.stat(p_out_file).st_mtime:
+                making_new = True
                 print FML00, "changed"
         else:
-            makingNew = True
+            making_new = True
     else:
         print FML00, ' does not exist - assuming not needed...'
-        USINGFML00 = False
+        USING_FML00 = False
     # Forcing
     if FORCE:
-        makingNew = True
-        if (not echoed00):
+        making_new = True
+        if not echoed00:
             print "Forcing rebuild of all..."
-            echoed00 = True
+            #  echoed00 = True
     # Making new
-    if makingNew:
-        loclistStr = ""
-        for i in loclist:
-            loclistStr += (i + " ")
-        if verbose > 3:
-            print plCmd
-        sar2trimPath=findPath('sar2trim')
-        perlPath=findPath('perl')
-      #  print perlPath
-     #   print sar2trimPath
-      #  print os.getcwd()
-      #  pdb.set_trace()
-        tester=" ".join([perlPath,sar2trimPath, '-d', '-p',PGM,'-v',VERN,loclistStr])
-#       plStat=subprocess.Popen(['perl',sar2trimPath, '-d', '-p',PGM,'-v',VERN,loclistStr],stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-        plStat=subprocess.Popen(tester,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-#        cmdtest=subprocess.Popen(['perl',sar2trimPath,'-d','-p',PGM,'-v',VERN, '10_XX_070.tbl, 10_XX_071.tbl'],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        [output,plerr]=plStat.communicate()
-        warnList = filter([plerr[:]], "Warning")
-        errList = filter([plerr[:]], "Error")
- #       plerr=plStat.stderr.read()
-        if errList:
-            print >> sys.stderr, "Child was terminated:\n", errList
-            print "failed", outFile, "continuing...\n"
+    if making_new:
+        location_list_str = ""
+        for i in location_list:
+            location_list_str += (i + " ")
+        sar_2_trim_path = find_path('sar2trim')
+        perl_path = find_path('perl')
+        #  print perl_path
+        #   print sar_2_trim_path
+        #  print os.getcwd()
+        #  pdb.set_trace()
+        tester = " ".join([perl_path, sar_2_trim_path, '-d', '-p', PGM, '-v', VERN, location_list_str])
+        perl_status = subprocess.Popen(tester, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        [output, perl_error] = perl_status.communicate()
+        warn_list = fnmatch.filter([perl_error[:]], "Warning")
+        err_list = fnmatch.filter([perl_error[:]], "Error")
+        #       perl_error=perl_status.stderr.read()
+        if err_list:
+            print >> sys.stderr, "Child was terminated:\n", err_list
+            print "failed", out_file, "continuing...\n"
             success = False
-                #print plerr
-                
+            # print perl_error
+
         else:  # success
-            if warnList:
-                print "Warnings found in ", outFile,"\n"
-                print warnList
+            if warn_list:
+                print "Warnings found in ", out_file, "\n"
+                print warn_list
                 print "continuing...\n"
-            if USINGFML00:
-                fReplace("SET VA AS_ADJ_STORE_REQ", \
-                             "!SET VA AS_ADJ_STORE_REQ", \
-                             PERLOUT)
-            fReplace(PERLOUT, outFile, PERLOUT)
-            if USINGFML00:
-                cat(PERLOUT, FML00, outFile)
+            if USING_FML00:
+                replace_str_in_file("SET VA AS_ADJ_STORE_REQ",
+                                    "!SET VA AS_ADJ_STORE_REQ",
+                                    PERL_OUT)
+            replace_str_in_file(PERL_OUT, out_file, PERL_OUT)
+            if USING_FML00:
+                cat(PERL_OUT, FML00, out_file)
             else:
-                copy(PERLOUT, outFile)
-            os.remove(PERLOUT)
-            print 'made', outFile
+                copy(PERL_OUT, out_file)
+            os.remove(PERL_OUT)
+            print 'made', out_file
             time.sleep(1)
             success = True
     else:
-        print pOutFile, ' up to date...'
-    return outFile, success
-    # End loc SARS
+        print p_out_file, ' up to date...'
+    return out_file, success
+    # End location SARs
 
-def updateASfiles(nameList,pOutRoot):
- #   pdb.set_trace()
-    #Sub function to run the BDB tools to generate updated AS files for given shopmod
-    adjDlist = filter(nameList, "*.adj")
-    tblDlist = filter(nameList, "*.tbl")
-    print "Updating as.adj and as.tbl in "+pOutRoot+" folder"
-    updateAdjArgs=['update_as_adj_win','-n','-f', pOutRoot]+adjDlist[:]
-   # pdb.set_trace()
-    statusAdj = subprocess.call(updateAdjArgs)
-    #print "This is current: "+statusAdj.poll()
-    #except OSError:
+
+# def update_as_files(name_list, p_out_file):
+def update_as_files(p_out_file):
+
+    #   pdb.set_trace()
+    # Sub function to run the BDB tools to generate updated AS files for given shopmod
+    # adj_change_list = fnmatch.filter(name_list, "*.adj")
+    # tbl_change_list = fnmatch.filter(name_list, "*.tbl")
+    print "Updating as.adj and as.tbl in " + p_out_file + " folder"
+    # update_adj_arg = ['update_as_adj_win', '-n', '-f', p_out_file] + adj_change_list[:]
+    # status_adj = subprocess.call(update_adj_arg)
+    # print "This is current: "+status_adj.poll()
+    # except OSError:
     #    print "Unable to update as.adj"
-    #try:
-    updateTblArgs=['update_as_tbl_win','-n','-f', pOutRoot]+tblDlist[:]
-    statusTbl = subprocess.call(updateTblArgs)
-    #statusTbl.wait()
-   # pdb.set_trace()
-    if os.path.exists(pOutRoot+"tbl.log"):
+    # try:
+    # update_tbl_args = ['update_as_tbl_win', '-n', '-f', p_out_file] + tbl_change_list[:]
+    # status_tbl = subprocess.call(update_tbl_args)
+    if os.path.exists(p_out_file + "tbl.log"):
         print "Converting as.tbl to tables_def.h for PLM"
-        statusCtblmkr=subprocess.Popen(['ctblmkr_GEneric_win','as.tbl']).communicate()[0]
-#    except OSError:
-#        print "Unable to update as.tbl or create tables_def.h"
+        # status_c_tbl_maker = subprocess.Popen(['ctblmkr_GEneric_win', 'as.tbl']).communicate()[0]
 
-def findPath(targetFunction):
-        whichProc = subprocess.Popen(["which", targetFunction],stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-        [funcPathC, stdoutTemp] = whichProc.communicate()
-       
-        if funcPathC:
-            cygpathProc = subprocess.Popen(["cygpath", "-w", funcPathC.rstrip()],stdout=subprocess.PIPE)
-            [funcPathW, stdoutTemp] = cygpathProc.communicate()
-        else:
-            raise Exception("Unable to find "+targetFunction+", please check it exists in $PATH")
-        return funcPathW.rstrip()
+
+def find_path(target_function):
+    which_process = subprocess.Popen(["which", target_function], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    [func_path_c, stdout_temp] = which_process.communicate()
+
+    if func_path_c:
+        cyg_path_process = subprocess.Popen(["cygpath", "-w", func_path_c.rstrip()], stdout=subprocess.PIPE)
+        [func_path_w, stdout_temp] = cyg_path_process.communicate()
+    else:
+        raise Exception("Unable to find " + target_function + ", please check it exists in $PATH")
+    return func_path_w.rstrip()
 
 
 def main(argv):
     """Convert .adj/.tbl to .cmd"""
-    global verbose, PGM, VERN, FORCE, PERLOUT, SWVER
+    global verbose, PGM, VERN, FORCE, PERL_OUT, SW_VER
 
     # Default _XX_ correspondence between file names and usage
-    engSARs = ['AS', 'ET']
-    dryRigSARs = ['AS', 'ET', 'DR']
-    testSARs = ['XX']
+    eng_sars = ['AS', 'ET']
+    dry_rig_sars = ['AS', 'ET', 'DR']
+    test_sars = ['XX']
 
     # Initialize
 
     # Options
+    options = ""
+    remainder = ""
     try:
-        options, remainder = getopt.getopt(argv, \
-          'd:fhp:Vv:', \
-          ['debug=', 'force', 'help', 'program=', 'version', 'SW_Version=',])
+        options, remainder = getopt.getopt(argv,
+                                           'd:fhp:Vv:',
+                                           ['debug=', 'force', 'help', 'program=', 'version', 'SW_Version=', ])
     except getopt.GetoptError:
         usage(2)
     for opt, arg in options:
-        if   opt in ('-h', '--help'):
+        if opt in ('-h', '--help'):
             print usage(1)
         elif opt in ('-d', '--debug'):
             verbose = int(arg)
@@ -738,50 +736,46 @@ def main(argv):
         elif opt in ('-p', '--program'):
             PGM = arg
         elif opt in ('-v', '--SW_Version'):
-            SWVER = arg
+            SW_VER = arg
         elif opt in ('-V', '--version'):
-            print 'makeCMD.py Version ',MYVERSION,' DG Rindner 10/04/11 Update shop mod function'
+            print 'makeCMD.py Version ', MY_VERSION, ' DG Rindner 10/04/11 Update shop mod function'
             exit(0)
-        else: print usage(1)
+        else:
+            print usage(1)
         if remainder:
             print 'ERROR(makeCMD.py):  too many arguments:', remainder
             exit(1)
 
     # Assign static variables
-    #SWVER = os.getcwd().rpartition('/')[2].strip()
-    VERN = SWVER.replace('.', '').replace('v', '')
+    VERN = SW_VER.replace('.', '').replace('v', '')
     print 'makeCMD.py:  making PDAP script cmd files for ',
-    print 'program=%(PG)s, version=%(SWVER)s...' \
-        % {'PG': PGM, 'SWVER': SWVER}
-    PERLOUT = "%(PG)sv%(VE)sscr%(DATE)s.cmd" \
-        % {'PG': PGM, 'VE': VERN, 'DATE': DATE}
+    print 'program=%(PG)s, version=%(SW_VER)s...' \
+          % {'PG': PGM, 'SW_VER': SW_VER}
+    PERL_OUT = "%(PG)sv%(VE)sscr%(DATE)s.cmd" \
+               % {'PG': PGM, 'VE': VERN, 'DATE': DATE}
 
     # Misc Test XX SARs
-    makeTest(testSARs)
+    make_test(test_sars)
 
     # Engine SARs
-    makeLoc(engSARs, ENG)
+    make_location(eng_sars, ENG)
     time.sleep(0.5)
 
     # Dry Rig SARs
-    makeLoc(dryRigSARs, RIG)
+    make_location(dry_rig_sars, RIG)
     time.sleep(0.5)
 
     # Shop Mods
-    for shmFile in glob.iglob(os.path.join(os.getcwd(), '*.shm')):
-        makeShm(shmFile)
+    for shm_file in glob.iglob(os.path.join(os.getcwd(), '*.shm')):
+        make_shm(shm_file)
         time.sleep(0.5)
 
     # Cleanup and quit
-    if lsl('.').count('.temp'):
+    if list_alpha('.').count('.temp'):
         os.remove('.temp')
     print "\nmakeCMD.py:  done."
 
 
-
-
 if __name__ == '__main__':
-    #sys.exit(cProfile.run("main(sys.argv[1:])"))
+    # sys.exit(cProfile.run("main(sys.argv[1:])"))
     sys.exit(main(sys.argv[1:]))
-
-

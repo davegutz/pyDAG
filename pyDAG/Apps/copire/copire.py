@@ -71,38 +71,41 @@ def main(argv):
     nVars = len(var)
 
     # calculate sample intervals.  Will hold longer ones.
-    dT  = []
+    dt = []
     for j in range(1, (nVars-1)*2, 2):
-        dT.append( atof(inf.token(2,j)) - atof(inf.token(1,j)) )
-    dTmin  = min(dT)
-    incr   = []
-    eps    = 1e-6
-    for j in range(len(dT)):
-        incr.append((dT[j]+eps)//dTmin)
+        t2 = inf.token(2, j)
+        t1 = inf.token(1, j)
+        if len(t2) > 1:
+            dt.append(atof(t2) - atof(t1))
+    dt_min = min(dt)
+    increment = []
+    eps = 1e-6
+    for j in range(len(dt)):
+        increment.append((dt[j]+eps)//dt_min)
 
     # write output file .csv until error
     fileout = inf.fileRoot + '.csv'
-    outf = open(fileout, 'w')
+    out_file = open(fileout, 'w')
     for j in range(len(var)):
-        outf.write(var[j]+',')
-    outf.write('\n')
-    numWrote = 0
+        out_file.write(var[j]+',')
+    out_file.write('\n')
+    num_wrote = 0
     for i in range(1, inf.numLines-1, 1):
-        outf.write(inf.token(i, 1)+',')
+        out_file.write(inf.token(i, 1)+',')
         for j in range(1, nVars):
-            index = int((i+1)/incr[j-1])
-            jndex = 2*j
+            index = int((i+1)/increment[j-1])
+            j_index = 2*j
             try:
-                value = inf.token(index, jndex)
+                value = inf.token(index, j_index)
                 if count(value, 'NAN'):
                     value = NANval
-                outf.write( value + ',' )
+                out_file.write( value + ',' )
             except:
                 break
-        outf.write('\n')
-        numWrote += 1
-    outf.close()
-    print 'wrote ', numWrote, ' lines'
+        out_file.write('\n')
+        num_wrote += 1
+    out_file.close()
+    print 'wrote ', num_wrote, ' lines'
 
 
 if __name__=='__main__':

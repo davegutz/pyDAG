@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Convert in folder all .jpg, .jpeg, .JPG, and .JPEG, apply watermark that exists in file wm.jpg and resave
+"""Convert in folder all .jpg, .jpeg, .JPG, and .JPEG, apply watermark that exists in a_file wm.jpg and re-save
     -h / --help
         Print this message and exit
     -d / --debug  <e.g. 0>
@@ -8,37 +8,46 @@
     -V, --version
         Print version and quit \n"
     -w, --watermarkfile <e.g. wm.jpg>
-        Use this watermark file
+        Use this watermark a_file
 
 Tests:
->>>python watermark.py -w watermarkKPEr.png
+python watermark.py -w watermarkKPEr.png
+>>> main(['-w', 'watermarkKPEr.png'])
+Opening water mark a_file watermarkKPEr.png ...
+Marking  Figure_1.jpg  and saving as  wFigure_1.jpg
+Done.
+
 """
-import cProfile
+# import cProfile
 import getopt
 import sys
-import Image, ImageEnhance, ImageDraw, ImageFont
+import PIL
 from pyDAG import mySystem
 
-def usage(code, msg=''):
-    "Usage description"
-    print >> sys.stderr, __doc__
+
+def usage(msg=''):
+    """Usage description"""
+    code = sys.stderr
+    print >> code, __doc__
     if msg:
-        print >> sys.stderr, msg
+        print >> code, msg
     sys.exit(code)
+
 
 def reduce_opacity(im, opacity):
     """Returns an image with reduced opacity."""
-    assert opacity >= 0 and opacity <= 1
+    assert 1 >= opacity >= 0
     if im.mode != 'RGBA':
         im = im.convert('RGBA')
     else:
         im = im.copy()
     alpha = im.split()[3]
-    alpha = ImageEnhance.Brightness(alpha).enhance(opacity)
+    alpha = PIL.ImageEnhance.Brightness(alpha).enhance(opacity)
     im.putalpha(alpha)
     return im
 
-def watermark(im, mark, position, opacity=1):
+
+def watermark(im, mark, position, opacity=1.0):
     """Adds a watermark to an image."""
     if opacity < 1:
         mark = reduce_opacity(mark, opacity)
@@ -46,7 +55,7 @@ def watermark(im, mark, position, opacity=1):
         im = im.convert('RGBA')
     # create a transparent layer the size of the image and draw the
     # watermark in that layer.
-    layer = Image.new('RGBA', im.size, (0, 0, 0, 0))
+    layer = PIL.Image.new('RGBA', im.size, (0, 0, 0, 0))
     if position == 'tile':
         for y in range(0, im.size[1], mark.size[1]):
             for x in range(0, im.size[0], mark.size[0]):
@@ -62,75 +71,77 @@ def watermark(im, mark, position, opacity=1):
     else:
         layer.paste(mark, position)
     # composite the watermark with the layer
-    return Image.composite(layer, im, layer)
+    return PIL.Image.composite(layer, im, layer)
+
 
 def main(argv):
-    """Add watermark to all jpegs <file>.jpg, saving to w<file>.jpg"""
+    """Add watermark to all jpegs <a_file>.jpg, saving to w<a_file>.jpg"""
 
     # Initialize static variables.
     global verbose
     verbose = 0
 
     # Initialize
-    help     = False
-    force    = False
-    quitting = False
-    WMFILE   = 'wm.jpg'
-    type     = 'tile'
+    wm_file = 'wm.jpg'
+    type_out = 'tile'
 
     # Options
+    options = ""
     try:
-        options, remainder = getopt.getopt(argv, 'd:hp:Vw:t:', ['debug=', 'force', 'help', 'program=', 'type=', 'version','watermark',])
+        options, remainder = getopt.getopt(argv, 'd:hp:Vw:t:', ['debug=', 'force', 'help', 'program=', 'type=',
+                                                                'version', 'watermark'])
     except getopt.GetoptError:
-        usage(2)
+        usage('ERR')
     for opt, arg in options:
-        if   opt in ('-h', '--help'):
-            print usage(1)
+        if opt in ('-h', '--help'):
+            print usage('help')
         elif opt in ('-d', '--debug'):
             verbose = int(arg)
         elif opt in ('-V', '--version'):
             print 'watermark.py Version 1.0.  DA Gutz 9/12/09'
             exit(0)
         elif opt in ('-t', '--type'):
-            type = arg
+            type_out = arg
         elif opt in ('-w', '--watermarkfile'):
-            WMFILE = arg
-        else: print usage(1)
+            wm_file = arg
+        else:
+            print usage('OK')
 
-    print 'Opening water mark file', WMFILE, '...'
-    mark = Image.open(WMFILE)
+    print 'Opening water mark a_file', wm_file, '...'
+    mark = PIL.Image.open(wm_file)
     
     # Alphabetical directory listing
-    dListAlpha = mySystem.lsl('.')
+    d_list_alpha = mySystem.lsl('.')
 
     # jpeg listings
-    jList = []
-    for file in dListAlpha:
-        if file.count('.jpg') | file.count('.jpeg') | file.count('JPG') | \
-                file.count('JPEG'):
-            if file.count(WMFILE) == 0:
-                jList.append(file)
-    if jList.__len__():
-        for file in jList:
-            sFile = 'w' + file
-            print 'Marking ', file, ' and saving as ', sFile
-            im = Image.open(file)
-            if type == 'tile':
-                immod = watermark(im, mark, 'tile', 0.08)
-            elif type == 'scale':
-                immod = watermark(im, mark, 'scale', 0.08)
-            elif type == 'sign':
-                immod = watermark(im, mark, (im.size[0]-mark.size[0], im.size[1]-mark.size[1]), 0.8)
+    j_list = []
+    for a_file in d_list_alpha:
+        if a_file.count('.jpg') | a_file.count('.jpeg') | a_file.count('JPG') | \
+                a_file.count('JPEG'):
+            if a_file.count(wm_file) == 0:
+                j_list.append(a_file)
+    if j_list.__len__():
+        for a_file in j_list:
+            s_file = 'w' + a_file
+            print 'Marking ', a_file, ' and saving as ', s_file
+            im = PIL.Image.open(a_file)
+            im_mod = im.copy()
+            if type_out == 'tile':
+                im_mod = watermark(im, mark, 'tile', 0.08)
+            elif type_out == 'scale':
+                im_mod = watermark(im, mark, 'scale', 0.08)
+            elif type_out == 'sign':
+                im_mod = watermark(im, mark, (im.size[0]-mark.size[0], im.size[1]-mark.size[1]), 0.8)
             else:
                 print 'watermark.py:  unknown type'
             if verbose > 3:
-                immod.show()
-            immod.save(sFile)
+                im_mod.show()
+            im_mod.save(s_file)
     else:
         print 'No files...'
     print 'Done.'
 
-if __name__ == '__main__':
-    #sys.exit(cProfile.run("main(sys.argv[1:])"))
-    sys.exit(main(sys.argv[1:]))
 
+if __name__ == '__main__':
+    # sys.exit(cProfile.run("main(sys.argv[1:])"))
+    sys.exit(main(sys.argv[1:]))
