@@ -526,10 +526,10 @@ def batchCopy(libDir, targetDir, sext):
             sourceFileGz = sourceFile + '.gz'
             targetFile = targetDir  + '/' + root + sext
             targetFileGz = targetFile + '.gz'
-            dSourceFile = osu.getStamp(sourceFile)
-            dSourceFileGz = osu.getStamp(sourceFileGz)
-            dTargetFile = osu.getStamp(targetFile)
-            dTargetFileGz = osu.getStamp(targetFileGz)
+            dSourceFile = osu.get_stamp(sourceFile)
+            dSourceFileGz = osu.get_stamp(sourceFileGz)
+            dTargetFile = osu.get_stamp(targetFile)
+            dTargetFileGz = osu.get_stamp(targetFileGz)
             if   dTargetFile >=  max(dSourceFile, dSourceFileGz):
                 skipped += 1
             elif dTargetFileGz >= max(dSourceFile, dSourceFileGz):

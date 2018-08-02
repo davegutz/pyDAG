@@ -68,7 +68,7 @@ def lsl(path):
     return flist
 
 # Replace string in file
-def fReplace(stext, rtext, iFile):
+def replace_in_file(stext, rtext, iFile):
     inf  = open(iFile)
     output = open('.temp', 'w')
     count  = 0

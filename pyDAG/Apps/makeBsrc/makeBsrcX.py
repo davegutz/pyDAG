@@ -748,7 +748,7 @@ class _MyUserInterfaceClass(Tk.Frame): # pylint: disable=R0904
         subprocess.PIPE = monFp
         for myFile in nList:
             nFile = os.path.join(self.bfsilDir, myFile)
-            dnFile = osu.getStamp(nFile)
+            dnFile = osu.get_stamp(nFile)
             # remove old ones
             making = 0
             ext = myFile.rpartition('.')[2]
@@ -756,12 +756,12 @@ class _MyUserInterfaceClass(Tk.Frame): # pylint: disable=R0904
             hFile = os.path.join(self.bfsilDir, ''.join([root, '.h']))
             cFile = os.path.join(self.bfsilDir, ''.join([root, '.c']))
             if os.path.isfile(hFile):
-                dhFile = osu.getStamp(hFile)
+                dhFile = osu.get_stamp(hFile)
                 if dnFile > dhFile:
                     os.remove(hFile)
                     making = 1
             if os.path.isfile(cFile):
-                dcFile = osu.getStamp(cFile)
+                dcFile = osu.get_stamp(cFile)
                 if dnFile > dcFile:
                     os.remove(cFile)
                     making = 1
@@ -844,10 +844,10 @@ def batchCopy(libDir, targetDir, sext):
             sourceFileGz = ''.join([sourceFile, '.gz'])
             targetFile = os.path.join(targetDir, ''.join([root, sext]))
             targetFileGz = ''.join([targetFile, '.gz'])
-            dSourceFile = osu.getStamp(sourceFile)
-            dSourceFileGz = osu.getStamp(sourceFileGz)
-            dTargetFile = osu.getStamp(targetFile)
-            dTargetFileGz = osu.getStamp(targetFileGz)
+            dSourceFile = osu.get_stamp(sourceFile)
+            dSourceFileGz = osu.get_stamp(sourceFileGz)
+            dTargetFile = osu.get_stamp(targetFile)
+            dTargetFileGz = osu.get_stamp(targetFileGz)
             if   dTargetFile >=  max(dSourceFile, dSourceFileGz):
                 skipped += 1
             elif dTargetFileGz >= max(dSourceFile, dSourceFileGz):

@@ -69,7 +69,7 @@ def usage(code, msg=''):
 
 
 # Replace string in file
-def fReplace(stext, rtext, iFile):
+def replace_in_file(stext, rtext, iFile):
     input = open(iFile)
     output = open('.pyReplaceTempXXX', 'w')
     count = 0
@@ -139,7 +139,7 @@ def main(argv):
 
     count = 0
     for file in argList:
-        countf = fReplace(stext, rtext, file)
+        countf = replace_in_file(stext, rtext, file)
         count += countf
         if verbose:
             print 'target=', stext, ', replacement=', rtext, ', file=', file, ', count=', countf
