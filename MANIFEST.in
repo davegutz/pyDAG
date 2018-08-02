@@ -1,2 +1,2 @@
 include *.txt MANIFEST.in
-recursive-include pyDAG *.txt *.py *.eu *.TXT *txtOld *.csv *.dat *.map *.xls *.png *.gif *.jpeg *.xml *.cfg *.zap *.doc *.gpl *.mtc *.def *.int *.mtp *.scd
+recursive-include pyDAG *.txt *.py *.eu *.TXT *txtOld *.csv *.dat *.map *.xls *.xlsx *.png *.gif *.jpeg *.jpg *.xml *.cfg *.zap *.doc *.gpl *.mtc *.def *.int *.mtp *.scd

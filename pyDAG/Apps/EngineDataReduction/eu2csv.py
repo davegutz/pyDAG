@@ -14,26 +14,26 @@ hdrStr = f.readline()
 q1, q2, q3, loc, cell, dateStr, q4, q5, q6 = hdrStr.split()
 print q1, q2, q3, loc, cell, dateStr, q4, q5
 
-namesStr = f.readline()
+names_str = f.readline()
 delimiters = ' \t()\n'
-regEx = re.compile("[" + re.escape(delimiters) + "]*")
-namesTok = regEx.split(namesStr)
-namesKey = namesTok[0]
-numNames = string.atoi(namesTok[1])
-nameFmt = namesTok[2]
-locA = string.find(nameFmt, 'A')
-namesPerLine = string.atoi(nameFmt[:locA])
-numNameLines = numNames / namesPerLine
-if numNames % namesPerLine != 0:
-    numNameLines = numNameLines + 1
+reg_ex = re.compile("[" + re.escape(delimiters) + "]*")
+names_token = reg_ex.split(names_str)
+names_key = names_token[0]
+num_names = string.atoi(names_token[1])
+name_format = names_token[2]
+loc_a = string.find(name_format, 'A')
+names_per_line = string.atoi(name_format[:loc_a])
+num_name_lines = num_names / names_per_line
+if num_names % names_per_line != 0:
+    num_name_lines = num_name_lines + 1
 names = []
-[names.extend([nm for nm in f.readline().split()]) for i in range(numNameLines)]
+[names.extend([nm for nm in f.readline().split()]) for i in range(num_name_lines)]
 print names
 
 frequencies_str = f.readline()
 delimiters = ' \t()\n'
-regEx = re.compile("[" + re.escape(delimiters) + "]*")
-frequencies_token = regEx.split(frequencies_str)
+reg_ex = re.compile("[" + re.escape(delimiters) + "]*")
+frequencies_token = reg_ex.split(frequencies_str)
 frequenciesKey = frequencies_token[0]
 num_frequencies = string.atoi(frequencies_token[1])
 frequencies_format = frequencies_token[2]
@@ -46,19 +46,19 @@ frequencies = []
 [frequencies.extend([string.atof(fs) for fs in f.readline().split()]) for i in range(numFreqLines)]
 print frequencies
 
-parStrNext = f.readline().split()
+par_str_next = f.readline().split()
 data = []
-for j in range(numNames):
+for j in range(num_names):
     data.append([])
-    parStr = parStrNext
-    dataStr = f.readline()
-    locNext = string.find(dataStr, '*VALUEB')
-    parStrNext = dataStr[locNext:]
-    dataStr = dataStr[:locNext]
-    num_data = len(dataStr) / 4
+    par_str = par_str_next
+    data_str = f.readline()
+    loc_next = string.find(data_str, '*VALUEB')
+    par_str_next = data_str[loc_next:]
+    data_str = data_str[:loc_next]
+    num_data = len(data_str) / 4
     i_data = []
     for i in range(num_data):
-        temp = dataStr[4 * i:4 * i + 4]
+        temp = data_str[4 * i:4 * i + 4]
         packed = struct.pack('4c', temp[0], temp[1], temp[2], temp[3])
         data[j].append(struct.unpack('f', packed))
 

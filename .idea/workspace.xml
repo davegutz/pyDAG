@@ -3,11 +3,31 @@
   <component name="ChangeListManager">
     <list default="true" id="0b94d7ef-68ae-4ca8-9778-0f0217f39940" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/makeBsrc/MakeBsrc.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyDAG/Apps/makeBsrc/MakeBsrc.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/makeBsrc/genBsrc.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyDAG/Apps/makeBsrc/genBsrc.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/makeBsrc/makeBsrcX.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyDAG/Apps/makeBsrc/makeBsrcX.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/pyReplace" beforeDir="false" afterPath="$PROJECT_DIR$/pyDAG/Apps/pyReplace" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyDAG/System/mySystem.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyDAG/System/mySystem.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MANIFEST.in" beforeDir="false" afterPath="$PROJECT_DIR$/MANIFEST.in" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/GE38_EngineDataReduction/c005r9951.eu" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/GE38_EngineDataReduction/eu2csv.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/GE38_RotorDynamicModel/README.TXT" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/GE38_RotorDynamicModel/rotorCurves.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/GE38_RotorDynamicModel/rotorCurves.txtOld" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/GE38_RotorDynamicModel/rotorModel.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/GE38_RotorDynamicModel/rotorModel.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/GE38_RotorDynamicModel/rotorModel.dic" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/GE38_RotorDynamicModel/rotorModel.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/GE38_RotorDynamicModel/rotorModel.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/GE38_RotorDynamicModel/rotorModel.xls" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/GE38_RotorDynamicModel/rotorModel006.xls" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/GE38_RotorDynamicModel/rotorModel010.xls" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/GE38_RotorDynamicModel/rotorModel012.xls" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/GE38_RotorDynamicModel/rotorModel_2damstep.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/GE38_RotorDynamicModel/rotorModel_2damstep.xls" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/copire/Export2.TXT" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/copire/Export2.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/copire/copire" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/copire/copire.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/makeBsrc/MakeBsrc.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/makeBsrc/genBsrc.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/makeBsrc/makeBsrcX.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/setup.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -18,18 +38,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="watermark.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pyDAG/Apps/watermark/watermark.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="118">
-              <caret line="26" selection-start-line="25" selection-start-column="26" selection-end-line="26" />
-              <folding>
-                <element signature="e#653#666#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="makeCMD.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pyDAG/Apps/makeCMD/makeCMD.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -54,20 +62,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="rotorModel.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pyDAG/Apps/GE38_RotorDynamicModel/rotorModel.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="305">
-              <caret line="17" lean-forward="true" selection-start-line="1" selection-end-line="17" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="mySystem.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="mySystem.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pyDAG/System/mySystem.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="134">
-              <caret line="186" lean-forward="true" selection-start-line="186" selection-end-line="186" />
+            <state relative-caret-position="562">
+              <caret line="190" selection-start-line="190" selection-end-line="190" />
               <folding>
                 <element signature="e#659#669#0" expanded="true" />
               </folding>
@@ -75,11 +74,50 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="eu2csv.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pyDAG/Apps/EngineDataReduction/eu2csv.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="51">
+              <caret line="6" column="11" lean-forward="true" selection-start-line="6" selection-start-column="11" selection-end-line="6" selection-end-column="11" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MANIFEST.in" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/MANIFEST.in">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file leaf-file-name="README.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/README.txt">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file leaf-file-name="setup.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/setup.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1003">
+              <caret line="59" column="52" lean-forward="true" selection-start-line="59" selection-start-column="52" selection-end-line="59" selection-end-column="52" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="pyReplace" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pyDAG/Apps/pyReplace">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-2210" />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="myReplace.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pyDAG/System/myReplace.py">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
     </leaf>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>Ic_Value</find>
       <find>ImageFont</find>
       <find>pillow</find>
       <find>stext</find>
@@ -109,9 +147,9 @@
       <find>dfile</find>
       <find>Dave</find>
       <find>study</find>
+      <find>locNext</find>
     </findStrings>
     <replaceStrings>
-      <replace>ls_dir</replace>
       <replace>target_function</replace>
       <replace>j_index</replace>
       <replace>type_out</replace>
@@ -141,6 +179,7 @@
       <replace>d_file</replace>
       <replace>replace_in_file</replace>
       <replace>load_lookup</replace>
+      <replace>loc_next</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -149,7 +188,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/pyDAG/Apps/GE38_EngineDataReduction/eu2csv.py" />
         <option value="$PROJECT_DIR$/pyDAG/Apps/copire/copire.py" />
         <option value="$PROJECT_DIR$/pyDAG/Apps/makeCMD/makeTBLADJ.py" />
         <option value="$PROJECT_DIR$/pyDAG/Apps/genGorilla/genGorilla.py" />
@@ -161,6 +199,8 @@
         <option value="$PROJECT_DIR$/pyDAG/System/testMySystem.py" />
         <option value="$PROJECT_DIR$/pyDAG/System/mySystem.dic" />
         <option value="$PROJECT_DIR$/pyDAG/System/mySystem.py" />
+        <option value="$PROJECT_DIR$/pyDAG/Apps/GE38_EngineDataReduction/eu2csv.py" />
+        <option value="$PROJECT_DIR$/setup.py" />
       </list>
     </option>
   </component>
@@ -193,26 +233,6 @@
               <item name="pyDAG" type="462c0819:PsiDirectoryNode" />
               <item name="Apps" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="pyDAG" type="b2602c69:ProjectViewProjectNode" />
-              <item name="pyDAG" type="462c0819:PsiDirectoryNode" />
-              <item name="pyDAG" type="462c0819:PsiDirectoryNode" />
-              <item name="Apps" type="462c0819:PsiDirectoryNode" />
-              <item name="watermark" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="pyDAG" type="b2602c69:ProjectViewProjectNode" />
-              <item name="pyDAG" type="462c0819:PsiDirectoryNode" />
-              <item name="pyDAG" type="462c0819:PsiDirectoryNode" />
-              <item name="System" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="pyDAG" type="b2602c69:ProjectViewProjectNode" />
-              <item name="pyDAG" type="462c0819:PsiDirectoryNode" />
-              <item name="pyDAG" type="462c0819:PsiDirectoryNode" />
-              <item name="System" type="462c0819:PsiDirectoryNode" />
-              <item name="tests" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -236,25 +256,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.mySystem">
-    <configuration name="copire" type="PythonConfigurationType" factoryName="Python">
-      <module name="pyDAG" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="C:\cygwin64\bin\python2.7.exe" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/pyDAG/Apps/copire" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pyDAG/Apps/copire/copire.py" />
-      <option name="PARAMETERS" value="Export2.TXT" />
-      <option name="SHOW_COMMAND_LINE" value="true" />
-      <option name="EMULATE_TERMINAL" value="true" />
-      <option name="MODULE_MODE" value="false" />
-    </configuration>
+  <component name="RunManager" selected="Python.rotorModel">
     <configuration name="eu2csv" type="PythonConfigurationType" factoryName="Python" activateToolWindowBeforeRun="false">
       <output_file path="$PROJECT_DIR$/pyDAG/Apps/GE38_EngineDataReduction/c005r9951.csv" is_save="true" />
       <module name="pyDAG" />
@@ -264,11 +266,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="C:\cygwin64\bin\python2.7.exe" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/pyDAG/Apps/GE38_EngineDataReduction" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/pyDAG/Apps/EngineDataReduction" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pyDAG/Apps/GE38_EngineDataReduction/eu2csv.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pyDAG/Apps/EngineDataReduction/eu2csv.py" />
       <option name="PARAMETERS" value="c005r9951.eu" />
       <option name="SHOW_COMMAND_LINE" value="true" />
       <option name="EMULATE_TERMINAL" value="true" />
@@ -336,11 +338,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="C:\cygwin64\bin\python2.7.exe" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/pyDAG/Apps/GE38_RotorDynamicModel" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/pyDAG/Apps/RotorDynamicModel" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pyDAG/Apps/GE38_RotorDynamicModel/rotorModel.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pyDAG/Apps/RotorDynamicModel/rotorModel.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -364,7 +366,7 @@
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
     </configuration>
-    <configuration name="Doctests in genGorilla" type="tests" factoryName="Doctests" temporary="true" nameIsGenerated="true">
+    <configuration name="Doctests in genGorilla" type="tests" factoryName="Doctests" nameIsGenerated="true">
       <module name="pyDAG" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -390,7 +392,7 @@
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pyDAG/Apps/GE38_RotorDynamicModel/rotorModel.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pyDAG/Apps/RotorDynamicModel/rotorModel.py" />
       <option name="CLASS_NAME" value="" />
       <option name="METHOD_NAME" value="" />
       <option name="FOLDER_NAME" value="" />
@@ -436,7 +438,6 @@
       <item itemvalue="Python.mySystem" />
       <item itemvalue="Python.genGorilla" />
       <item itemvalue="Python.eu2csv" />
-      <item itemvalue="Python.copire" />
       <item itemvalue="Python.makeCMD" />
       <item itemvalue="Python.watermark" />
       <item itemvalue="Python.rotorModel" />
@@ -445,13 +446,8 @@
       <item itemvalue="Python tests.Doctests in watermark" />
       <item itemvalue="Python tests.Doctests in genGorilla" />
     </list>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Python tests.Doctests in genGorilla" />
-      </list>
-    </recent_temporary>
   </component>
-  <component name="SpellCheckerSettings" BundledDictionaries="0" Folders="6" Folder0="C:\Users\Dave\Documents\GitHub\pyDAG\pyDAG\Apps\watermark" Folder1="C:\Users\Dave\Documents\GitHub\pyDAG" Folder2="C:\Users\Dave\Documents\GitHub\pyDAG\pyDAG\Apps\genGorilla" Folder3="C:\Users\Dave\Documents\GitHub\pyDAG\pyDAG\Apps\makeCMD" Folder4="C:\Users\Dave\Documents\GitHub\pyDAG\pyDAG\Apps\GE38_RotorDynamicModel" Folder5="C:\Users\Dave\Documents\GitHub\pyDAG\pyDAG\System" CustomDictionaries="6" CustomDictionary0="C:\Users\Dave\Documents\GitHub\pyDAG\pyDAG\Apps\watermark\watermark.dic" CustomDictionary1="C:\Users\Dave\Documents\GitHub\pyDAG\pyDAG.dic" CustomDictionary2="C:\Users\Dave\Documents\GitHub\pyDAG\pyDAG\Apps\genGorilla\genGorilla.dic" CustomDictionary3="C:\Users\Dave\Documents\GitHub\pyDAG\pyDAG\Apps\makeCMD\makeCMD.dic" CustomDictionary4="C:\Users\Dave\Documents\GitHub\pyDAG\pyDAG\Apps\GE38_RotorDynamicModel\rotorModel.dic" CustomDictionary5="C:\Users\Dave\Documents\GitHub\pyDAG\pyDAG\System\mySystem.dic" Dictionaries="0" CorrectionsLimit="5" DefaultDictionary="application-level" UseSingleDictionary="false" />
+  <component name="SpellCheckerSettings" BundledDictionaries="0" Folders="5" Folder0="C:\Users\Dave\Documents\GitHub\pyDAG\pyDAG\Apps\watermark" Folder1="C:\Users\Dave\Documents\GitHub\pyDAG" Folder2="C:\Users\Dave\Documents\GitHub\pyDAG\pyDAG\Apps\genGorilla" Folder3="C:\Users\Dave\Documents\GitHub\pyDAG\pyDAG\Apps\makeCMD" Folder4="C:\Users\Dave\Documents\GitHub\pyDAG\pyDAG\System" CustomDictionaries="5" CustomDictionary0="C:\Users\Dave\Documents\GitHub\pyDAG\pyDAG\Apps\watermark\watermark.dic" CustomDictionary1="C:\Users\Dave\Documents\GitHub\pyDAG\pyDAG.dic" CustomDictionary2="C:\Users\Dave\Documents\GitHub\pyDAG\pyDAG\Apps\genGorilla\genGorilla.dic" CustomDictionary3="C:\Users\Dave\Documents\GitHub\pyDAG\pyDAG\Apps\makeCMD\makeCMD.dic" CustomDictionary4="C:\Users\Dave\Documents\GitHub\pyDAG\pyDAG\System\mySystem.dic" Dictionaries="0" CorrectionsLimit="5" DefaultDictionary="application-level" UseSingleDictionary="false" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -466,12 +462,6 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="mySystem - 2018.08.02 at 06h 49m 09s.xml">
-      <configuration name="mySystem" configurationId="tests" />
-    </history-entry>
-    <history-entry file="mySystem - 2018.08.02 at 06h 49m 53s.xml">
-      <configuration name="mySystem" configurationId="tests" />
-    </history-entry>
     <history-entry file="mySystem - 2018.08.02 at 06h 50m 07s.xml">
       <configuration name="mySystem" configurationId="tests" />
     </history-entry>
@@ -496,17 +486,23 @@
     <history-entry file="mySystem - 2018.08.02 at 07h 13m 56s.xml">
       <configuration name="mySystem" configurationId="tests" />
     </history-entry>
+    <history-entry file="Doctests_in_rotorModel - 2018.08.02 at 07h 55m 50s.xml">
+      <configuration name="Doctests in rotorModel" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Doctests_in_rotorModel - 2018.08.02 at 07h 56m 07s.xml">
+      <configuration name="Doctests in rotorModel" configurationId="tests" />
+    </history-entry>
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="878" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19828156" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.31658956" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Python Console" order="7" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.45822102" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.45822102" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Favorites" order="2" side_tool="true" />
@@ -592,25 +588,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pyDAG/Apps/GE38_EngineDataReduction/eu2csv.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-22">
-          <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pyDAG/Apps/copire/copire">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="44">
           <caret line="12" column="14" selection-start-line="12" selection-start-column="7" selection-end-line="12" selection-end-column="14" />
         </state>
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pyDAG/Apps/copire/Export2.TXT">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/README.txt">
-      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/pyDAG/Apps/makeCMD/ctblmkr_GEneric.c">
       <provider selected="true" editor-type-id="text-editor">
@@ -629,13 +612,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pyDAG/Apps/copire/copire.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1203">
-          <caret line="29" column="6" lean-forward="true" selection-start-line="29" selection-start-column="6" selection-end-line="29" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/ide/ide-scripting.groovy">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -643,13 +619,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="720">
           <caret line="129" column="10" lean-forward="true" selection-start-line="129" selection-start-column="10" selection-end-line="129" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/setup.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1126">
-          <caret line="68" column="39" lean-forward="true" selection-start-line="68" selection-start-column="39" selection-end-line="68" selection-end-column="39" />
         </state>
       </provider>
     </entry>
@@ -744,13 +713,85 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/pyDAG/Apps/GE38_WetRigXML_ConfigFiles/README.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pyDAG/Apps/GE38_WetRigXML_ConfigFiles/csv2BPxml.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pyDAG/Apps/makeBsrc/MakeBsrc.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pyDAG/Apps/copire/Export2.TXT">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pyDAG/Apps/copire/Export2.csv">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pyDAG/Apps/copire/copire.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1006">
+          <caret line="29" column="6" lean-forward="true" selection-start-line="29" selection-start-column="6" selection-end-line="29" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pyDAG/System/myReplace.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pyDAG/Apps/pyReplace">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2210" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pyDAG/Apps/makeBsrc/makeBsrcX.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2907">
+          <caret line="9" column="11" selection-start-line="9" selection-start-column="11" selection-end-line="9" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pyDAG/Apps/makeBsrc/genBsrc.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1700" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pyDAG/Apps/GE38_EngineDataReduction/eu2csv.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="161">
+          <caret line="75" lean-forward="true" selection-start-line="75" selection-end-line="75" />
+          <folding>
+            <element signature="e#22#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/pyDAG/System/mySystem.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="134">
-          <caret line="186" lean-forward="true" selection-start-line="186" selection-end-line="186" />
+        <state relative-caret-position="562">
+          <caret line="190" selection-start-line="190" selection-end-line="190" />
           <folding>
             <element signature="e#659#669#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pyDAG/Apps/EngineDataReduction/eu2csv.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="6" column="11" lean-forward="true" selection-start-line="6" selection-start-column="11" selection-end-line="6" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MANIFEST.in">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/setup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1003">
+          <caret line="59" column="52" lean-forward="true" selection-start-line="59" selection-start-column="52" selection-end-line="59" selection-end-column="52" />
         </state>
       </provider>
     </entry>
