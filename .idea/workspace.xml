@@ -2,27 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0b94d7ef-68ae-4ca8-9778-0f0217f39940" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/pyDAG.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/pyDAG.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/GE38_EngineDataReduction/eu2csv.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyDAG/Apps/GE38_EngineDataReduction/eu2csv.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/copire/Export2.csv" beforeDir="false" afterPath="$PROJECT_DIR$/pyDAG/Apps/copire/Export2.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/copire/copire.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyDAG/Apps/copire/copire.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/genGorilla/g110.def" beforeDir="false" afterPath="$PROJECT_DIR$/pyDAG/Apps/genGorilla/g110.def" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/genGorilla/g110.int" beforeDir="false" afterPath="$PROJECT_DIR$/pyDAG/Apps/genGorilla/g110.int" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/genGorilla/g110.mtp" beforeDir="false" afterPath="$PROJECT_DIR$/pyDAG/Apps/genGorilla/g110.mtp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/genGorilla/g110.scd" beforeDir="false" afterPath="$PROJECT_DIR$/pyDAG/Apps/genGorilla/g110.scd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/genGorilla/g111.def" beforeDir="false" afterPath="$PROJECT_DIR$/pyDAG/Apps/genGorilla/g111.def" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/genGorilla/g111.int" beforeDir="false" afterPath="$PROJECT_DIR$/pyDAG/Apps/genGorilla/g111.int" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/genGorilla/g111.mtp" beforeDir="false" afterPath="$PROJECT_DIR$/pyDAG/Apps/genGorilla/g111.mtp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/genGorilla/g111.scd" beforeDir="false" afterPath="$PROJECT_DIR$/pyDAG/Apps/genGorilla/g111.scd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/genGorilla/genGorilla.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyDAG/Apps/genGorilla/genGorilla.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/makeCMD/makeCMD.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyDAG/Apps/makeCMD/makeCMD.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/makeCMD/makeTBLADJ.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyDAG/Apps/makeCMD/makeTBLADJ.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/GE38_RotorDynamicModel/rotorModel.csv" beforeDir="false" afterPath="$PROJECT_DIR$/pyDAG/Apps/GE38_RotorDynamicModel/rotorModel.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/GE38_RotorDynamicModel/rotorModel.map" beforeDir="false" afterPath="$PROJECT_DIR$/pyDAG/Apps/GE38_RotorDynamicModel/rotorModel.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/GE38_RotorDynamicModel/rotorModel.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyDAG/Apps/GE38_RotorDynamicModel/rotorModel.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pyDAG/Apps/watermark/watermark.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyDAG/Apps/watermark/watermark.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/setup.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyDAG/Dynamics/ode.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyDAG/Dynamics/ode.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -36,8 +21,8 @@
       <file leaf-file-name="watermark.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pyDAG/Apps/watermark/watermark.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="7" column="17" lean-forward="true" selection-start-line="7" selection-start-column="17" selection-end-line="7" selection-end-column="17" />
+            <state relative-caret-position="442">
+              <caret line="26" selection-start-line="25" selection-start-column="26" selection-end-line="26" />
               <folding>
                 <element signature="e#653#666#0" expanded="true" />
               </folding>
@@ -48,8 +33,8 @@
       <file leaf-file-name="makeCMD.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pyDAG/Apps/makeCMD/makeCMD.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="63">
-              <caret line="478" column="35" lean-forward="true" selection-start-line="478" selection-start-column="35" selection-end-line="478" selection-end-column="35" />
+            <state relative-caret-position="8126">
+              <caret line="478" column="35" selection-start-line="478" selection-start-column="35" selection-end-line="478" selection-end-column="35" />
               <folding>
                 <element signature="e#40#53#0" expanded="true" />
               </folding>
@@ -57,14 +42,35 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="genGorilla.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="genGorilla.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pyDAG/Apps/genGorilla/genGorilla.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="161">
-              <caret line="309" column="35" lean-forward="true" selection-start-line="309" selection-start-column="35" selection-end-line="309" selection-end-column="35" />
+            <state relative-caret-position="4828">
+              <caret line="309" column="35" selection-start-line="309" selection-start-column="35" selection-end-line="309" selection-end-column="35" />
               <folding>
                 <element signature="e#2102#2121#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="rotorModel.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/pyDAG/Apps/GE38_RotorDynamicModel/rotorModel.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="615">
+              <caret line="547" column="26" lean-forward="true" selection-start-line="547" selection-start-column="26" selection-end-line="547" selection-end-column="26" />
+              <folding>
+                <element signature="e#106#116#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="rotorCurves.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pyDAG/Apps/GE38_RotorDynamicModel/rotorCurves.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="68">
+              <caret line="4" column="72" selection-start-line="4" selection-start-column="72" selection-end-line="4" selection-end-column="72" />
             </state>
           </provider>
         </entry>
@@ -73,23 +79,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>dT</find>
-      <find>VERN</find>
-      <find>perl_command</find>
-      <find>tblF</find>
-      <find>lsdir</find>
-      <find>main</find>
-      <find>targetFunction</find>
-      <find>usage</find>
-      <find>__doc__</find>
-      <find>type</find>
-      <find>watermark</find>
-      <find>jList</find>
-      <find>RGBA</find>
-      <find>NORMALCONSTANT</find>
-      <find>out_filename</find>
-      <find>INITAS</find>
-      <find>random</find>
       <find>filter</find>
       <find>fnmatch</find>
       <find>update_as</find>
@@ -99,6 +88,27 @@
       <find>ImageFont</find>
       <find>pillow</find>
       <find>stext</find>
+      <find>PIL</find>
+      <find>Image</find>
+      <find>PIL.ImageEnhance</find>
+      <find>load_curv</find>
+      <find>\t</find>
+      <find>derivatives</find>
+      <find>nOATF</find>
+      <find>nALT</find>
+      <find>&quot;</find>
+      <find>curves</find>
+      <find>Q</find>
+      <find>N</find>
+      <find>nL</find>
+      <find>R</find>
+      <find>hptr_T</find>
+      <find>q1</find>
+      <find>derivs</find>
+      <find>dtime</find>
+      <find>qgas</find>
+      <find>qtotload</find>
+      <find>initialization</find>
     </findStrings>
     <replaceStrings>
       <replace>dt</replace>
@@ -117,6 +127,19 @@
       <replace>IcValue</replace>
       <replace>PIL.ImageFont</replace>
       <replace>s_text</replace>
+      <replace>ImageEnhance</replace>
+      <replace>dynang</replace>
+      <replace>n_oatf</replace>
+      <replace>d_alt</replace>
+      <replace>&quot;&quot;&quot;</replace>
+      <replace>j</replace>
+      <replace>q</replace>
+      <replace>n</replace>
+      <replace>n_l</replace>
+      <replace>r_m</replace>
+      <replace>hptr_t</replace>
+      <replace>d_time</replace>
+      <replace>load_lookup</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -131,21 +154,22 @@
         <option value="$PROJECT_DIR$/pyDAG/Apps/genGorilla/genGorilla.py" />
         <option value="$PROJECT_DIR$/pyDAG/Apps/makeCMD/makeCMD.py" />
         <option value="$PROJECT_DIR$/pyDAG/Apps/watermark/watermark.py" />
+        <option value="$PROJECT_DIR$/pyDAG/Dynamics/ode.py" />
+        <option value="$PROJECT_DIR$/pyDAG/Apps/GE38_RotorDynamicModel/rotorModel.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="7">
-    <option name="x" value="595" />
-    <option name="y" value="11" />
-    <option name="width" value="930" />
-    <option name="height" value="1075" />
+    <option name="x" value="-9" />
+    <option name="y" value="-9" />
+    <option name="width" value="1098" />
+    <option name="height" value="1938" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -153,14 +177,39 @@
               <item name="pyDAG" type="b2602c69:ProjectViewProjectNode" />
               <item name="pyDAG" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="pyDAG" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pyDAG" type="462c0819:PsiDirectoryNode" />
+              <item name="pyDAG" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pyDAG" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pyDAG" type="462c0819:PsiDirectoryNode" />
+              <item name="pyDAG" type="462c0819:PsiDirectoryNode" />
+              <item name="Apps" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pyDAG" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pyDAG" type="462c0819:PsiDirectoryNode" />
+              <item name="pyDAG" type="462c0819:PsiDirectoryNode" />
+              <item name="Apps" type="462c0819:PsiDirectoryNode" />
+              <item name="GE38_RotorDynamicModel" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pyDAG" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pyDAG" type="462c0819:PsiDirectoryNode" />
+              <item name="pyDAG" type="462c0819:PsiDirectoryNode" />
+              <item name="Dynamics" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/pyDAG/Apps/makeCMD/makeCMD.dic" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/pyDAG/Apps/GE38_RotorDynamicModel/rotorModel.py" />
     <property name="settings.editor.selected.configurable" value="reference.settings.ide.settings.spelling" />
   </component>
   <component name="RunDashboard">
@@ -175,7 +224,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.makeCMD">
+  <component name="RunManager" selected="Python.rotorModel">
     <configuration name="copire" type="PythonConfigurationType" factoryName="Python">
       <module name="pyDAG" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -245,7 +294,25 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pyDAG/Apps/makeCMD/makeCMD.py" />
       <option name="PARAMETERS" value="-d 0" />
-      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <configuration name="rotorModel" type="PythonConfigurationType" factoryName="Python" singleton="true">
+      <module name="pyDAG" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\cygwin64\bin\python2.7.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/pyDAG/Apps/GE38_RotorDynamicModel" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pyDAG/Apps/GE38_RotorDynamicModel/rotorModel.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
     </configuration>
@@ -263,7 +330,7 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pyDAG/Apps/watermark/watermark.py" />
       <option name="PARAMETERS" value="-w watermarkKPEr.png" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
     </configuration>
@@ -277,6 +344,23 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pyDAG/Apps/genGorilla/genGorilla.py" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+    </configuration>
+    <configuration name="Doctests in rotorModel" type="tests" factoryName="Doctests">
+      <module name="pyDAG" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="C:\cygwin64\bin\python2.7.exe" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pyDAG/Apps/GE38_RotorDynamicModel/rotorModel.py" />
       <option name="CLASS_NAME" value="" />
       <option name="METHOD_NAME" value="" />
       <option name="FOLDER_NAME" value="" />
@@ -307,6 +391,8 @@
       <item itemvalue="Python.copire" />
       <item itemvalue="Python.makeCMD" />
       <item itemvalue="Python.watermark" />
+      <item itemvalue="Python.rotorModel" />
+      <item itemvalue="Python tests.Doctests in rotorModel" />
       <item itemvalue="Python tests.Doctests in watermark" />
       <item itemvalue="Python tests.Doctests in genGorilla" />
     </list>
@@ -316,7 +402,7 @@
       </list>
     </recent_temporary>
   </component>
-  <component name="SpellCheckerSettings" BundledDictionaries="0" Folders="4" Folder0="C:\Users\Dave\Documents\GitHub\pyDAG\pyDAG\Apps\watermark" Folder1="C:\Users\Dave\Documents\GitHub\pyDAG" Folder2="C:\Users\Dave\Documents\GitHub\pyDAG\pyDAG\Apps\genGorilla" Folder3="C:\Users\Dave\Documents\GitHub\pyDAG\pyDAG\Apps\makeCMD" CustomDictionaries="4" CustomDictionary0="C:\Users\Dave\Documents\GitHub\pyDAG\pyDAG\Apps\watermark\watermark.dic" CustomDictionary1="C:\Users\Dave\Documents\GitHub\pyDAG\pyDAG.dic" CustomDictionary2="C:\Users\Dave\Documents\GitHub\pyDAG\pyDAG\Apps\genGorilla\genGorilla.dic" CustomDictionary3="C:\Users\Dave\Documents\GitHub\pyDAG\pyDAG\Apps\makeCMD\makeCMD.dic" Dictionaries="0" CorrectionsLimit="5" DefaultDictionary="application-level" UseSingleDictionary="false" />
+  <component name="SpellCheckerSettings" BundledDictionaries="0" Folders="5" Folder0="C:\Users\Dave\Documents\GitHub\pyDAG\pyDAG\Apps\watermark" Folder1="C:\Users\Dave\Documents\GitHub\pyDAG" Folder2="C:\Users\Dave\Documents\GitHub\pyDAG\pyDAG\Apps\genGorilla" Folder3="C:\Users\Dave\Documents\GitHub\pyDAG\pyDAG\Apps\makeCMD" Folder4="C:\Users\Dave\Documents\GitHub\pyDAG\pyDAG\Apps\GE38_RotorDynamicModel" CustomDictionaries="5" CustomDictionary0="C:\Users\Dave\Documents\GitHub\pyDAG\pyDAG\Apps\watermark\watermark.dic" CustomDictionary1="C:\Users\Dave\Documents\GitHub\pyDAG\pyDAG.dic" CustomDictionary2="C:\Users\Dave\Documents\GitHub\pyDAG\pyDAG\Apps\genGorilla\genGorilla.dic" CustomDictionary3="C:\Users\Dave\Documents\GitHub\pyDAG\pyDAG\Apps\makeCMD\makeCMD.dic" CustomDictionary4="C:\Users\Dave\Documents\GitHub\pyDAG\pyDAG\Apps\GE38_RotorDynamicModel\rotorModel.dic" Dictionaries="0" CorrectionsLimit="5" DefaultDictionary="application-level" UseSingleDictionary="false" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -358,34 +444,66 @@
     <history-entry file="Doctests_in_genGorilla - 2018.08.01 at 12h 50m 53s.xml">
       <configuration name="Doctests in genGorilla" configurationId="tests" />
     </history-entry>
+    <history-entry file="Doctests_in_rotorModel - 2018.08.02 at 05h 08m 37s.xml">
+      <configuration name="Doctests in rotorModel" configurationId="tests" />
+    </history-entry>
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="878" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14210178" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.19828156" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32884097" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.45822102" />
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Python Console" order="7" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.45822102" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="7" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.39892185" />
       <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.39892185" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32884097" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/pyDAG/Apps/watermark/watermark.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="17" selection-start-line="7" selection-start-column="17" selection-end-line="7" selection-end-column="17" />
+          <folding>
+            <element signature="e#653#666#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pyDAG/Apps/makeCMD/makeCMD.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="8126">
+          <caret line="478" column="35" lean-forward="true" selection-start-line="478" selection-start-column="35" selection-end-line="478" selection-end-column="35" />
+          <folding>
+            <element signature="e#40#53#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pyDAG/Apps/genGorilla/genGorilla.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5100">
+          <caret line="309" column="35" lean-forward="true" selection-start-line="309" selection-start-column="35" selection-end-line="309" selection-end-column="35" />
+          <folding>
+            <element signature="e#2102#2121#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/pyDAG/Apps/watermark/watermark.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="272">
@@ -487,8 +605,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/pyDAG/Apps/watermark/watermark.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="17" lean-forward="true" selection-start-line="7" selection-start-column="17" selection-end-line="7" selection-end-column="17" />
+        <state relative-caret-position="442">
+          <caret line="26" selection-start-line="25" selection-start-column="26" selection-end-line="26" />
           <folding>
             <element signature="e#653#666#0" expanded="true" />
           </folding>
@@ -497,20 +615,56 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/pyDAG/Apps/makeCMD/makeCMD.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="63">
-          <caret line="478" column="35" lean-forward="true" selection-start-line="478" selection-start-column="35" selection-end-line="478" selection-end-column="35" />
+        <state relative-caret-position="8126">
+          <caret line="478" column="35" selection-start-line="478" selection-start-column="35" selection-end-line="478" selection-end-column="35" />
           <folding>
             <element signature="e#40#53#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/pyDAG/TextProcessing/StringSet.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-4083" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pyDAG/TextProcessing/InFile.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="109">
+          <caret line="329" column="28" selection-start-line="329" selection-start-column="26" selection-end-line="329" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pyDAG/Dynamics/ode.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="616">
+          <caret line="28" column="41" selection-start-line="28" selection-start-column="41" selection-end-line="28" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pyDAG/Apps/GE38_RotorDynamicModel/rotorCurves.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="72" selection-start-line="4" selection-start-column="72" selection-end-line="4" selection-end-column="72" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/pyDAG/Apps/genGorilla/genGorilla.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="161">
-          <caret line="309" column="35" lean-forward="true" selection-start-line="309" selection-start-column="35" selection-end-line="309" selection-end-column="35" />
+        <state relative-caret-position="4828">
+          <caret line="309" column="35" selection-start-line="309" selection-start-column="35" selection-end-line="309" selection-end-column="35" />
           <folding>
             <element signature="e#2102#2121#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pyDAG/Apps/GE38_RotorDynamicModel/rotorModel.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="615">
+          <caret line="547" column="26" lean-forward="true" selection-start-line="547" selection-start-column="26" selection-end-line="547" selection-end-column="26" />
+          <folding>
+            <element signature="e#106#116#0" expanded="true" />
           </folding>
         </state>
       </provider>

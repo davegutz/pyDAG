@@ -21,7 +21,8 @@ Done.
 # import cProfile
 import getopt
 import sys
-import PIL
+from PIL import Image
+from PIL import ImageEnhance
 from pyDAG import mySystem
 
 
@@ -42,7 +43,7 @@ def reduce_opacity(im, opacity):
     else:
         im = im.copy()
     alpha = im.split()[3]
-    alpha = PIL.ImageEnhance.Brightness(alpha).enhance(opacity)
+    alpha = ImageEnhance.Brightness(alpha).enhance(opacity)
     im.putalpha(alpha)
     return im
 
@@ -55,7 +56,7 @@ def watermark(im, mark, position, opacity=1.0):
         im = im.convert('RGBA')
     # create a transparent layer the size of the image and draw the
     # watermark in that layer.
-    layer = PIL.Image.new('RGBA', im.size, (0, 0, 0, 0))
+    layer = Image.new('RGBA', im.size, (0, 0, 0, 0))
     if position == 'tile':
         for y in range(0, im.size[1], mark.size[1]):
             for x in range(0, im.size[0], mark.size[0]):
@@ -71,7 +72,7 @@ def watermark(im, mark, position, opacity=1.0):
     else:
         layer.paste(mark, position)
     # composite the watermark with the layer
-    return PIL.Image.composite(layer, im, layer)
+    return Image.composite(layer, im, layer)
 
 
 def main(argv):
@@ -108,7 +109,7 @@ def main(argv):
             print usage('OK')
 
     print 'Opening water mark a_file', wm_file, '...'
-    mark = PIL.Image.open(wm_file)
+    mark = Image.open(wm_file)
     
     # Alphabetical directory listing
     d_list_alpha = mySystem.lsl('.')
@@ -124,7 +125,7 @@ def main(argv):
         for a_file in j_list:
             s_file = 'w' + a_file
             print 'Marking ', a_file, ' and saving as ', s_file
-            im = PIL.Image.open(a_file)
+            im = Image.open(a_file)
             im_mod = im.copy()
             if type_out == 'tile':
                 im_mod = watermark(im, mark, 'tile', 0.08)
