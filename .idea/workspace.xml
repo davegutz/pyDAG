@@ -2,11 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0b94d7ef-68ae-4ca8-9778-0f0217f39940" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/pyReplace" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.txt" beforeDir="false" afterPath="$PROJECT_DIR$/README.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pyDAG/Apps/watermark/watermarkKPEr.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyDAG/TextProcessing/beaconParser.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/setup.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -17,16 +14,25 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="pyReplace.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="pyReplace.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pyDAG/System/pyReplace.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
+            <state relative-caret-position="200">
+              <caret line="40" column="9" lean-forward="true" selection-start-line="40" selection-start-column="9" selection-end-line="40" selection-end-column="9" />
               <folding>
-                <element signature="e#930#943#0" expanded="true" />
                 <element signature="e#952#1008#0" />
                 <element signature="e#1040#1455#0" />
                 <element signature="e#1487#1607#0" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="README.txt" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/README.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="44">
+              <caret line="2" column="9" lean-forward="true" selection-start-line="2" selection-start-column="9" selection-end-line="2" selection-end-column="9" />
             </state>
           </provider>
         </entry>
@@ -126,6 +132,7 @@
         <option value="$PROJECT_DIR$/setup.py" />
         <option value="$PROJECT_DIR$/pyDAG/System/pyReplace" />
         <option value="$PROJECT_DIR$/pyDAG/System/pyReplace.py" />
+        <option value="$PROJECT_DIR$/README.txt" />
       </list>
     </option>
   </component>
@@ -147,43 +154,6 @@
             <path>
               <item name="pyDAG" type="b2602c69:ProjectViewProjectNode" />
               <item name="pyDAG" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="pyDAG" type="b2602c69:ProjectViewProjectNode" />
-              <item name="pyDAG" type="462c0819:PsiDirectoryNode" />
-              <item name="pyDAG" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="pyDAG" type="b2602c69:ProjectViewProjectNode" />
-              <item name="pyDAG" type="462c0819:PsiDirectoryNode" />
-              <item name="pyDAG" type="462c0819:PsiDirectoryNode" />
-              <item name="Apps" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="pyDAG" type="b2602c69:ProjectViewProjectNode" />
-              <item name="pyDAG" type="462c0819:PsiDirectoryNode" />
-              <item name="pyDAG" type="462c0819:PsiDirectoryNode" />
-              <item name="Apps" type="462c0819:PsiDirectoryNode" />
-              <item name="RotorDynamicModel" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="pyDAG" type="b2602c69:ProjectViewProjectNode" />
-              <item name="pyDAG" type="462c0819:PsiDirectoryNode" />
-              <item name="pyDAG" type="462c0819:PsiDirectoryNode" />
-              <item name="Dynamics" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="pyDAG" type="b2602c69:ProjectViewProjectNode" />
-              <item name="pyDAG" type="462c0819:PsiDirectoryNode" />
-              <item name="pyDAG" type="462c0819:PsiDirectoryNode" />
-              <item name="System" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="pyDAG" type="b2602c69:ProjectViewProjectNode" />
-              <item name="pyDAG" type="462c0819:PsiDirectoryNode" />
-              <item name="pyDAG" type="462c0819:PsiDirectoryNode" />
-              <item name="System" type="462c0819:PsiDirectoryNode" />
-              <item name="tests" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -438,9 +408,6 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="Doctests_in_pyReplace - 2018.08.03 at 07h 30m 35s.xml">
-      <configuration name="Doctests in pyReplace" configurationId="tests" />
-    </history-entry>
     <history-entry file="Doctests_in_pyReplace - 2018.08.03 at 07h 31m 17s.xml">
       <configuration name="Doctests in pyReplace" configurationId="tests" />
     </history-entry>
@@ -468,17 +435,19 @@
     <history-entry file="Doctests_in_pyReplace - 2018.08.03 at 07h 36m 01s.xml">
       <configuration name="Doctests in pyReplace" configurationId="tests" />
     </history-entry>
+    <history-entry file="Doctests_in_pyReplace - 2018.08.03 at 07h 37m 02s.xml">
+      <configuration name="Doctests in pyReplace" configurationId="tests" />
+    </history-entry>
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="878" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.17580965" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17580965" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Python Console" order="7" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32614556" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.32614556" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Favorites" order="2" side_tool="true" />
@@ -653,13 +622,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/README.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="714">
-          <caret line="42" lean-forward="true" selection-start-line="42" selection-end-line="42" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pyDAG/Apps/makeCMD/makeCMD.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="101">
@@ -769,13 +731,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/pyDAG/System/pyReplace.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
+        <state relative-caret-position="200">
+          <caret line="40" column="9" lean-forward="true" selection-start-line="40" selection-start-column="9" selection-end-line="40" selection-end-column="9" />
           <folding>
-            <element signature="e#930#943#0" expanded="true" />
             <element signature="e#952#1008#0" />
             <element signature="e#1040#1455#0" />
             <element signature="e#1487#1607#0" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="44">
+          <caret line="2" column="9" lean-forward="true" selection-start-line="2" selection-start-column="9" selection-end-line="2" selection-end-column="9" />
         </state>
       </provider>
     </entry>

@@ -14,12 +14,18 @@ sudo python setup.py install --install-scripts=/usr/local/bin
 
 Windows:
 python setup.py install
+in .bashrc
+alias replace='python pyReplace.py'
 
 Linux:
 sudo python setup.py install
+in .bashrc
+alias replace='python pyReplace.py'
 
 UNIX: 
 python setup.py install --home=~ --install-scripts=~/bin 
+in .bashrc
+alias replace='python pyReplace.py'
 
 
 Building packages:
