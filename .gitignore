@@ -80,3 +80,4 @@ build/scripts-2.7/watermark.py
 *.xml
 .idea/workspace.xml
 .idea/workspace.xml
+pyDAG/Apps/watermark/wFigure_1.jpg

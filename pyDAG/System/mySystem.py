@@ -8,8 +8,8 @@ Copy file
 >>> ms.copy('mySystem.dic', 'tests/.temp')
 
 Time stamp
->>> ms.get_stamp('tests/mySystem.dic')
-1533205457.4743285
+>>> ms.get_stamp('mySystem.dic')
+1533316964.1656606
 
 Sorted reverse time
 >>> ms.lslrt('tests')
