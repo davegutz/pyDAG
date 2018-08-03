@@ -73,7 +73,7 @@ duc.setup(name='pyDAG',
                    'pyDAG/Apps/makeCMD/ctblmkr_GEneric.c',
                    'pyDAG/Apps/makeCMD/ctblmkr_GEneric_win.exe',
                    'pyDAG/Apps/watermark/watermark.py',
-                   'pyDAG/Apps/pyReplace',
+                   'pyDAG/Apps/System/pyReplace',
                    'pyDAG/System/myReplace.py'],
           packages=['pyDAG', 'pyDAG.TextProcessing', 'pyDAG.Dynamics', 'pyDAG.Tables', 'pyDAG.System', 'pyDAG.Tkinter'],
           requires=['Pillow']

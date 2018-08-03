@@ -1,12 +1,3 @@
-#!/usr/bin/env python
-
-# import cProfile
-import getopt
-# import time
-import os
-import sys
-import shutil
-
 """Replaces strings in file lists.
 Normally call with target and replace strings then file listing.   Optionally
 provide a file with file list.
@@ -22,18 +13,35 @@ Options:
         Use this verbosity level to debug program
     -l / --list <e.g. "pyReplace.list" a file listing to operate on>
         example:   pyReplace -l file.lst  targetStr sourceStr
-    -V, --version
+    -V, --# import cProfile
+        version
         Print version and quit \n"
+
 Tests:
-pyReplace -d 0
->>> main('-d 0')
+
+>>> import mySystem as ms
+>>> import os
+>>> ms.copy('mySystem.dic', 'tests/.temp')
+
+# python pyReplace lslrt lslrt_replaced tests/.temp
+>>> main(['lslrt', 'lslrt_replaced', 'tests/.temp'])
+1
+
+>>> os.remove('tests/.temp')
 """
 
 """
 Rev		Author		Date	Description
 1.0.		DA Gutz		8/31/11	Release
-
 """
+
+# import cProfile
+import getopt
+# import time
+import os
+import sys
+import shutil
+
 
 # Initialize static variables.
 MY_VERSION = 1.0
@@ -121,7 +129,7 @@ def main(argv):
         else:
             usage(1, 'uknown')
 
-    if len(remainder) != 2:
+    if len(remainder) != 3:
         if verbose:
             print 'remainder=', remainder
         usage(1, 'number of string arguments supplied not 2')
@@ -149,10 +157,7 @@ def main(argv):
         count += count_file
         if verbose:
             print 'target=', s_text, ', replacement=', r_text, ', file=', file_name, ', count=', count_file
-    if verbose:
-        print 'final count=', count
-
-    exit(count)
+    print count
 
 
 if __name__ == '__main__':
