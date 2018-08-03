@@ -1,222 +1,224 @@
 #!/usr/bin/env python
+import Tkinter as Tk
+import Tkconstants as Tkc
+
 """State:  GUI state machine class
-	-d [level] / --debug [level]
-	    Use this verbosity level to debug program  [0]
-	-h / --help
-		Print this message and exit
-	-V, --version
-		Print version and quit \n"
+    -d [level] / --debug [level]
+        Use this verbosity level to debug program  [0]
+    -h / --help
+        Print this message and exit
+    -V, --version
+        Print version and quit \n"
 Tests:
 >>>python State.py
 """
-
-import Tkinter as Tk
-import Tkconstants as Tkc
 
 
 class State:
     """Organized memory of button/internal states for callbacks
 
     State dictionary
-    entry format = State(stype, (row, col),['depend1', ...], presentState,
+    entry format = State(s_type, (row, col),['depend1', ...], presentState,
                     butName, callback, description))
     
     """
-    def __init__(self, stype, rowcol, depends, stateBoolean,
-                 buttonName, callback, description):
-        self.__stype = stype
-        self.__loc = rowcol
+
+    def __init__(self, s_type, row_col, depends, state_boolean,
+                 button_name, callback, description):
+        self.__s_type = s_type
+        self.__loc = row_col
         self.__depends = depends
-        self.__state = stateBoolean
-        if stype == 'checkbutton':
+        self.__state = state_boolean
+        if s_type == 'checkbutton':
             self.stateInt = Tk.IntVar()
-            if stateBoolean:
+            if state_boolean:
                 self.stateInt.set(0)
             else:
                 self.stateInt.set(1)
-        self.__buttonName = buttonName
+        self.__buttonName = button_name
         self.__callback = callback
         self.__desc = description
         self.__widget = Tk.Button()
 
-    def flattenButt(self):
-        """Flatten the Tkbutton"""
+    def flatten_butt(self):
+        """Flatten the tk button"""
         self.__widget['relief'] = Tkc.FLAT
 
     def flat(self):
         """Query if flat"""
-        if self.__stype == 'button' and self.__widget['relief'] == \
+        if self.__s_type == 'button' and self.__widget['relief'] == \
                 Tkc.FLAT:
             return True
         else:
             return False
 
-    def raiseButt(self):
-        """Raise the Tkbutton"""
+    def raise_butt(self):
+        """Raise the tk button"""
         self.__widget['relief'] = Tkc.RAISED
 
     def raised(self):
         """Query if raised"""
-        if self.__stype == 'button' and self.__widget['relief'] == \
+        if self.__s_type == 'button' and self.__widget['relief'] == \
                 Tkc.RAISED:
             return True
         else:
             return False
 
-    def grooveButt(self):
-        """Groove the Tkbutton"""
+    def groove_butt(self):
+        """Groove the tk button"""
         self.__widget['relief'] = Tkc.GROOVE
 
     def grooved(self):
         """Query if grooved"""
-        if self.__stype == 'button' and self.__widget['relief'] == \
+        if self.__s_type == 'button' and self.__widget['relief'] == \
                 Tkc.GROOVE:
             return True
         else:
             return False
 
-    def ridgeButt(self):
+    def ridge_butt(self):
         """Make button ridged"""
         self.__widget['relief'] = Tkc.RIDGE
 
     def ridged(self):
         """Query ridged"""
-        if self.__stype == 'button' and self.__widget['relief'] == \
+        if self.__s_type == 'button' and self.__widget['relief'] == \
                 Tkc.RIDGE:
             return True
         else:
             return False
 
-    def disabButt(self):
+    def disable_butt(self):
         """Make button disabled"""
         self.__widget['state'] = Tkc.DISABLED
 
     def disabled(self):
         """Query disabled"""
-        if self.__stype == 'button' and self.__widget['state'] == \
+        if self.__s_type == 'button' and self.__widget['state'] == \
                 Tkc.DISABLED:
             return True
         else:
             return False
 
-    def enabButt(self):
+    def enable_butt(self):
         """Make button enabled"""
         self.__widget['state'] = Tkc.NORMAL
 
     def enabled(self):
         """Query enabled"""
-        if self.__stype == 'button' and self.__widget['state'] == \
+        if self.__s_type == 'button' and self.__widget['state'] == \
                 Tkc.NORMAL:
             return True
         else:
             return False
 
-    def sinkButt(self):
+    def sink_butt(self):
         """Make button sunken"""
         self.__widget['relief'] = Tkc.SUNKEN
 
     def sunken(self):
         """Query sunken"""
-        if self.__stype == 'button' and self.__widget['relief'] == \
+        if self.__s_type == 'button' and self.__widget['relief'] == \
                 Tkc.SUNKEN:
             return True
         else:
             return False
 
-    def stype(self, newType=None):
-        """Assign/query stype"""
-        if newType:
-            self.__stype = newType
-        return self.__stype
+    def s_type(self, new_type=None):
+        """Assign/query s_type"""
+        if new_type:
+            self.__s_type = new_type
+        return self.__s_type
 
-    def widget(self, newObj=None):
+    def widget(self, new_obj=None):
         """Assign/query widget"""
-        if newObj and self.__stype == 'button':
-            self.__widget = newObj
+        if new_obj and self.__s_type == 'button':
+            self.__widget = new_obj
         return self.__widget
 
-    def row(self, newRow=None):
+    def row(self, new_row=None):
         """Assign/query row"""
-        if newRow:
-            self.__loc = (newRow, self.col())
+        if new_row:
+            self.__loc = (new_row, self.col())
         return self.__loc[0]
 
-    def col(self, newCol=None):
+    def col(self, new_col=None):
         """Assign/query column"""
-        if newCol:
-            self.__loc = (self.row(), newCol)
+        if new_col:
+            self.__loc = (self.row(), new_col)
         return self.__loc[1]
 
-    def depends(self, newDepends=None):
+    def depends(self, new_depends=None):
         """Assign/query depends"""
-        if newDepends:
-            self.__depends = newDepends
+        if new_depends:
+            self.__depends = new_depends
         return self.__depends
 
-    def permitted(self, newPermitted=None):
-        """Assign/query permitter"""
-        if newPermitted != None:
-            if self.__stype == 'checkbutton':
-                self.stateInt.set(newPermitted)
-            self.__state = newPermitted
+    def permitted(self, new_permitted=None):
+        """Assign/query permit"""
+        if new_permitted is not None:
+            if self.__s_type == 'checkbutton':
+                self.stateInt.set(new_permitted)
+            self.__state = new_permitted
         else:
-            if self.__stype == 'checkbutton':
+            if self.__s_type == 'checkbutton':
                 self.__state = self.stateInt.get()
         return self.__state
 
-    def buttonName(self, newButtonName=None):
+    def button_name(self, new_button_name=None):
         """Assign/query name"""
-        if newButtonName:
-            self.__buttonName = newButtonName
+        if new_button_name:
+            self.__buttonName = new_button_name
         return self.__buttonName
 
-    def callback(self, newCallback=None):
+    def callback(self, new_callback=None):
         """Assign/query callback"""
-        if newCallback:
-            self.__callback = newCallback
+        if new_callback:
+            self.__callback = new_callback
         return self.__callback
 
-#------------------------------------------------------------------------
+
+# ------------------------------------------------------------------------
 # Name: StateMachine
 # Desc: Organize memory of button/internal states for callbacks
-#------------------------------------------------------------------------
+# ------------------------------------------------------------------------
 class StateMachine:
-    """Organize memor of button/internal states for callbacks"""
+    """Organize memory of button/internal states for callbacks"""
 
-    def __init__(self, stateD, verboseIn):
-        self.__verbose = verboseIn
-        self.__stateD = stateD
-        self.len = len(stateD)
+    def __init__(self, state_d, verbose_in):
+        self.__verbose = verbose_in
+        self.__stateD = state_d
+        self.len = len(state_d)
         self.__total = 0
         self.__totalize()
 
-    def stateD(self, key):
+    def state_d(self, key):
         """Query state from dictionary"""
         return self.__stateD[key]
 
-    def verbose(self, newVerbose=None):
+    def verbose(self, new_verbose=None):
         """Query/assign verbose"""
-        if newVerbose:
-            self.__verbose = newVerbose
+        if new_verbose:
+            self.__verbose = new_verbose
         return self.__verbose
 
-    def update(self, buttDone=None):
+    def update(self, butt_done=None):
         """Query/assign update"""
-        totalPast = -1
+        total_past = -1
         total = self.__totalize()
-        if buttDone and self.__stateD[buttDone].stype()!='checkbutton':
-            self.__stateD[buttDone].permitted(True)
+        if butt_done and self.__stateD[butt_done].s_type() != 'checkbutton':
+            self.__stateD[butt_done].permitted(True)
         count = 0
-        while (totalPast != total) and count < 20:
-            totalPast = total
+        while (total_past != total) and count < 20:
+            total_past = total
             for (key, state) in self.__stateD.items():
-                statePast = self.__stateD[key].permitted()
+                state_past = self.__stateD[key].permitted()
                 if self.__verbose > 4:
                     print key, '=', self.__stateD[key].permitted(), '::',
                 if len(state.depends()):
                     self.__stateD[key].permitted(True)
                 else:
-                    self.__stateD[key].permitted(statePast)
+                    self.__stateD[key].permitted(state_past)
                 for dep in state.depends():
                     if self.__verbose > 4:
                         print dep, '=', \
@@ -226,9 +228,9 @@ class StateMachine:
                 if self.__verbose > 4:
                     print '::', key, '=', self.__stateD[key].permitted()
                 if self.__verbose > -1:
-                    if not statePast and self.__stateD[key].permitted():
+                    if not state_past and self.__stateD[key].permitted():
                         print 'set=', key
-                    if statePast and not self.__stateD[key].permitted():
+                    if state_past and not self.__stateD[key].permitted():
                         print 'unset=', key
             total = self.__totalize()
             count += 1
@@ -239,13 +241,14 @@ class StateMachine:
     def __totalize(self):
         """Add up total state number"""
         self.__total = 0
-        istate = 0
+        i_state = 0
         for (key, state) in self.__stateD.items():
-            self.__total += state.permitted() * 2**istate
-            istate += 1
+            self.__total += state.permitted() * 2 ** i_state
+            i_state += 1
             if self.__verbose > 0:
                 print key, '=', state.permitted(), ',',
         return self.__total
+
 
 # Main
 def main(argv):
@@ -256,121 +259,121 @@ def main(argv):
 
     # Initialize static variables.
     def usage(code, msg=''):
-        "Usage description"
+        """Usage description"""
         print >> sys.stderr, __doc__
         if msg:
             print >> sys.stderr, msg
         if code >= 0:
             sys.exit(code)
 
-
     # Options
+    options = ""
+    remainder = ""
     try:
-        options, remainder = getopt.getopt(argv, \
-               'd:hV', ['debug=', 'help', 'version'])
+        options, remainder = getopt.getopt(argv,
+                                           'd:hV', ['debug=', 'help', 'version'])
     except getopt.GetoptError:
         usage(2)
     for opt, arg in options:
         if opt in ('-d', '--debug'):
             verbose = int(arg)
-        elif   opt in ('-h', '--help'):
+        elif opt in ('-h', '--help'):
             print usage(1)
         elif opt in ('-V', '--version'):
             print 'State.py Version 1.0.  DA Gutz 8/26/10'
             exit(0)
-        else: print usage(1)
-    if len(remainder) >0:
+        else:
+            print usage(1)
+    if len(remainder) > 0:
         print usage(1)
 
     # gui
     class _MyUserInterfaceClass:
         """Local gui creator class"""
-        def __init__( self, master, ar, xy, stateD ):
-            # States
-            self.__stateDict = stateD
-            self.__stateMach = StateMachine(stateD, verbose)
-            
-            # Initialize main menu bar
-            self.__menubar = Tk.Menu( master )
-            self.__frame = Tk.Toplevel( relief = 'ridge',
-                                             borderwidth = 2,
-                                             menu = self.__menubar ) 
-            self.__frame.geometry( ar + xy )
-            master.config( menu=self.__menubar )
-            filemenu = Tk.Menu( self.__menubar, tearoff=0 ) # dropdown
-            self.__menubar.add_cascade( label = 'File', underline = 0,
-                                        menu = filemenu )
-            master.withdraw() # Suppress unwanted window
-            # Initialize buttons in main window
-            b0 =  Tk.Button(self.__frame, text='FILESYS',
-                         command=self.__SMcallback('FILESYS'),
-                         relief=Tkc.RAISED)
-            b0.grid(row=self.__stateRow('FILESYS'),
-                    column=self.__stateCol('FILESYS'))
-            b1 =  Tk.Button(self.__frame, text='BASELINE',
-                         command=self.__SMcallback('BASELINE'),
-                         relief=Tkc.RAISED)
-            b1.grid(row=self.__stateRow('BASELINE'),
-                    column=self.__stateCol('BASELINE'))
-            b2 =  Tk.Button(self.__frame, text='BUILDSAR',
-                         command=self.__SMcallback('BUILDSAR'),
-                         relief=Tkc.RAISED)
-            b2.grid(row=self.__stateRow('BUILDSAR'),
-                    column=self.__stateCol('BUILDSAR'))
 
-        def stateMach(self):
-            """stateMach query"""
+        def __init__(self, master, ar, xy, state_d):
+            # States
+            self.__stateDict = state_d
+            self.__stateMach = StateMachine(state_d, verbose)
+
+            # Initialize main menu bar
+            self.__menu_bar = Tk.Menu(master)
+            self.__frame = Tk.Toplevel(relief='ridge',
+                                       borderwidth=2,
+                                       menu=self.__menu_bar)
+            self.__frame.geometry(ar + xy)
+            master.config(menu=self.__menu_bar)
+            file_menu = Tk.Menu(self.__menu_bar, tearoff=0)  # drop down
+            self.__menu_bar.add_cascade(label='File', underline=0,
+                                        menu=file_menu)
+            master.withdraw()  # Suppress unwanted window
+            # Initialize buttons in main window
+            b0 = Tk.Button(self.__frame, text='FILESYS',
+                           command=self.__sm_callback('FILESYS'),
+                           relief=Tkc.RAISED)
+            b0.grid(row=self.__state_row('FILESYS'),
+                    column=self.__state_col('FILESYS'))
+            b1 = Tk.Button(self.__frame, text='BASELINE',
+                           command=self.__sm_callback('BASELINE'),
+                           relief=Tkc.RAISED)
+            b1.grid(row=self.__state_row('BASELINE'),
+                    column=self.__state_col('BASELINE'))
+            b2 = Tk.Button(self.__frame, text='BUILDSAR',
+                           command=self.__sm_callback('BUILDSAR'),
+                           relief=Tkc.RAISED)
+            b2.grid(row=self.__state_row('BUILDSAR'),
+                    column=self.__state_col('BUILDSAR'))
+
+        def state_machine(self):
+            """state_machine query"""
             return self.__stateMach
 
-        def __SMcallback(self, key):
+        def __sm_callback(self, key):
             """State lookup and call"""
-            return self.__stateMach.stateD(key).callback()
+            return self.__stateMach.state_d(key).callback()
 
-        def __stateRow(self, key):
+        def __state_row(self, key):
             """State row query"""
-            return self.__stateMach.stateD(key).row()
+            return self.__stateMach.state_d(key).row()
 
-        def __stateCol(self, key):
+        def __state_col(self, key):
             """State column query"""
-            return self.__stateMach.stateD(key).col()
+            return self.__stateMach.state_d(key).col()
 
-    def checkCreateFileSys():
+    def check_create_file_sys():
         """File system build callback"""
         print 'FILESYS'
-        muic.stateMach().update('FILESYS')
+        mu_ic.state_machine().update('FILESYS')
 
-    def importBuildBaseline():
+    def import_build_baseline():
         """Build Baseline callback"""
         print 'BASELINE'
-        muic.stateMach().update('BASELINE')
+        mu_ic.state_machine().update('BASELINE')
 
-    def buildSAR():
+    def build_sar():
         """Build SAR callback"""
-        print 'buildSAR'
-        muic.stateMach().update('BUILDSAR')
-
-
-
+        print 'build_sar'
+        mu_ic.state_machine().update('BUILDSAR')
 
     # State dictionary
     # entry format = (key,
-    #                 State(stype, (locRow, locCol), ('depends1', ...),
+    #                 State(s_type, (locRow, locCol), ('depends1', ...),
     #                 presentState, butName, callback, description))
     states = [('FILESYS',
-               State('button',  (0, 0), [], False,
-                     'Setup File Sys', checkCreateFileSys,
+               State('button', (0, 0), [], False,
+                     'Setup File Sys', check_create_file_sys,
                      'Check and create folder structure vs. settings')),
               ('SARSPRESENT',
-               State('internal',(None, None), ['FILESYS'], False,
+               State('internal', (None, None), ['FILESYS'], False,
                      'SARs Present', None,
                      'SARS are available for processing')),
               ('BASELINE',
                State('button', (0, 1), ['FILESYS'], False,
-                     'Build Baseline', importBuildBaseline,
+                     'Build Baseline', import_build_baseline,
                      'Make a complete build from totally raw library')),
               ('BUILDSAR',
                State('button', (0, 2), ['FILESYS', 'SARSPRESENT'], False,
-                     'Build Review Pkg', buildSAR,
+                     'Build Review Pkg', build_sar,
                      'Run buildsar tool to make review package')),
               ('GENCODE',
                State('button', (0, 3), ['FILESYS', 'SARSPRESENT'], False,
@@ -381,37 +384,37 @@ def main(argv):
                      'Generate TBL', None,
                      'Process the .tbl table trims')),
               ('BUILDADJ',
-               State('button',  (0, 5), ['GENCODE'], False,
+               State('button', (0, 5), ['GENCODE'], False,
                      'Generate ADJ', None,
                      'Process the .adj adjustment trims')),
               ('DBGEN',
-               State('button',  (0, 6), ['BUILDTBL', 'BUILDADJ'], False,
+               State('button', (0, 6), ['BUILDTBL', 'BUILDADJ'], False,
                      'Generate BDB', None,
                      'Generate Beacon Database')),
               ('DBCHECK',
-               State('button',  (1, 0), ['DBGEN'], False,
+               State('button', (1, 0), ['DBGEN'], False,
                      'Check BDB', None,
                      'Check the Beacon Database')),
               ('BSRC',
-               State('button',  (2, 0), ['DBCHECK'], False,
+               State('button', (2, 0), ['DBCHECK'], False,
                      'Build the BSRC folder', None,
                      'Consolidate files for move to Simulink'))
               ]
-    
+
     # load settings and make them global
     root = Tk.Tk()
     root.title('State')
     root.withdraw()
 
     root2 = Tk.Toplevel()
-    muic = _MyUserInterfaceClass( root2,     # Set up the main GUI 
-                           '400x200', # Width & Height
-                          '+20+20',  # Initial X/Y screen loc
-                          dict(states)) # state machine def
-    root.mainloop() # Outer event loop
-
+    mu_ic = _MyUserInterfaceClass(root2,  # Set up the main GUI 
+                                  '400x200',  # Width & Height
+                                  '+20+20',  # Initial X/Y screen loc
+                                  dict(states))  # state machine def
+    root.mainloop()  # Outer event loop
 
 
 if __name__ == '__main__':
     import sys
+
     sys.exit(main(sys.argv[1:]))

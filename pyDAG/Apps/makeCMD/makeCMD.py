@@ -95,7 +95,7 @@ class InputError(Error):
     """
 
     def __init__(self, message, use=0):
-        Error.__init__()
+        Error.__init__(self)
         self.message = message
         self.usage = use
 

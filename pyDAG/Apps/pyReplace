@@ -1,10 +1,18 @@
 #!/usr/bin/env python
+
+# import cProfile
+import getopt
+# import time
+import os
+import sys
+import shutil
+
 """Replaces strings in file lists.
 Normally call with target and replace strings then file listing.   Optionally
 provide a file with file list.
 
 Example:
-	pyReplace targetStr sourceStr file
+    pyReplace targetStr sourceStr file
 
 Options:
 
@@ -13,26 +21,22 @@ Options:
     -d / --debug  <e.g. 0>
         Use this verbosity level to debug program
     -l / --list <e.g. "pyReplace.list" a file listing to operate on>
-     	example:   pyReplace -l file.lst  targetStr sourceStr
+        example:   pyReplace -l file.lst  targetStr sourceStr
     -V, --version
         Print version and quit \n"
 Tests:
->>> pyReplace -d 0
+pyReplace -d 0
+>>> main('-d 0')
 """
+
 """
 Rev		Author		Date	Description
 1.0.		DA Gutz		8/31/11	Release
 
 """
-MYVERSION = 1.0
-# import cProfile
-import getopt
-import time
-import os
-import sys
-import shutil
 
 # Initialize static variables.
+MY_VERSION = 1.0
 verbose = 0
 
 
@@ -43,13 +47,13 @@ class Error(Exception):
 
 
 class InputError(Error):
-    """Exception raised for errors in the input.
+    """Exception raised for errors in the input_file.
     Attributes:
         message -- explanation of the error
     """
 
     def __init__(self, message, use=0):
-        Error.__init__()
+        Error.__init__(self)
         self.message = message
         self.usage = use
 
@@ -69,17 +73,17 @@ def usage(code, msg=''):
 
 
 # Replace string in file
-def replace_in_file(stext, rtext, iFile):
-    input = open(iFile)
-    output = open('.pyReplaceTempXXX', 'w')
+def replace_in_file(s_text, r_text, input_file_file_name):
+    input_file = open(input_file_file_name)
+    output_file = open('.pyReplaceTempXXX', 'w')
     count = 0
-    for s in input.xreadlines():
-        count += s.count(stext)
-        output.write(s.replace(stext, rtext))
-    input.close()
-    output.close()
+    for s in input_file.xreadlines():
+        count += s.count(s_text)
+        output_file.write(s.replace(s_text, r_text))
+    input_file.close()
+    output_file.close()
     if count > 0:
-        shutil.move('.pyReplaceTempXXX', iFile)
+        shutil.move('.pyReplaceTempXXX', input_file_file_name)
     else:
         os.remove('.pyReplaceTempXXX')
     return count
@@ -91,10 +95,12 @@ def main(argv):
     global verbose
 
     # Initialize
-    LISTFILE = ""
-    argList = []
+    list_file = ""
+    arg_list = []
 
     # Options
+    options = ""
+    remainder = ""
     try:
         options, remainder = getopt.getopt(argv,
                                            'd:hl:V',
@@ -108,9 +114,9 @@ def main(argv):
         elif opt in ('-d', '--debug'):
             verbose = int(arg)
         elif opt in ('-l', '--list'):
-            LISTFILE = arg
+            list_file = arg
         elif opt in ('-V', '--version'):
-            print 'pyReplace Version ', MYVERSION, ' DA Gutz 8/31/2011 add file list option'
+            print 'pyReplace Version ', MY_VERSION, ' DA Gutz 8/31/2011 add file list option'
             exit(0)
         else:
             usage(1, 'uknown')
@@ -121,28 +127,28 @@ def main(argv):
         usage(1, 'number of string arguments supplied not 2')
 
     if verbose:
-        print 'LISTFILE=', LISTFILE
+        print 'list_file=', list_file
 
-    if LISTFILE:
-        stext = remainder[0]
-        rtext = remainder[1]
-        f = open(LISTFILE)
+    if list_file:
+        s_text = remainder[0]
+        r_text = remainder[1]
+        f = open(list_file)
         for line in f:
-            argList.append(line.strip())
+            arg_list.append(line.strip())
     else:
-        stext = remainder[0]
-        rtext = remainder[1]
-        argList = remainder
-        del argList[0:2]
+        s_text = remainder[0]
+        r_text = remainder[1]
+        arg_list = remainder
+        del arg_list[0:2]
         if verbose:
-            print 'argList=', argList
+            print 'arg_list=', arg_list
 
     count = 0
-    for file in argList:
-        countf = replace_in_file(stext, rtext, file)
-        count += countf
+    for file_name in arg_list:
+        count_file = replace_in_file(s_text, r_text, file_name)
+        count += count_file
         if verbose:
-            print 'target=', stext, ', replacement=', rtext, ', file=', file, ', count=', countf
+            print 'target=', s_text, ', replacement=', r_text, ', file=', file_name, ', count=', count_file
     if verbose:
         print 'final count=', count
 
