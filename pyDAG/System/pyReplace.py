@@ -19,9 +19,9 @@ Options:
 
 Tests:
 
->>> import mySystem as ms
+>>> import mySystem as mS
 >>> import os
->>> ms.copy('mySystem.dic', 'tests/.temp')
+>>> mS.copy('mySystem.dic', 'tests/.temp')
 
 # python pyReplace lslrt lslrt_replaced tests/.temp
 >>> main(['lslrt', 'lslrt_replaced', 'tests/.temp'])
@@ -38,9 +38,8 @@ Rev		Author		Date	Description
 # import cProfile
 import getopt
 # import time
-import os
 import sys
-import shutil
+import mySystem as mS
 
 
 # Initialize static variables.
@@ -78,23 +77,6 @@ def usage(code, msg=''):
     if msg:
         print >> sys.stderr, msg
     sys.exit(code)
-
-
-# Replace string in file
-def replace_in_file(s_text, r_text, input_file_file_name):
-    input_file = open(input_file_file_name)
-    output_file = open('.pyReplaceTempXXX', 'w')
-    count = 0
-    for s in input_file.xreadlines():
-        count += s.count(s_text)
-        output_file.write(s.replace(s_text, r_text))
-    input_file.close()
-    output_file.close()
-    if count > 0:
-        shutil.move('.pyReplaceTempXXX', input_file_file_name)
-    else:
-        os.remove('.pyReplaceTempXXX')
-    return count
 
 
 # noinspection SpellCheckingInspection
@@ -153,7 +135,7 @@ def main(argv):
 
     count = 0
     for file_name in arg_list:
-        count_file = replace_in_file(s_text, r_text, file_name)
+        count_file = mS.replace_in_file(s_text, r_text, file_name)
         count += count_file
         if verbose:
             print 'target=', s_text, ', replacement=', r_text, ', file=', file_name, ', count=', count_file

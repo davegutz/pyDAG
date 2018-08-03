@@ -52,8 +52,8 @@ def watermark(im, mark, position, opacity=1.0):
     """Adds a watermark to an image."""
     if opacity < 1:
         mark = reduce_opacity(mark, opacity)
-    if im.mode != 'RGBA':
-        im = im.convert('RGBA')
+    # if im.mode != 'RGBA':  deleted this conversion because some python does not like RGBA jpeg
+    #    im = im.convert('RGBA')
     # create a transparent layer the size of the image and draw the
     # watermark in that layer.
     layer = Image.new('RGBA', im.size, (0, 0, 0, 0))

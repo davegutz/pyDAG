@@ -1,28 +1,28 @@
 #!/usr/bin/env python
 """"Various system utilities
 
->>> import mySystem as ms
+>>> import mySystem as mS
 >>> import os
 
 Copy file
->>> ms.copy('mySystem.dic', 'tests/.temp')
+>>> mS.copy('mySystem.dic', 'tests/.temp')
 
 Time stamp
->>> ms.get_stamp('mySystem.dic')
+>>> mS.get_stamp('mySystem.dic')
 1533316964.1656606
 
 Sorted reverse time
->>> ms.lslrt('tests')
+>>> mS.lslrt('tests')
 ['MANIFEST.in', 'mySystem.dic', 'pyDAG.dic', '.temp']
 
 Sorted alphabetically
->>> ms.lslrt('tests')
+>>> mS.lslrt('tests')
 ['MANIFEST.in', 'mySystem.dic', 'pyDAG.dic', '.temp']
 
->>> ms.replace_in_file('lslrt', 'lslrt_replaced', 'tests/.temp')
+>>> mS.replace_in_file('lslrt', 'lslrt_replaced', 'tests/.temp')
 1
 
->>> ms.cat('tests/.temp', 'tests/.temp', 'tests/.temp1')
+>>> mS.cat('tests/.temp', 'tests/.temp', 'tests/.temp1')
 2
 
 >>> os.remove('tests/.temp')
@@ -50,7 +50,7 @@ class InputError(Error):
     """
 
     def __init__(self, message, usage_=0):
-        Error.__init__()
+        Error.__init__(self)
         self.message = message
         self.usage = usage_
 
@@ -163,7 +163,10 @@ def replace_in_file(s_text, r_text, input_file_name):
         output.write(s.replace(s_text, r_text))
     input_file.close()
     output.close()
-    shutil.move('.r_temp', input_file_name)
+    if count > 0:
+        shutil.move('.r_temp', input_file_name)
+    else:
+        os.remove('.r_temp')
     return count
 
 
