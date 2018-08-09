@@ -13,9 +13,12 @@ mac OS X:
 sudo python setup.py install --install-scripts=/usr/local/bin
 
 Windows:
-python setup.py install
+pip install --index-url https://test.pypi.org/simple/ pyDAG
+or
+pip install pyDAG-1.4-py2-none-any.whl
+#python setup.py install
 in .bashrc
-alias replace='python pyReplace.py'
+alias my_replace='python -m pyReplace.py'
 
 Linux:
 sudo python setup.py install
@@ -44,7 +47,23 @@ To construct a scratch build folder:
 python setup.py build
 
 To build a tar.gz distribution.  The tar.gz file will be in dist folder:
-python setup.py sdist
+python setup.py sdist bdist bdist_wheel
+
+Upload for trial ****use Windows CMD for this**********
+twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+uname=davegutz, pwd=Stevie18g
+
+Test
+pip install --index-url https://test.pypi.org/simple/ pyDAG
+or for local copy
+pip install pyDAG-1.4.1-py2-none-any.whl
+
+
+Uninstall  ******use Window CMD for this********
+pip uninstall pyDAG
+or
+python -m pip uninstall pyDAG-1.4-py2-none-any.whl
+
 
 
 Version number goes into setup.py

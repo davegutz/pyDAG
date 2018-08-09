@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """Replaces strings in file lists.
 Normally call with target and replace strings then file listing.   Optionally
 provide a file with file list.
@@ -18,8 +19,7 @@ Options:
         Print version and quit \n"
 
 Tests:
-
->>> import mySystem as mS
+>>> from pyDAG import mySystem as mS
 >>> import os
 >>> mS.copy('mySystem.dic', 'tests/.temp')
 
@@ -31,15 +31,16 @@ Tests:
 """
 
 """
-Rev		Author		Date	Description
-1.0.		DA Gutz		8/31/11	Release
+Rev		Author		Date	    Description
+1.0.	DA Gutz		8/31/11	    Release
+1.1     DA Gutz     8/8/2018    PEP Coding standards
 """
 
 # import cProfile
 import getopt
 # import time
 import sys
-import mySystem as mS
+from pyDAG import mySystem as mS
 
 
 # Initialize static variables.

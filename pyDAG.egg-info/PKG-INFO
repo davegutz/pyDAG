@@ -1,7 +1,7 @@
-Metadata-Version: 1.0
+Metadata-Version: 1.1
 Name: pyDAG
-Version: 1.4
-Summary: Dave Gutz Python Utilities for Python 2.7
+Version: 1.5
+Summary: Dave Gutz Python 2.7 Utilities Cleanup for GIT
 Home-page: http://www.google.com
 Author: Dave Gutz
 Author-email: davegutz@alum.mit.edu

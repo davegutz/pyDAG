@@ -2,10 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0b94d7ef-68ae-4ca8-9778-0f0217f39940" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/pyDAG/Apps/watermark/watermark.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyDAG/Apps/watermark/watermark.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyDAG/System/myReplace.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyDAG/System/mySystem.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyDAG/System/mySystem.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PKG-INFO" beforeDir="false" afterPath="$PROJECT_DIR$/PKG-INFO" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.txt" beforeDir="false" afterPath="$PROJECT_DIR$/README.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pyDAG/System/pyReplace.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyDAG/System/pyReplace.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyDAG/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyDAG/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/setup.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -18,46 +20,90 @@
     <session id="80890760">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="2" />
-          <entry key="project.open.time.3" value="2" />
-          <entry key="project.opened" value="2" />
+          <entry key="project.closed" value="8" />
+          <entry key="project.open.time.0" value="2" />
+          <entry key="project.open.time.2" value="2" />
+          <entry key="project.open.time.3" value="5" />
+          <entry key="project.opened" value="9" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="in" value="1" />
-          <entry key="py" value="10" />
-          <entry key="txt" value="1" />
+          <entry key="PKG-INFO" value="1" />
+          <entry key="in" value="3" />
+          <entry key="makeCMD" value="1" />
+          <entry key="py" value="33" />
+          <entry key="txt" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="PLAIN_TEXT" value="2" />
-          <entry key="Python" value="10" />
+          <entry key="PLAIN_TEXT" value="7" />
+          <entry key="Python" value="33" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="102" />
+          <entry key="PKG-INFO" value="21" />
+          <entry key="Python Console" value="8" />
+          <entry key="py" value="577" />
+          <entry key="txt" value="315" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="102" />
+          <entry key="PLAIN_TEXT" value="336" />
+          <entry key="Python" value="585" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pyDAG/System/pyReplace.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="168">
-              <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+            <state relative-caret-position="-1689">
+              <caret line="42" column="11" selection-start-line="42" selection-start-column="11" selection-end-line="42" selection-end-column="11" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pyDAG/System/mySystem.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="263">
+              <caret line="156" column="32" selection-start-line="156" selection-start-column="32" selection-end-line="156" selection-end-column="32" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/README.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="25">
+              <caret line="51" column="29" selection-start-line="51" selection-start-column="29" selection-end-line="51" selection-end-column="29" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/setup.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="68">
+              <caret line="4" column="18" selection-start-line="4" selection-start-column="18" selection-end-line="4" selection-end-column="18" />
               <folding>
-                <element signature="e#866#879#0" expanded="true" />
+                <element signature="e#0#17#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/MANIFEST.in">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="17">
+              <caret line="1" column="84" selection-start-line="1" selection-start-column="84" selection-end-line="1" selection-end-column="84" />
             </state>
           </provider>
         </entry>
@@ -66,10 +112,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>hptr_T</find>
-      <find>q1</find>
-      <find>derivs</find>
-      <find>dtime</find>
       <find>qgas</find>
       <find>qtotload</find>
       <find>initialization</find>
@@ -96,6 +138,10 @@
       <find>usag</find>
       <find>pyReplaceTempXXX</find>
       <find>ms</find>
+      <find>find</find>
+      <find>os.</find>
+      <find>alia</find>
+      <find>myS</find>
     </findStrings>
     <replaceStrings>
       <replace>ImageEnhance</replace>
@@ -153,17 +199,24 @@
         <option value="$PROJECT_DIR$/pyDAG/Tkinter/State.py" />
         <option value="$PROJECT_DIR$/pyDAG/TextProcessing/beaconParser.py" />
         <option value="$PROJECT_DIR$/pyDAG/System/pyReplace" />
-        <option value="$PROJECT_DIR$/README.txt" />
         <option value="$PROJECT_DIR$/pyDAG/Apps/watermark/watermark.py" />
         <option value="$PROJECT_DIR$/pyDAG/System/mySystem.py" />
+        <option value="$PROJECT_DIR$/PKG-INFO" />
+        <option value="$PROJECT_DIR$/pyDAG/Apps/makeCMD/find_executable.py" />
+        <option value="$PROJECT_DIR$/MANIFEST.in" />
+        <option value="$PROJECT_DIR$/pyDAG/Apps/__init__.py" />
+        <option value="$PROJECT_DIR$/pyDAG/__init__.py" />
         <option value="$PROJECT_DIR$/pyDAG/System/pyReplace.py" />
+        <option value="$PROJECT_DIR$/README.txt" />
         <option value="$PROJECT_DIR$/setup.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="width" value="1440" />
-    <option name="height" value="1080" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="2132" />
+    <option name="y" value="52" />
+    <option name="width" value="955" />
+    <option name="height" value="864" />
   </component>
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="1" id="Add" />
@@ -185,12 +238,6 @@
               <item name="pyDAG" type="462c0819:PsiDirectoryNode" />
               <item name="pyDAG" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="pyDAG" type="b2602c69:ProjectViewProjectNode" />
-              <item name="pyDAG" type="462c0819:PsiDirectoryNode" />
-              <item name="pyDAG" type="462c0819:PsiDirectoryNode" />
-              <item name="Apps" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -199,7 +246,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/pyDAG/System/pyReplace.py" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Downloads/pyDAG-1.4/pyDAG-1.4/setup.py" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
@@ -220,7 +267,49 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python tests.Doctests in pyReplace">
+  <component name="RunManager" selected="Python.dist">
+    <configuration name="build" type="PythonConfigurationType" factoryName="Python">
+      <module name="pyDAG" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Python27\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/setup.py" />
+      <option name="PARAMETERS" value="build" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="dist" type="PythonConfigurationType" factoryName="Python">
+      <module name="pyDAG" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Python27\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/setup.py" />
+      <option name="PARAMETERS" value="bdist bdist_wheel" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="eu2csv" type="PythonConfigurationType" factoryName="Python" activateToolWindowBeforeRun="false">
       <output_file path="$PROJECT_DIR$/pyDAG/Apps/GE38_EngineDataReduction/c005r9951.csv" is_save="true" />
       <module name="pyDAG" />
@@ -238,6 +327,27 @@
       <option name="PARAMETERS" value="c005r9951.eu" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="true" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="find_executable" type="PythonConfigurationType" factoryName="Python">
+      <module name="pyDAG" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/pyDAG/Apps/makeCMD" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pyDAG/Apps/makeCMD/find_executable.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
       <option name="REDIRECT_INPUT" value="false" />
       <option name="INPUT_FILE" value="" />
@@ -439,6 +549,9 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Python.find_executable" />
+      <item itemvalue="Python.build" />
+      <item itemvalue="Python.dist" />
       <item itemvalue="Python.mySystem" />
       <item itemvalue="Python.genGorilla" />
       <item itemvalue="Python.eu2csv" />
@@ -467,12 +580,6 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="Doctests_in_genGorilla - 2018.08.03 at 16h 05m 24s.xml">
-      <configuration name="Doctests in genGorilla" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Doctests_in_mySystem - 2018.08.03 at 16h 05m 41s.xml">
-      <configuration name="Doctests in mySystem" configurationId="tests" />
-    </history-entry>
     <history-entry file="Doctests_in_pyReplace - 2018.08.03 at 16h 05m 53s.xml">
       <configuration name="Doctests in pyReplace" configurationId="tests" />
     </history-entry>
@@ -497,6 +604,12 @@
     <history-entry file="Doctests_in_pyReplace - 2018.08.03 at 18h 34m 43s.xml">
       <configuration name="Doctests in pyReplace" configurationId="tests" />
     </history-entry>
+    <history-entry file="Doctests_in_mySystem - 2018.08.08 at 14h 42m 31s.xml">
+      <configuration name="Doctests in mySystem" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Doctests_in_pyReplace - 2018.08.09 at 04h 01m 32s.xml">
+      <configuration name="Doctests in pyReplace" configurationId="tests" />
+    </history-entry>
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -508,15 +621,15 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="878" extended-state="6" />
+    <frame x="2132" y="52" width="955" height="864" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.17514871" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25408942" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3261745" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4990086" weight="0.32348993" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4990086" visible="true" weight="0.45068493" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39892185" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -553,25 +666,6 @@
       </provider>
     </entry>
     <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/ide/ide-scripting.groovy" />
-    <entry file="file://$PROJECT_DIR$/pyDAG/Apps/makeCMD/makeCMD">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="720">
-          <caret line="129" column="10" lean-forward="true" selection-start-line="129" selection-start-column="10" selection-end-line="129" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pyDAG/TextProcessing/StringSet.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-4083" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pyDAG/TextProcessing/InFile.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="109">
-          <caret line="329" column="28" selection-start-line="329" selection-start-column="26" selection-end-line="329" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pyDAG/Dynamics/ode.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="343">
@@ -601,9 +695,6 @@
     <entry file="file://$PROJECT_DIR$/pyDAG/Apps/makeBsrc/genBsrc.py" />
     <entry file="file://$PROJECT_DIR$/pyDAG/Apps/GE38_EngineDataReduction/eu2csv.py" />
     <entry file="file://$PROJECT_DIR$/pyDAG/Apps/pyReplace" />
-    <entry file="file://$PROJECT_DIR$/pyDAG/__init__.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/pyDAG.dic" />
     <entry file="file://$PROJECT_DIR$/pyDAG/Tkinter/Tkinter.dic" />
     <entry file="file://$PROJECT_DIR$/pyDAG/Tkinter/State.py">
@@ -614,17 +705,8 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/pyDAG/TextProcessing/beaconParser.py" />
-    <entry file="file://$PROJECT_DIR$/pyDAG/TextProcessing/__init__.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/pyDAG/System/pyReplace" />
-    <entry file="file://C:/Python27/Lib/site-packages/PIL/JpegImagePlugin.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="159">
-          <caret line="622" selection-start-line="622" selection-end-line="622" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://C:/Python27/Lib/site-packages/PIL/JpegImagePlugin.py" />
     <entry file="file://$PROJECT_DIR$/pyDAG/Apps/genGorilla/genGorilla.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="663">
@@ -634,20 +716,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/pyDAG/Apps/EngineDataReduction/eu2csv.py">
       <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pyDAG/Apps/makeCMD/makeCMD.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6307">
-          <caret line="380" column="44" selection-start-line="380" selection-start-column="44" selection-end-line="380" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/README.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="680">
-          <caret line="40" selection-start-line="40" selection-end-line="40" />
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/pyDAG/Apps/RotorDynamicModel/rotorModel.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -663,41 +731,122 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pyDAG/System/mySystem.py">
+    <entry file="file://$PROJECT_DIR$/pyDAG/System/myReplace.py" />
+    <entry file="file://$PROJECT_DIR$/PKG-INFO">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="163" column="22" lean-forward="true" selection-start-line="163" selection-start-column="22" selection-end-line="163" selection-end-column="22" />
+        <state>
+          <caret column="21" lean-forward="true" selection-start-column="21" selection-end-column="21" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pyDAG/System/myReplace.py">
+    <entry file="file://$PROJECT_DIR$/pyDAG/Apps/makeCMD/find_executable.py" />
+    <entry file="file://$PROJECT_DIR$/pyDAG/Apps/makeCMD/makeCMD">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="32" lean-forward="true" selection-start-line="10" selection-start-column="32" selection-end-line="10" selection-end-column="32" />
+        <state>
+          <caret column="19" selection-start-column="19" selection-end-column="19" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/MANIFEST.in">
+    <entry file="file://$PROJECT_DIR$/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
+        <state>
+          <caret column="19" selection-start-column="5" selection-end-column="19" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/setup.py">
+    <entry file="file://$PROJECT_DIR$/pyDAG/Dynamics/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pyDAG/TextProcessing/InFile.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="952">
-          <caret line="56" selection-start-line="56" selection-end-line="56" />
+        <state relative-caret-position="5491">
+          <caret line="329" column="28" selection-start-line="329" selection-start-column="26" selection-end-line="329" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pyDAG/TextProcessing/StringSet.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3927" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pyDAG/Tkinter/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pyDAG/Apps/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" selection-start-line="5" selection-end-line="5" />
+          <folding>
+            <element signature="e#0#33#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/pyDAG/System/pyReplace.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="168">
-          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+        <state relative-caret-position="-1689">
+          <caret line="42" column="11" selection-start-line="42" selection-start-column="11" selection-end-line="42" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pyDAG/TextProcessing/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" selection-start-line="2" selection-end-line="2" />
           <folding>
-            <element signature="e#866#879#0" expanded="true" />
+            <element signature="e#0#25#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pyDAG/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" selection-start-line="5" selection-end-line="5" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pyDAG/Apps/makeCMD/makeCMD.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" column="23" selection-start-line="10" selection-start-column="23" selection-end-line="10" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pyDAG/System/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pyDAG/System/mySystem.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="263">
+          <caret line="156" column="32" selection-start-line="156" selection-start-column="32" selection-end-line="156" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MANIFEST.in">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="84" selection-start-line="1" selection-start-column="84" selection-end-line="1" selection-end-column="84" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/setup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="18" selection-start-line="4" selection-start-column="18" selection-end-line="4" selection-end-column="18" />
+          <folding>
+            <element signature="e#0#17#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="25">
+          <caret line="51" column="29" selection-start-line="51" selection-start-column="29" selection-end-line="51" selection-end-column="29" />
         </state>
       </provider>
     </entry>
